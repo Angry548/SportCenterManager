@@ -1,0 +1,162 @@
+@startuml Sistema_Gestion_Gimnasio
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+' ===================== ENUMERACIONES =====================
+enum RolUsuario {
+  Cliente
+  Entrenador
+  Administrador
+}
+
+enum EstadoUsuario {
+  Activo
+  Inactivo
+}
+
+enum EstadoMembresiaAsignada {
+  Vigente
+  Vencida
+}
+
+enum NivelDificultad {
+  Principiante
+  Intermedio
+  Avanzado
+}
+
+' ===================== USUARIOS =====================
+abstract class Usuario {
+  -id : int
+  -nombres : String
+  -apellidos : String
+  -dui : String
+  -correo : String
+  -contrasena : String
+  -telefono : String
+  -estado : EstadoUsuario
+  -rol : RolUsuario
+  +iniciarSesion() : boolean
+  +cerrarSesion() : void
+  +cambiarEstado() : void
+}
+
+class Cliente {
+  -fechaNacimiento : Date
+  -sexo : String
+  -direccion : String
+  -codigoQR : String
+}
+
+class Entrenador {
+  -especialidad : String
+}
+
+class Administrador {
+}
+
+' ===================== MEMBRESIAS Y PAGOS =====================
+class Membresia {
+  -id : int
+  -nombre : String
+  -precio : double
+  -duracionDias : int
+  -estado : EstadoUsuario
+}
+
+class MembresiaAsignada {
+  -id : int
+  -fechaInicio : Date
+  -fechaVencimiento : Date
+  -estado : EstadoMembresiaAsignada
+}
+
+class Pago {
+  -id : int
+  -monto : double
+  -fecha : Date
+  -metodoPago : String
+  -numeroComprobante : String
+  +generarComprobante() : File
+}
+
+' ===================== ASISTENCIA =====================
+class Asistencia {
+  -id : int
+  -fechaHora : DateTime
+  -autorizado : boolean
+}
+
+' ===================== RUTINAS Y EJERCICIOS =====================
+class Rutina {
+  -id : int
+  -fechaCreacion : Date
+  -fechaModificacion : Date
+}
+
+class Ejercicio {
+  -id : int
+  -nombre : String
+  -descripcion : String
+  -grupoMuscular : String
+  -nivelDificultad : NivelDificultad
+  -imagen : String
+}
+
+class RutinaEjercicio {
+  -series : int
+  -repeticiones : int
+  -tiempoDescanso : int
+  -observaciones : String
+}
+
+' ===================== PROGRESO =====================
+class Progreso {
+  -id : int
+  -fecha : Date
+  -peso : double
+  -estatura : double
+  -porcentajeGrasaCorporal : double
+  -observaciones : String
+}
+
+' ===================== REPORTES =====================
+class Reporte {
+  -id : int
+  -tipo : String
+  -fechaGeneracion : Date
+  +generar() : void
+  +exportarPDF() : File
+}
+
+' ===================== RELACIONES =====================
+Usuario <|-- Cliente
+Usuario <|-- Entrenador
+Usuario <|-- Administrador
+Usuario --> RolUsuario
+Usuario --> EstadoUsuario
+
+Membresia "1" --> "0..*" MembresiaAsignada
+Cliente "1" --> "0..*" MembresiaAsignada
+MembresiaAsignada --> EstadoMembresiaAsignada
+
+Cliente "1" --> "0..*" Pago
+MembresiaAsignada "1" --> "0..*" Pago
+
+Cliente "1" --> "0..*" Asistencia
+
+Entrenador "1" --> "0..*" Cliente : atiende
+Entrenador "1" --> "0..*" Rutina : crea
+Cliente "1" --> "0..*" Rutina
+
+Rutina "1" --> "0..*" RutinaEjercicio
+Ejercicio "1" --> "0..*" RutinaEjercicio
+Ejercicio --> NivelDificultad
+
+Entrenador "1" --> "0..*" Progreso : registra
+Cliente "1" --> "0..*" Progreso
+
+Administrador "1" --> "0..*" Reporte : genera
+
+@enduml
