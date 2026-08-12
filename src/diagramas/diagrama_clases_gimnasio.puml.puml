@@ -1,32 +1,66 @@
 @startuml Sistema_Gestion_Gimnasio
 
+' ==============================================================================
+' CONFIGURACIÓN DE ORIENTACIÓN Y ESTILOS
+' ==============================================================================
+' Fuerza que el diagrama se arme de Izquierda a Derecha como en la imagen
+left to right direction
+
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
+skinparam roundCorner 10
+skinparam shadowing false
 
-' ===================== ENUMERACIONES =====================
+skinparam class {
+  BackgroundColor #F9F9F9
+  HeaderBackgroundColor #E2E8E4
+  BorderColor #666666
+  FontName Arial
+  FontSize 12
+  AttributeFontSize 11
+}
+
+skinparam enum {
+  BackgroundColor #F9F9F9
+  HeaderBackgroundColor #D5E1DF
+  BorderColor #666666
+}
+
+' ==============================================================================
+' ENUMERACIONES (DEFINICIONES DE ESTADOS Y TIPOS)
+' ==============================================================================
+
+' Define los roles que puede asumir un usuario en el sistema
 enum RolUsuario {
   Cliente
   Entrenador
   Administrador
 }
 
+' Define el estado de acceso de un usuario
 enum EstadoUsuario {
   Activo
   Inactivo
 }
 
+' Estado actual de vigencia de la membresía asignada a un cliente
 enum EstadoMembresiaAsignada {
   Vigente
   Vencida
 }
 
+' Niveles de dificultad aplicables a los ejercicios
 enum NivelDificultad {
   Principiante
   Intermedio
   Avanzado
 }
 
-' ===================== USUARIOS =====================
+' ==============================================================================
+' CLASES BASE Y TIPOS DE USUARIO (HERENCIA)
+' ==============================================================================
+
+' Clase abstracta principal que contiene la información compartida por todos los usuarios
 abstract class Usuario {
   -id : int
   -nombres : String
@@ -42,6 +76,7 @@ abstract class Usuario {
   +cambiarEstado() : void
 }
 
+' Usuario de tipo Cliente: Representa a los socios del gimnasio
 class Cliente {
   -fechaNacimiento : Date
   -sexo : String
@@ -49,14 +84,20 @@ class Cliente {
   -codigoQR : String
 }
 
+' Usuario de tipo Entrenador: Personal encargado de coordinar rutinas y progresos
 class Entrenador {
   -especialidad : String
 }
 
+' Usuario de tipo Administrador: Encargado de la gestión global y reportes del sistema
 class Administrador {
 }
 
-' ===================== MEMBRESIAS Y PAGOS =====================
+' ==============================================================================
+' GESTIÓN DE MEMBRESÍAS Y PAGOS
+' ==============================================================================
+
+' Catálogo general de membresías y planes ofrecidos por el gimnasio
 class Membresia {
   -id : int
   -nombre : String
@@ -65,6 +106,7 @@ class Membresia {
   -estado : EstadoUsuario
 }
 
+' Suscripción o plan adquirido activamente por un cliente
 class MembresiaAsignada {
   -id : int
   -fechaInicio : Date
@@ -72,6 +114,7 @@ class MembresiaAsignada {
   -estado : EstadoMembresiaAsignada
 }
 
+' Registro transaccional de pagos realizados
 class Pago {
   -id : int
   -monto : double
@@ -81,20 +124,18 @@ class Pago {
   +generarComprobante() : File
 }
 
-' ===================== ASISTENCIA =====================
-class Asistencia {
-  -id : int
-  -fechaHora : DateTime
-  -autorizado : boolean
-}
+' ==============================================================================
+' GESTIÓN DE RUTINAS Y EJERCICIOS
+' ==============================================================================
 
-' ===================== RUTINAS Y EJERCICIOS =====================
+' Plan de entrenamiento asignado a un cliente y diseñado por un entrenador
 class Rutina {
   -id : int
   -fechaCreacion : Date
   -fechaModificacion : Date
 }
 
+' Catálogo general de ejercicios disponibles
 class Ejercicio {
   -id : int
   -nombre : String
@@ -104,6 +145,7 @@ class Ejercicio {
   -imagen : String
 }
 
+' Tabla intermedia/Clase que especifica la configuración de un ejercicio dentro de una rutina
 class RutinaEjercicio {
   -series : int
   -repeticiones : int
@@ -111,7 +153,18 @@ class RutinaEjercicio {
   -observaciones : String
 }
 
-' ===================== PROGRESO =====================
+' ==============================================================================
+' SEGUIMIENTO, ASISTENCIA Y OPERACIONES
+' ==============================================================================
+
+' Control de ingresos físicos de los clientes al gimnasio
+class Asistencia {
+  -id : int
+  -fechaHora : DateTime
+  -autorizado : boolean
+}
+
+' Evaluaciones físicas e historial antropométrico del cliente
 class Progreso {
   -id : int
   -fecha : Date
@@ -121,7 +174,7 @@ class Progreso {
   -observaciones : String
 }
 
-' ===================== REPORTES =====================
+' Documentos de análisis e informes generados por los administradores
 class Reporte {
   -id : int
   -tipo : String
@@ -130,33 +183,41 @@ class Reporte {
   +exportarPDF() : File
 }
 
-' ===================== RELACIONES =====================
+' ==============================================================================
+' DEFINICIÓN DE RELACIONES ENTRE CLASES
+' ==============================================================================
+
+' --- Herencia y Estados de Usuarios ---
 Usuario <|-- Cliente
 Usuario <|-- Entrenador
 Usuario <|-- Administrador
+
 Usuario --> RolUsuario
 Usuario --> EstadoUsuario
 
+' --- Relaciones de Membresías y Pagos ---
 Membresia "1" --> "0..*" MembresiaAsignada
 Cliente "1" --> "0..*" MembresiaAsignada
 MembresiaAsignada --> EstadoMembresiaAsignada
-
 Cliente "1" --> "0..*" Pago
 MembresiaAsignada "1" --> "0..*" Pago
 
+' --- Relaciones de Control de Asistencia ---
 Cliente "1" --> "0..*" Asistencia
 
-Entrenador "1" --> "0..*" Cliente : atiende
+' --- Relaciones de Rutinas y Ejercicios ---
 Entrenador "1" --> "0..*" Rutina : crea
 Cliente "1" --> "0..*" Rutina
-
 Rutina "1" --> "0..*" RutinaEjercicio
 Ejercicio "1" --> "0..*" RutinaEjercicio
 Ejercicio --> NivelDificultad
 
+' --- Relaciones de Progreso y Asignación de Entrenador ---
+Entrenador "1" --> "0..*" Cliente : atiende
 Entrenador "1" --> "0..*" Progreso : registra
 Cliente "1" --> "0..*" Progreso
 
+' --- Relaciones de Administración y Reportes ---
 Administrador "1" --> "0..*" Reporte : genera
 
 @enduml
