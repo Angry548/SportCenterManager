@@ -1,13 +1,31 @@
 @startuml Diagrama_Base_Datos_Gestion_Gimnasio
 
-' Configuración visual ERD
+' ==============================================================================
+' CONFIGURACIÓN VISUAL Y ORIENTACIÓN
+' ==============================================================================
+left to right direction
+
 hide circle
 skinparam linetype ortho
-skinparam roundcorner 5
+skinparam roundcorner 10
+skinparam shadowing false
+
+skinparam entity {
+  BackgroundColor #F9F9F9
+  HeaderBackgroundColor #E2E8E4
+  BorderColor #666666
+  FontName Arial
+  FontSize 12
+  AttributeFontSize 11
+}
 
 !define primary_key(x) <b><color:#b8860b><&key></color> x</b>
 !define foreign_key(x) <color:#4682b4><&key></color> x
 !define column(x) <color:#333333>x</color>
+
+' ==============================================================================
+' MÓDULOS DEL SISTEMA
+' ==============================================================================
 
 package "Módulo de Usuarios y Roles" {
   entity "usuarios" as usuario {
@@ -140,36 +158,38 @@ package "Módulo de Progreso y Reportes" {
   }
 }
 
-' ===================== RELACIONES =====================
+' ==============================================================================
+' RELACIONES CON PALABRAS DESCRIPTIVAS CORTAS (Lectura Izquierda -> Derecha)
+' ==============================================================================
 
-' Herencia
-usuario ||--o| cliente : "es un"
-usuario ||--o| entrenador : "es un"
-usuario ||--o| administrador : "es un"
+' Herencia / Tipos
+usuario ||--o| cliente : define
+usuario ||--o| entrenador : define
+usuario ||--o| administrador : define
 
 ' Membresías y Pagos
-membresia ||--o{ membresia_asignada : "se asigna"
-cliente ||--o{ membresia_asignada : "posee"
-cliente ||--o{ pago : "realiza"
-membresia_asignada ||--o{ pago : "cancela"
+membresia ||--o{ membresia_asignada : otorga
+cliente ||--o{ membresia_asignada : adquiere
+cliente ||--o{ pago : realiza
+membresia_asignada ||--o{ pago : liquida
 
 ' Asistencia
-cliente ||--o{ asistencia : "registra"
+cliente ||--o{ asistencia : registra
 
-' Asignación Entrenador - Cliente
-entrenador ||--o{ cliente : "atiende"
+' Asignación
+entrenador ||--o{ cliente : atiende
 
 ' Rutinas y Ejercicios
-entrenador ||--o{ rutina : "crea"
-cliente ||--o{ rutina : "recibe"
-rutina ||--|{ rutina_ejercicio : "contiene"
-ejercicio ||--|{ rutina_ejercicio : "se incluye en"
+entrenador ||--o{ rutina : diseña
+cliente ||--o{ rutina : recibe
+rutina ||--|{ rutina_ejercicio : contiene
+ejercicio ||--|{ rutina_ejercicio : compone
 
 ' Progreso
-entrenador ||--o{ progreso : "registra"
-cliente ||--o{ progreso : "evalúa"
+entrenador ||--o{ progreso : evalúa
+cliente ||--o{ progreso : registra
 
 ' Reportes
-administrador ||--o{ reporte : "genera"
+administrador ||--o{ reporte : genera
 
 @enduml
