@@ -1,56 +1,47 @@
 package com.esfe.sistemagimnasio.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "RutinaEjercicios")
+@Table(name = "RUTINA_EJERCICIO")
 public class RutinaEjercicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @NotBlank(message = "este campo es obligatorio")
-    private String series;
+//    @NotNull(message = "La rutina es obligatoria")
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "rutina_id", nullable = false, foreignKey = @ForeignKey(name = "FK_rutinaEjercicio_rutina"))
+//    private Rutina rutina;
 
-    @NotBlank(message = "las repeticiones es obligatorio")
-    private String repeticiones;
+    @NotNull(message = "El ejercicio es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ejercicio_id", nullable = false, foreignKey = @ForeignKey(name = "FK_rutinaEjercicio_ejercicio"))
+    private Ejercicio ejercicio;
 
-    @NotBlank(message = "el tiempoDescanso no puede quedar vacio")
-    private LocalTime tiempoDescanso;
+    @NotNull(message = "Las series son obligatorias")
+    @Min(value = 1, message = "Debe haber al menos 1 serie")
+    @Column(name = "series", nullable = false)
+    private Integer series;
 
+    @NotNull(message = "Las repeticiones son obligatorias")
+    @Min(value = 1, message = "Debe haber al menos 1 repeticion")
+    @Column(name = "repeticiones", nullable = false)
+    private Integer repeticiones;
+
+    @NotNull(message = "El descanso es obligatorio")
+    @Min(value = 0, message = "El descanso no puede ser negativo")
+    @Column(name = "descanso_segundos", nullable = false)
+    private Integer descansoSegundos;
+
+    @Size(max = 300, message = "Las observaciones no pueden exceder 300 caracteres")
+    @Column(name = "observaciones", length = 300)
     private String observaciones;
 
-    public String getSeries() {
-        return series;
-    }
-
-    public void setSeries(String series) {
-        this.series = series;
-    }
-
-    public String getRepeticiones() {
-        return repeticiones;
-    }
-
-    public void setRepeticiones(String repeticiones) {
-        this.repeticiones = repeticiones;
-    }
-
-    public LocalTime getTiempoDescanso() {
-        return tiempoDescanso;
-    }
-
-    public void setTiempoDescanso(LocalTime tiempoDescanso) {
-        this.tiempoDescanso = tiempoDescanso;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
 }
