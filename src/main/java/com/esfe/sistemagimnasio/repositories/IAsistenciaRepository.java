@@ -1,0 +1,7 @@
+package com.esfe.sistemagimnasio.repositories;
+
+import com.esfe.sistemagimnasio.models.Asistencia;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface IAsistenciaRepository extends JpaRepository<Asistencia, Integer> {
+}
