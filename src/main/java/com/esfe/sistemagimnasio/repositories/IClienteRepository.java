@@ -1,4 +1,8 @@
 package com.esfe.sistemagimnasio.repositories;
 
-public interface IClienteRepository {
+import com.esfe.sistemagimnasio.models.Cliente;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface IClienteRepository extends JpaRepository<Cliente, Integer> {
+
 }
