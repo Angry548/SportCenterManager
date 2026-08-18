@@ -16,4 +16,20 @@ public class GrupoMuscular {
     @Size(max = 50, message = "El nombre no puede exceder 50 caracteres")
     @Column(name = "nombre", nullable = false, length = 50, unique = true)
     private String nombre;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }

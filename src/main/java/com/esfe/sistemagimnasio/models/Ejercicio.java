@@ -13,10 +13,10 @@ public class Ejercicio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @NotNull(message = "El grupo muscular es obligatorio")
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "grupo_muscular_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ejercicio_grupoMuscular"))
-//    private GrupoMuscular grupoMuscular;
+    @NotNull(message = "El grupo muscular es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "grupo_muscular_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ejercicio_grupoMuscular"))
+    private GrupoMuscular grupoMuscular;
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 100, message = "El nombre no puede exceder 100 caracteres")
@@ -32,6 +32,45 @@ public class Ejercicio {
     @Column(name = "imagen_url", length = 255)
     private String imagenUrl;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public GrupoMuscular getGrupoMuscular() {
+        return grupoMuscular;
+    }
+
+    public void setGrupoMuscular(GrupoMuscular grupoMuscular) {
+        this.grupoMuscular = grupoMuscular;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Dificultad getDificultad() {
+        return dificultad;
+    }
+
+    public void setDificultad(Dificultad dificultad) {
+        this.dificultad = dificultad;
+    }
+
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
+    }
 }
 
 

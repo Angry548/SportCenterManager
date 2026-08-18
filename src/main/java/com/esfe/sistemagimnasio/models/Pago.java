@@ -22,15 +22,15 @@ public class Pago {
     @JoinColumn(name = "cliente_id", nullable = false, foreignKey = @ForeignKey(name = "FK_pago_cliente"))
     private Cliente cliente;
 
-//    @NotNull(message = "La membresia asociada es obligatoria")
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "membresia_cliente_id", nullable = false, foreignKey = @ForeignKey(name = "FK_pago_membresiaCliente"))
-//    private MembresiaCliente membresiaCliente;
-//
-//    @NotNull(message = "El metodo de pago es obligatorio")
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "metodo_pago_id", nullable = false, foreignKey = @ForeignKey(name = "FK_pago_metodoPago"))
-//    private MetodoPago metodoPago;
+    @NotNull(message = "La membresia asociada es obligatoria")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "membresia_cliente_id", nullable = false, foreignKey = @ForeignKey(name = "FK_pago_membresiaCliente"))
+    private MembresiaCliente membresiaCliente;
+
+    @NotNull(message = "El metodo de pago es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "metodo_pago_id", nullable = false, foreignKey = @ForeignKey(name = "FK_pago_metodoPago"))
+    private MetodoPago metodoPago;
 
     @NotNull(message = "El monto es obligatorio")
     @DecimalMin(value = "0.0", inclusive = false, message = "El monto debe ser mayor a 0")
@@ -44,4 +44,60 @@ public class Pago {
     @Size(max = 20)
     @Column(name = "numero_comprobante", nullable = false, length = 20, unique = true, updatable = false)
     private String numeroComprobante;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public MembresiaCliente getMembresiaCliente() {
+        return membresiaCliente;
+    }
+
+    public void setMembresiaCliente(MembresiaCliente membresiaCliente) {
+        this.membresiaCliente = membresiaCliente;
+    }
+
+    public MetodoPago getMetodoPago() {
+        return metodoPago;
+    }
+
+    public void setMetodoPago(MetodoPago metodoPago) {
+        this.metodoPago = metodoPago;
+    }
+
+    public BigDecimal getMonto() {
+        return monto;
+    }
+
+    public void setMonto(BigDecimal monto) {
+        this.monto = monto;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getNumeroComprobante() {
+        return numeroComprobante;
+    }
+
+    public void setNumeroComprobante(String numeroComprobante) {
+        this.numeroComprobante = numeroComprobante;
+    }
 }
