@@ -44,3 +44,6 @@ public class Cliente {
     @Column(name = "direccion", nullable = false, length = 200)
     private String direccion;
 }
+
+
+
