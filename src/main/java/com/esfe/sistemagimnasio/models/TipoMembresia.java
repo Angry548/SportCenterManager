@@ -32,4 +32,5 @@ public class TipoMembresia {
     @NotNull
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
+
 }
