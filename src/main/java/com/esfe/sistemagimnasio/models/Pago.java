@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "PAGO")
@@ -45,6 +46,7 @@ public class Pago {
     @Column(name = "numero_comprobante", nullable = false, length = 20, unique = true, updatable = false)
     private String numeroComprobante;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -99,5 +101,14 @@ public class Pago {
 
     public void setNumeroComprobante(String numeroComprobante) {
         this.numeroComprobante = numeroComprobante;
+    }
+
+    //Metodos de negocio
+    public String generarNumeroComprobante() {
+        return "CMP-" + UUID.randomUUID().toString().substring(0, 12).toUpperCase();
+    }
+
+    public byte[] generarComprobantePDF() {
+        throw new UnsupportedOperationException("Implementar en PagoService usando los datos de este Pago");
     }
 }

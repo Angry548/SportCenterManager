@@ -32,6 +32,7 @@ public class Ejercicio {
     @Column(name = "imagen_url", length = 255)
     private String imagenUrl;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -70,6 +71,13 @@ public class Ejercicio {
 
     public void setImagenUrl(String imagenUrl) {
         this.imagenUrl = imagenUrl;
+    }
+
+
+    //Metodos de negocio
+    public boolean estaEnUso(java.util.List<RutinaEjercicio> rutinaEjercicios) {
+        return rutinaEjercicios.stream()
+                .anyMatch(re -> re.getEjercicio().getId().equals(this.id));
     }
 }
 

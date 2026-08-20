@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "TIPO_MEMBRESIA")
@@ -33,6 +34,8 @@ public class TipoMembresia {
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
 
+
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -71,5 +74,11 @@ public class TipoMembresia {
 
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+
+
+    //Metodos de negocio
+    public LocalDate calcularFechaVencimiento(LocalDate fechaInicio) {
+        return fechaInicio.plusDays(this.duracionDias);
     }
 }

@@ -85,4 +85,14 @@ public class Rutina {
     public void setFechaModificacion(LocalDate fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
+
+    //Metodos de negocio
+//    public void agregarEjercicio(RutinaEjercicio rutinaEjercicio) {
+//        rutinaEjercicio.setRutina(this);
+//        this.ejercicios.add(rutinaEjercicio);
+//    }
+
+//    public List<RutinaEjercicio> listarEjercicios() {
+//        return this.ejercicio;
+//    }
 }
