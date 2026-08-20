@@ -1,6 +1,7 @@
 package com.esfe.sistemagimnasio.models;
 
 
+import com.esfe.sistemagimnasio.enums.Resultado;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,8 +23,40 @@ public class Asistencia {
     @Column(name = "fecha_hora", nullable = false, updatable = false)
     private LocalDateTime fechaHora;
 
-//    @NotNull(message = "El resultado es obligatorio")
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "resultado", nullable = false, length = 15)
-//    private Resultado resultado;
+    @NotNull(message = "El resultado es obligatorio")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "resultado", nullable = false, length = 15)
+    private Resultado resultado;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public Resultado getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(Resultado resultado) {
+        this.resultado = resultado;
+    }
 }
