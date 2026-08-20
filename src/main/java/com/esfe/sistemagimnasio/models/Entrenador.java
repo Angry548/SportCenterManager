@@ -14,10 +14,10 @@ public class Entrenador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @NotNull(message = "El entrenador debe estar asociado a un usuario")
-//    @OneToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "usuario_id", nullable = false, unique = true, foreignKey = @ForeignKey(name = "FK_entrenador_usuario"))
-//    private Usuario usuario;
+    @NotNull(message = "El entrenador debe estar asociado a un usuario")
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "usuario_id", nullable = false, unique = true, foreignKey = @ForeignKey(name = "FK_entrenador_usuario"))
+    private Usuario usuario;
 
     @NotBlank(message = "El DUI es obligatorio")
     @Pattern(regexp = "\\d{8}-\\d{1}", message = "El DUI debe tener el formato 00000000-0")
@@ -33,4 +33,44 @@ public class Entrenador {
     @Pattern(regexp = "\\d{4}-\\d{4}", message = "El telefono debe tener el formato 0000-0000")
     @Column(name = "telefono", nullable = false, length = 20)
     private String telefono;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getDui() {
+        return dui;
+    }
+
+    public void setDui(String dui) {
+        this.dui = dui;
+    }
+
+    public String getEspecialidad() {
+        return especialidad;
+    }
+
+    public void setEspecialidad(String especialidad) {
+        this.especialidad = especialidad;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 }
