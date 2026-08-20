@@ -30,6 +30,9 @@ public class AsignacionEntrenador {
     @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 
+
+//    Encapsulamiento
+
     public Integer getId() {
         return id;
     }
@@ -68,5 +71,15 @@ public class AsignacionEntrenador {
 
     public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+
+//    Metodos de Negocio
+    public void finalizar() {
+    this.fechaFin = LocalDate.now();
+}
+
+    public boolean estaActiva() {
+        return this.fechaFin == null;
     }
 }

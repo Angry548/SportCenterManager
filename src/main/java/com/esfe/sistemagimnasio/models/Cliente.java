@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table(name = "CLIENTE")
@@ -44,6 +45,7 @@ public class Cliente {
     @Column(name = "direccion", nullable = false, length = 200)
     private String direccion;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -98,6 +100,19 @@ public class Cliente {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    //Metodos de negocio
+    public boolean tieneMembresiaVigente(java.util.List<MembresiaCliente> membresias) {
+        return membresias.stream().anyMatch(MembresiaCliente::estaVigente);
+    }
+
+    public boolean tieneEntrenadorActivo(java.util.List<AsignacionEntrenador> asignaciones) {
+        return asignaciones.stream().anyMatch(AsignacionEntrenador::estaActiva);
+    }
+
+    public int obtenerEdad() {
+        return Period.between(this.fechaNacimiento, LocalDate.now()).getYears();
     }
 }
 

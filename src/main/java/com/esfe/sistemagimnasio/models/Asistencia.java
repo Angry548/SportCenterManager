@@ -28,6 +28,7 @@ public class Asistencia {
     @Column(name = "resultado", nullable = false, length = 15)
     private Resultado resultado;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -58,5 +59,13 @@ public class Asistencia {
 
     public void setResultado(Resultado resultado) {
         this.resultado = resultado;
+    }
+
+    //Metodos de negocio
+    public static Asistencia registrar(Cliente cliente, boolean membresiaVigente) {
+        Asistencia asistencia = new Asistencia();
+        asistencia.setCliente(cliente);
+        asistencia.setResultado(membresiaVigente ? Resultado.PERMITIDO : Resultado.RECHAZADO);
+        return asistencia;
     }
 }
