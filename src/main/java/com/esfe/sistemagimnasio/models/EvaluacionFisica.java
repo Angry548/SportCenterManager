@@ -19,10 +19,10 @@ public class EvaluacionFisica {
     @JoinColumn(name = "cliente_id", nullable = false, foreignKey = @ForeignKey(name = "FK_evaluacion_cliente"))
     private Cliente cliente;
 
-//    @NotNull(message = "El entrenador es obligatorio")
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "entrenador_id", nullable = false, foreignKey = @ForeignKey(name = "FK_evaluacion_entrenador"))
-//    private Entrenador entrenador;
+    @NotNull(message = "El entrenador es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "entrenador_id", nullable = false, foreignKey = @ForeignKey(name = "FK_evaluacion_entrenador"))
+    private Entrenador entrenador;
 
     @NotNull(message = "La fecha es obligatoria")
     @PastOrPresent(message = "La fecha no puede ser futura")
@@ -50,4 +50,68 @@ public class EvaluacionFisica {
     @Size(max = 500, message = "Las observaciones no pueden exceder 500 caracteres")
     @Column(name = "observaciones", length = 500)
     private String observaciones;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Entrenador getEntrenador() {
+        return entrenador;
+    }
+
+    public void setEntrenador(Entrenador entrenador) {
+        this.entrenador = entrenador;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public BigDecimal getPeso() {
+        return peso;
+    }
+
+    public void setPeso(BigDecimal peso) {
+        this.peso = peso;
+    }
+
+    public BigDecimal getEstatura() {
+        return estatura;
+    }
+
+    public void setEstatura(BigDecimal estatura) {
+        this.estatura = estatura;
+    }
+
+    public BigDecimal getPorcentajeGrasa() {
+        return porcentajeGrasa;
+    }
+
+    public void setPorcentajeGrasa(BigDecimal porcentajeGrasa) {
+        this.porcentajeGrasa = porcentajeGrasa;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
 }
