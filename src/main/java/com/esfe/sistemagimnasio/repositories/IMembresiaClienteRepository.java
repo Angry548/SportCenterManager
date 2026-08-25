@@ -11,12 +11,6 @@ import java.util.Optional;
 
 
 public interface IMembresiaClienteRepository extends JpaRepository<MembresiaCliente, Integer> {
-    List<MembresiaCliente> findByCliente_IdOrderByFechaVencimientoDesc(Integer clienteId);
-
-    Optional<MembresiaCliente> findTopByCliente_IdOrderByFechaVencimientoDesc(Integer clienteId);
-
-    @Query("SELECT m FROM MembresiaCliente m WHERE m.fechaVencimiento BETWEEN :hoy AND :fechaLimite")
-    List<MembresiaCliente> findProximasAVencer(@Param("hoy") LocalDate hoy, @Param("fechaLimite") LocalDate fechaLimite);
-
 
 }
+
