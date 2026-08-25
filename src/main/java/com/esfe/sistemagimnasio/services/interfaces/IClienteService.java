@@ -9,20 +9,6 @@ import java.util.Optional;
 
 public interface IClienteService {
 
-
-    List<IClienteRepository> obtenerTodos();
-
-    Optional<IClienteRepository> obtenerPorId(Integer id);
-
-    Cliente guardar(Cliente cliente);
-
-    void eliminar(Integer id);
-
-    boolean tieneMembresiaVigente(Integer clienteId);
-
-    boolean tieneEntrenadorActivo(Integer clienteId);
-
-
     List<Cliente> obtenerTodasMembresias();
 
     Optional<Cliente> obtenerMembresiaPorId(Integer id);
