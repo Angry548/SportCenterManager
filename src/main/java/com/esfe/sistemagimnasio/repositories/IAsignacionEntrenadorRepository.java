@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface IAsignacionEntrenadorRepository extends JpaRepository<AsignacionEntrenador, Integer> {
 
-    List<AsignacionEntrenador> findByEntrenador_IdAndFechaFinIsNull(Integer entrenadorId);
-    List<AsignacionEntrenador> findByCliente_IdOrderByFechaAsignacionDesc(Integer clienteId);
 }
