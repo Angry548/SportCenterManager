@@ -31,6 +31,7 @@ public class PagoService implements IPagoService {
         return IPagoRepository.save(pago);
     }
 
+
     @Override
     public void eliminar(Integer id) {
       IPagoRepository.deleteById(id);
