@@ -16,12 +16,12 @@ public class EntrenadorService implements IEntrenadorService {
     private IEntrenadorRepository entrenadorRepository;
 
     @Override
-    public List<Entrenador> ObtenerTodos() {
+    public List<Entrenador> obtenerTodos() {
         return entrenadorRepository.findAll();
     }
 
     @Override
-    public Optional<Entrenador> ObtenerPorld(Integer id) {
+    public Optional<Entrenador> obtenerPorld(Integer id) {
         return entrenadorRepository.findById(id);
     }
 
