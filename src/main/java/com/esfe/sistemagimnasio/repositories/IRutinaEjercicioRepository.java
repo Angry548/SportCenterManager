@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface IRutinaEjercicioRepository extends JpaRepository<RutinaEjercicio,Integer> {
 
-    List<RutinaEjercicio> findByRutina_Id(Integer rutinaId);
-    boolean existsByEjercicio_Id(Integer ejercicioId);
 }
