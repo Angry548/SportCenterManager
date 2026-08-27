@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface IAsigacionEntrenadorService {
     List<AsignacionEntrenador> obtenerTodos();
-    Optional<AsignacionEntrenador> obtenerporId (Integer id);
+    Optional<AsignacionEntrenador> obtenerPorId (Integer id);
     AsignacionEntrenador guardar (AsignacionEntrenador asignacionEntrenador);
     void eliminar(Integer id);
 }
