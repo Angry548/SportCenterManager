@@ -10,7 +10,7 @@ public interface ITipoMembresiaService {
 
     Optional<TipoMembresia> obtenerPorId(Integer id);
 
-    TipoMembresia guardar(TipoMembresia membresiaCliente);
+    TipoMembresia guardar(TipoMembresia tipoMembresia);
 
     void eliminar(Integer id);
 }
