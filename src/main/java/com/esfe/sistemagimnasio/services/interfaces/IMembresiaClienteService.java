@@ -18,7 +18,7 @@ public interface IMembresiaClienteService {
 
     Page <MembresiaCliente> obtenerTodosPaginados(Pageable pageable);
 
-    boolean estaVigente(Integer membresiaClienteId);
+    boolean estaVigente(Integer id);
 
-    int diasRestantes(Integer membresiaClienteId);
+    int diasRestantes(Integer id);
 }

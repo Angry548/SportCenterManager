@@ -45,18 +45,32 @@ public class MembresiaClienteService implements IMembresiaClienteService {
     }
 
     @Override
-    public boolean estaVigente(Integer membresiaClienteId) {
-        Optional<MembresiaCliente> membresia = membresiaClienteRepository.findById(membresiaClienteId);
-        if (membresia.isEmpty()) return false;
-        return !LocalDate.now().isAfter(membresia.get().getFechaVencimiento());
+    public boolean estaVigente(Integer id) {
+        MembresiaCliente membresia = obtenerPorId(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "No se encontró la membresía con id: " + id
+                ));
+
+        LocalDate fechaActual = LocalDate.now();
+
+        return !fechaActual.isAfter(membresia.getFechaVencimiento());
     }
 
     @Override
-    public int diasRestantes(Integer membresiaClienteId) {
-        Optional<MembresiaCliente> membresia = membresiaClienteRepository.findById(membresiaClienteId);
-        if (membresia.isEmpty()) return 0;
-        long dias = ChronoUnit.DAYS.between(LocalDate.now(), membresia.get().getFechaVencimiento());
-        return (int) Math.max(dias, 0);
+    public int diasRestantes(Integer id) {
+        MembresiaCliente membresia = obtenerPorId(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "No se encontró la membresía con id: " + id
+                ));
+
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate fechaVencimiento = membresia.getFechaVencimiento();
+
+        if (fechaActual.isAfter(fechaVencimiento)) {
+            return 0;
+        }
+
+        return (int) ChronoUnit.DAYS.between(fechaActual, fechaVencimiento);
     }
 
 }
