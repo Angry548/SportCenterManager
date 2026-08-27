@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface IAsignacionEntrenadorRepository extends JpaRepository<AsignacionEntrenador, Integer> {
-
+    boolean existsByClienteIdAndFechaFinIsNull(Integer clienteId);
 }
