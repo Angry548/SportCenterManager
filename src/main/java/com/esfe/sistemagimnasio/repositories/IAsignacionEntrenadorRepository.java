@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IAsignacionEntrenadorRepository extends JpaRepository<AsignacionEntrenador, Integer> {
-
+    boolean existsByClienteIdAndFechaFinIsNull(Integer clienteId);
 }
