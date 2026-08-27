@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface IUsuarioService {
 
-    List<Usuario> obtenerTodasMembresias();
+    List<Usuario> obtenerTodos();
 
-    Optional<Usuario> obtenerMembresiaPorId(Integer id);
+    Optional<Usuario> obtenerPorId(Integer id);
 
-    Usuario guardarMembresia(Usuario usuario);
+    Usuario guardar (Usuario usuario);
 
-    void eliminarMembresia(Integer id);
+    void eliminar(Integer id);
 }
 
 
