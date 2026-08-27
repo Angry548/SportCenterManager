@@ -2,19 +2,18 @@ package com.esfe.sistemagimnasio.services.interfaces;
 
 
 import com.esfe.sistemagimnasio.models.Cliente;
-import com.esfe.sistemagimnasio.repositories.IClienteRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IClienteService {
 
-    List<Cliente> obtenerTodasMembresias();
+    List<Cliente> obtenerTodos();
 
-    Optional<Cliente> obtenerMembresiaPorId(Integer id);
+    Optional<Cliente> obtenerPorId(Integer id);
 
-    Cliente guardarMembresia(Cliente membresiaCliente);
+    Cliente guardar(Cliente cliente);
 
-    void eliminarMembresia(Integer id);
+    void eliminar(Integer id);
 }
 
