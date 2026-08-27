@@ -2,7 +2,7 @@ package com.esfe.sistemagimnasio.services.implementations;
 
 import com.esfe.sistemagimnasio.models.AsignacionEntrenador;
 import com.esfe.sistemagimnasio.repositories.IAsignacionEntrenadorRepository;
-import com.esfe.sistemagimnasio.services.interfaces.IAsigacionEntrenadorService;
+import com.esfe.sistemagimnasio.services.interfaces.IAsignacionEntrenadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AsignacionEntrenadorService implements IAsigacionEntrenadorService {
+public class AsignacionEntrenadorService implements IAsignacionEntrenadorService {
     @Autowired
     private IAsignacionEntrenadorRepository asignacionEntrenadorRepository;
 
