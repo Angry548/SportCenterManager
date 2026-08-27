@@ -46,31 +46,21 @@ public class MembresiaClienteService implements IMembresiaClienteService {
 
     @Override
     public boolean estaVigente(Integer id) {
-        MembresiaCliente membresia = obtenerPorId(id)
-                .orElseThrow(() -> new RuntimeException(
-                        "No se encontró la membresía con id: " + id
-                ));
+        MembresiaCliente membresia = obtenerPorId(id).orElseThrow();
 
-        LocalDate fechaActual = LocalDate.now();
-
-        return !fechaActual.isAfter(membresia.getFechaVencimiento());
+        return !LocalDate.now().isAfter(membresia.getFechaVencimiento());
     }
 
     @Override
     public int diasRestantes(Integer id) {
-        MembresiaCliente membresia = obtenerPorId(id)
-                .orElseThrow(() -> new RuntimeException(
-                        "No se encontró la membresía con id: " + id
-                ));
+        MembresiaCliente membresia = obtenerPorId(id).orElseThrow();
 
-        LocalDate fechaActual = LocalDate.now();
-        LocalDate fechaVencimiento = membresia.getFechaVencimiento();
+        long dias = ChronoUnit.DAYS.between(
+                LocalDate.now(),
+                membresia.getFechaVencimiento()
+        );
 
-        if (fechaActual.isAfter(fechaVencimiento)) {
-            return 0;
-        }
-
-        return (int) ChronoUnit.DAYS.between(fechaActual, fechaVencimiento);
+        return (int) Math.max(dias, 0);
     }
 
 }
