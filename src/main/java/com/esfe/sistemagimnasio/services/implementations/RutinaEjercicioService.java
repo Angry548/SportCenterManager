@@ -4,6 +4,8 @@ import com.esfe.sistemagimnasio.models.RutinaEjercicio;
 import com.esfe.sistemagimnasio.repositories.IRutinaEjercicioRepository;
 import com.esfe.sistemagimnasio.services.interfaces.IRutinaEjercicioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,5 +33,10 @@ public class RutinaEjercicioService implements IRutinaEjercicioService {
     @Override
     public void eliminar(Integer id) {
         rutinaEjercicioRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<RutinaEjercicio> obtenerTodosPaginados(Pageable pageable) {
+        return rutinaEjercicioRepository.findAll(pageable);
     }
 }
