@@ -7,7 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IPagoRepository extends JpaRepository<Pago,Integer> {
-    List<Pago> findByCliente_IdOrderByFechaDesc(Integer clienteId);
 
-    Optional<Pago> findByNumeroComprobante(String numeroComprobante);
 }
