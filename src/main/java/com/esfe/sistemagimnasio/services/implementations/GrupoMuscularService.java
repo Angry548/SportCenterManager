@@ -4,6 +4,8 @@ import com.esfe.sistemagimnasio.models.GrupoMuscular;
 import com.esfe.sistemagimnasio.repositories.IGrupoMuscularRepository;
 import com.esfe.sistemagimnasio.services.interfaces.IGrupoMuscularService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,5 +35,10 @@ public class GrupoMuscularService implements IGrupoMuscularService {
     @Override
     public void eliminar(Integer id) {
         grupoMuscularRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<GrupoMuscular> obtenerTodosPaginados(Pageable pageable) {
+        return grupoMuscularRepository.findAll(pageable);
     }
 }
