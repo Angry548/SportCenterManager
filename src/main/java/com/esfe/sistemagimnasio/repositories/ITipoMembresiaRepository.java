@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface ITipoMembresiaRepository extends JpaRepository<TipoMembresia, Integer> {
 
-    List<TipoMembresia> findByActivoTrue();
-
 }
