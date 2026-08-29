@@ -5,6 +5,7 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "MEMBRESIA_CLIENTE")
@@ -33,6 +34,7 @@ public class MembresiaCliente {
     @Column(name = "fecha_vencimiento", nullable = false)
     private LocalDate fechaVencimiento;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -72,4 +74,6 @@ public class MembresiaCliente {
     public void setFechaVencimiento(LocalDate fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
+
+
 }

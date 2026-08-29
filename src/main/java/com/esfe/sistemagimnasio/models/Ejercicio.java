@@ -32,6 +32,7 @@ public class Ejercicio {
     @Column(name = "imagen_url", length = 255)
     private String imagenUrl;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -71,6 +72,8 @@ public class Ejercicio {
     public void setImagenUrl(String imagenUrl) {
         this.imagenUrl = imagenUrl;
     }
+
+
 }
 
 

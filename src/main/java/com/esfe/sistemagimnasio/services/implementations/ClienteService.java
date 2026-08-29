@@ -1,4 +1,4 @@
 package com.esfe.sistemagimnasio.services.implementations;
 
-public class ClienteServiceImpl {
+public class ClienteService {
 }
