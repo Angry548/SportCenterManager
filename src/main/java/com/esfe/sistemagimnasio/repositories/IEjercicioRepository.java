@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface IEjercicioRepository extends JpaRepository<Ejercicio,Integer> {
 
-
 }
