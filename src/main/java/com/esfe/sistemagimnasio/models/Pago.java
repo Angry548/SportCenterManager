@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "PAGO")
@@ -17,11 +16,6 @@ public class Pago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @NotNull(message = "El cliente es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "cliente_id", nullable = false, foreignKey = @ForeignKey(name = "FK_pago_cliente"))
-    private Cliente cliente;
 
     @NotNull(message = "La membresia asociada es obligatoria")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -53,14 +47,6 @@ public class Pago {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
     }
 
     public MembresiaCliente getMembresiaCliente() {
