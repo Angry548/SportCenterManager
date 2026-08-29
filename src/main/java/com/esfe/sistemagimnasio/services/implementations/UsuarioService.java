@@ -2,7 +2,6 @@ package com.esfe.sistemagimnasio.services.implementations;
 
 import com.esfe.sistemagimnasio.models.Usuario;
 import com.esfe.sistemagimnasio.repositories.IUsuarioRepository;
-import com.esfe.sistemagimnasio.services.interfaces.IClienteService;
 import com.esfe.sistemagimnasio.services.interfaces.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

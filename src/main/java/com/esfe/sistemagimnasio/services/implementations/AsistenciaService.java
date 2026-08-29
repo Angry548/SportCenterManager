@@ -1,6 +1,7 @@
 package com.esfe.sistemagimnasio.services.implementations;
 
 
+import com.esfe.sistemagimnasio.enums.Resultado;
 import com.esfe.sistemagimnasio.models.Asistencia;
 import com.esfe.sistemagimnasio.repositories.IAsistenciaRepository;
 import com.esfe.sistemagimnasio.repositories.IMembresiaClienteRepository;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,6 +1,5 @@
 package com.esfe.sistemagimnasio.services.interfaces;
 
-
 import com.esfe.sistemagimnasio.models.Cliente;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

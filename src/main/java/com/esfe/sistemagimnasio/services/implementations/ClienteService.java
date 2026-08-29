@@ -1,8 +1,11 @@
 package com.esfe.sistemagimnasio.services.implementations;
 
 import com.esfe.sistemagimnasio.models.Cliente;
+import com.esfe.sistemagimnasio.repositories.IAsignacionEntrenadorRepository;
 import com.esfe.sistemagimnasio.repositories.IClienteRepository;
+import com.esfe.sistemagimnasio.repositories.IMembresiaClienteRepository;
 import com.esfe.sistemagimnasio.services.interfaces.IClienteService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +15,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class ClienteService implements IClienteService {
     @Autowired
