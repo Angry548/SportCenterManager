@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Entity
@@ -51,6 +52,7 @@ public class EvaluacionFisica {
     @Column(name = "observaciones", length = 500)
     private String observaciones;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -114,4 +116,5 @@ public class EvaluacionFisica {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
 }

@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "PAGO")
@@ -45,6 +46,7 @@ public class Pago {
     @Column(name = "numero_comprobante", nullable = false, length = 20, unique = true, updatable = false)
     private String numeroComprobante;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -100,4 +102,5 @@ public class Pago {
     public void setNumeroComprobante(String numeroComprobante) {
         this.numeroComprobante = numeroComprobante;
     }
+
 }
