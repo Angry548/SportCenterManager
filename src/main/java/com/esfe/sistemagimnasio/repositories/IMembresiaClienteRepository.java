@@ -11,6 +11,9 @@ import java.util.Optional;
 
 
 public interface IMembresiaClienteRepository extends JpaRepository<MembresiaCliente, Integer> {
-
-
+    boolean existsByClienteIdAndFechaVencimientoGreaterThanEqual(
+            Integer clienteId,
+            LocalDate fecha
+    );
 }
+
