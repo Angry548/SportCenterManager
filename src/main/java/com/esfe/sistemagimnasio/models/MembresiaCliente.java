@@ -75,13 +75,5 @@ public class MembresiaCliente {
         this.fechaVencimiento = fechaVencimiento;
     }
 
-    //Metodos de negocio
-    public boolean estaVigente() {
-        return !LocalDate.now().isAfter(this.fechaVencimiento);
-    }
 
-    public long diasRestantes() {
-        long dias = ChronoUnit.DAYS.between(LocalDate.now(), this.fechaVencimiento);
-        return Math.max(dias, 0);
-    }
 }

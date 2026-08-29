@@ -7,10 +7,5 @@ import java.util.Optional;
 
 public interface IClienteRepository extends JpaRepository<Cliente, Integer> {
 
-    Optional<Cliente> findByDui(String dui);
-
-    Optional<Cliente> findByUsuario_Id(Integer usuarioId);
-
-    Optional<Cliente> findByUsuario_Email(String email);
 
 }

@@ -75,16 +75,5 @@ public class Entrenador {
         this.telefono = telefono;
     }
 
-    //Metodos de negocio
-    public java.util.List<AsignacionEntrenador> obtenerClientesActivos(
-            java.util.List<AsignacionEntrenador> asignaciones) {
-        return asignaciones.stream()
-                .filter(AsignacionEntrenador::estaActiva)
-                .toList();
-    }
 
-    public boolean estaDisponible(java.util.List<AsignacionEntrenador> asignaciones, int cupoMaximo) {
-        long activos = asignaciones.stream().filter(AsignacionEntrenador::estaActiva).count();
-        return activos < cupoMaximo;
-    }
 }

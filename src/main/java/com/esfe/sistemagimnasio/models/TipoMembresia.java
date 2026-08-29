@@ -76,9 +76,4 @@ public class TipoMembresia {
         this.activo = activo;
     }
 
-
-    //Metodos de negocio
-    public LocalDate calcularFechaVencimiento(LocalDate fechaInicio) {
-        return fechaInicio.plusDays(this.duracionDias);
-    }
 }

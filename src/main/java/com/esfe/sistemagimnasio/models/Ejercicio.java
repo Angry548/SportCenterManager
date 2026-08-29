@@ -74,11 +74,6 @@ public class Ejercicio {
     }
 
 
-    //Metodos de negocio
-    public boolean estaEnUso(java.util.List<RutinaEjercicio> rutinaEjercicios) {
-        return rutinaEjercicios.stream()
-                .anyMatch(re -> re.getEjercicio().getId().equals(this.id));
-    }
 }
 
 
