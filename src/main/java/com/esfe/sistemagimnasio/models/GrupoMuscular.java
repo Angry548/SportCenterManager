@@ -17,6 +17,7 @@ public class GrupoMuscular {
     @Column(name = "nombre", nullable = false, length = 50, unique = true)
     private String nombre;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -32,4 +33,5 @@ public class GrupoMuscular {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
 }

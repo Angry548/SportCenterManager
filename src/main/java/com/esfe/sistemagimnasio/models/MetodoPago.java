@@ -22,6 +22,7 @@ public class MetodoPago {
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
