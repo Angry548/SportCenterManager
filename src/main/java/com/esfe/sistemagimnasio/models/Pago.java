@@ -103,12 +103,4 @@ public class Pago {
         this.numeroComprobante = numeroComprobante;
     }
 
-    //Metodos de negocio
-    public String generarNumeroComprobante() {
-        return "CMP-" + UUID.randomUUID().toString().substring(0, 12).toUpperCase();
-    }
-
-    public byte[] generarComprobantePDF() {
-        throw new UnsupportedOperationException("Implementar en PagoService usando los datos de este Pago");
-    }
 }

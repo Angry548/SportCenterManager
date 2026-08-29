@@ -102,18 +102,7 @@ public class Cliente {
         this.direccion = direccion;
     }
 
-    //Metodos de negocio
-    public boolean tieneMembresiaVigente(java.util.List<MembresiaCliente> membresias) {
-        return membresias.stream().anyMatch(MembresiaCliente::estaVigente);
-    }
 
-    public boolean tieneEntrenadorActivo(java.util.List<AsignacionEntrenador> asignaciones) {
-        return asignaciones.stream().anyMatch(AsignacionEntrenador::estaActiva);
-    }
-
-    public int obtenerEdad() {
-        return Period.between(this.fechaNacimiento, LocalDate.now()).getYears();
-    }
 }
 
 

@@ -61,11 +61,5 @@ public class Asistencia {
         this.resultado = resultado;
     }
 
-    //Metodos de negocio
-    public static Asistencia registrar(Cliente cliente, boolean membresiaVigente) {
-        Asistencia asistencia = new Asistencia();
-        asistencia.setCliente(cliente);
-        asistencia.setResultado(membresiaVigente ? Resultado.PERMITIDO : Resultado.RECHAZADO);
-        return asistencia;
-    }
+
 }

@@ -8,7 +8,4 @@ import java.util.Optional;
 
 public interface IAsignacionEntrenadorRepository extends JpaRepository<AsignacionEntrenador, Integer> {
 
-    List<AsignacionEntrenador> findByEntrenador_IdAndFechaFinIsNull(Integer entrenadorId);
-    List<AsignacionEntrenador> findByCliente_IdOrderByFechaAsignacionDesc(Integer clienteId);
-    Optional<AsignacionEntrenador> findByCliente_IdAndFechaFinIsNull(Integer clienteId);
 }

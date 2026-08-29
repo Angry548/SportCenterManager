@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface IEjercicioRepository extends JpaRepository<Ejercicio,Integer> {
 
-    List<Ejercicio> findByGrupoMuscular_Id(Integer grupoMuscularId);
 
 }

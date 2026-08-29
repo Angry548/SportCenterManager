@@ -91,20 +91,4 @@ public class Usuario {
     }
 
 
-    //Metodos de negocio
-//    public boolean autenticar(String passwordPlano, org.springframework.security.crypto.password.PasswordEncoder encoder) {
-//        return Boolean.TRUE.equals(this.activo) && encoder.matches(passwordPlano, this.passwordHash);
-//    }
-
-    public void cambiarPassword(String nuevoHash) {
-        this.passwordHash = nuevoHash;
-    }
-
-    public void activar() {
-        this.activo = true;
-    }
-
-    public void desactivar() {
-        this.activo = false;
-    }
 }

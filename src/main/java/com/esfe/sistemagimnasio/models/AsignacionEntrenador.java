@@ -74,12 +74,4 @@ public class AsignacionEntrenador {
     }
 
 
-//    Metodos de Negocio
-    public void finalizar() {
-    this.fechaFin = LocalDate.now();
-}
-
-    public boolean estaActiva() {
-        return this.fechaFin == null;
-    }
 }

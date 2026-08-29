@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface IEntrenadorRepository extends JpaRepository<Entrenador, Integer> {
 
-    Optional<Entrenador> findByDui(String dui);
-    Optional<Entrenador> findByUsuario_Id(Integer usuarioId);
 }
