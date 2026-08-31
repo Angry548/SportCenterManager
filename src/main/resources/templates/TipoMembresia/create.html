@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Tipo de Membresía - Sistema Gimnasio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container mt-4 col-md-6">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Crear Nuevo Tipo de Membresía</h4>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/tipos-membresia/save}" th:object="${tipoMembresia}" method="post">
+
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre del Plan</label>
+                    <input type="text" th:field="*{nombre}" id="nombre" class="form-control" th:errorclass="is-invalid" placeholder="Ej. Mensual, Trimestral, VIP">
+                    <div class="invalid-feedback" th:errors="*{nombre}">Error en el nombre</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="duracionDias" class="form-label">Duración (en Días)</label>
+                    <input type="number" th:field="*{duracionDias}" id="duracionDias" class="form-control" th:errorclass="is-invalid" placeholder="Ej. 30, 90, 365">
+                    <div class="invalid-feedback" th:errors="*{duracionDias}">Error en la duración</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="precio" class="form-label">Precio ($)</label>
+                    <input type="number" step="0.01" th:field="*{precio}" id="precio" class="form-control" th:errorclass="is-invalid" placeholder="0.00">
+                    <div class="invalid-feedback" th:errors="*{precio}">Error en el precio</div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" th:field="*{activo}" class="form-check-input" id="activo" checked>
+                    <label class="form-check-label" for="activo">Plan Activo</label>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/tipos-membresia}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-success">Guardar Plan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
