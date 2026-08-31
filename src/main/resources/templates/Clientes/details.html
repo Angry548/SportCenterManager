@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles del Cliente - Sistema Gimnasio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container mt-4 col-md-7">
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Ficha del Cliente</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item"><strong>ID:</strong> <span th:text="${cliente.id}"></span></li>
+                <li class="list-group-item"><strong>Nombre Completo:</strong> <span th:text="${cliente.nombre + ' ' + cliente.apellido}"></span></li>
+                <li class="list-group-item"><strong>Teléfono:</strong> <span th:text="${cliente.telefono}"></span></li>
+                <li class="list-group-item"><strong>Fecha de Nacimiento:</strong> <span th:text="${#temporals.format(cliente.fechaNacimiento, 'dd/MM/yyyy')}"></span></li>
+
+                <!-- Consulta 1: Edad -->
+                <li class="list-group-item"><strong>Edad Calculada:</strong> <span class="badge bg-primary fs-6" th:text="${edad + ' años'}">25 años</span></li>
+
+                <!-- Consulta 2: Membresía Vigente -->
+                <li class="list-group-item"><strong>Membresía Vigente:</strong>
+                    <span th:if="${membresiaVigente != null}" class="badge bg-success fs-6" th:text="${membresiaVigente.tipoMembresia.nombre}">Anual</span>
+                    <span th:unless="${membresiaVigente != null}" class="badge bg-danger fs-6">Sin Membresía Activa</span>
+                </li>
+
+                <!-- Consulta 3: Entrenador Activo -->
+                <li class="list-group-item"><strong>Entrenador Activo:</strong>
+                    <span th:if="${entrenadorActivo != null}" th:text="${entrenadorActivo.nombre + ' ' + entrenadorActivo.apellido}">Carlos Gómez</span>
+                    <span th:unless="${entrenadorActivo != null}" class="text-muted">No tiene asignado un entrenador activo</span>
+                </li>
+            </ul>
+
+            <div class="d-flex justify-content-between">
+                <a th:href="@{/clientes}" class="btn btn-secondary">Volver al Listado</a>
+                <a th:href="@{/clientes/edit/{id}(id=${cliente.id})}" class="btn btn-warning">Editar Datos</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
