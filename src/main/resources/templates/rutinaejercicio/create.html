@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Ejercicio a Rutina</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <div th:if="${error != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Agregar Ejercicio a Rutina</h4>
+        </div>
+        <div class="card-body">
+
+            <form th:action="@{/rutina-ejercicios/save}" th:object="${rutinaEjercicio}" method="post">
+
+                <div class="row">
+                    <!-- Seleccionar Rutina -->
+                    <div class="col-md-6 mb-3">
+                        <label for="rutina" class="form-label fw-bold">Rutina *</label>
+                        <select id="rutina" th:field="*{rutina}" class="form-select" th:classappend="${#fields.hasErrors('rutina')} ? 'is-invalid'">
+                            <option value="">-- Seleccione una Rutina --</option>
+                            <option th:each="rut : ${rutinas}"
+                                    th:value="${rut.id}"
+                                    th:text="${rut.nombre != null ? rut.nombre : 'Rutina #' + rut.id}">
+                            </option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('rutina')}" th:errors="*{rutina}"></div>
+                    </div>
+
+                    <!-- Seleccionar Ejercicio -->
+                    <div class="col-md-6 mb-3">
+                        <label for="ejercicio" class="form-label fw-bold">Ejercicio *</label>
+                        <select id="ejercicio" th:field="*{ejercicio}" class="form-select" th:classappend="${#fields.hasErrors('ejercicio')} ? 'is-invalid'">
+                            <option value="">-- Seleccione un Ejercicio --</option>
+                            <option th:each="ej : ${ejercicios}"
+                                    th:value="${ej.id}"
+                                    th:text="${ej.nombre != null ? ej.nombre : 'Ejercicio #' + ej.id}">
+                            </option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('ejercicio')}" th:errors="*{ejercicio}"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Series -->
+                    <div class="col-md-4 mb-3">
+                        <label for="series" class="form-label fw-bold">Series *</label>
+                        <input type="number" min="1" id="series" th:field="*{series}" class="form-control"
+                               placeholder="Ej. 4" th:classappend="${#fields.hasErrors('series')} ? 'is-invalid'" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('series')}" th:errors="*{series}"></div>
+                    </div>
+
+                    <!-- Repeticiones -->
+                    <div class="col-md-4 mb-3">
+                        <label for="repeticiones" class="form-label fw-bold">Repeticiones *</label>
+                        <input type="number" min="1" id="repeticiones" th:field="*{repeticiones}" class="form-control"
+                               placeholder="Ej. 12" th:classappend="${#fields.hasErrors('repeticiones')} ? 'is-invalid'" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('repeticiones')}" th:errors="*{repeticiones}"></div>
+                    </div>
+
+                    <!-- Descanso -->
+                    <div class="col-md-4 mb-3">
+                        <label for="descansoSegundos" class="form-label fw-bold">Descanso (Segundos) *</label>
+                        <input type="number" min="0" id="descansoSegundos" th:field="*{descansoSegundos}" class="form-control"
+                               placeholder="Ej. 60" th:classappend="${#fields.hasErrors('descansoSegundos')} ? 'is-invalid'" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('descansoSegundos')}" th:errors="*{descansoSegundos}"></div>
+                    </div>
+                </div>
+
+                <!-- Observaciones -->
+                <div class="mb-3">
+                    <label for="observaciones" class="form-label fw-bold">Observaciones (Opcional)</label>
+                    <textarea id="observaciones" th:field="*{observaciones}" class="form-control" rows="3"
+                              placeholder="Ej. Controlar la fase concéntrica, pausar 1 segundo abajo..."
+                              th:classappend="${#fields.hasErrors('observaciones')} ? 'is-invalid'"></textarea>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('observaciones')}" th:errors="*{observaciones}"></div>
+                </div>
+
+                <!-- Botones -->
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <a th:href="@{/rutina-ejercicios}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
