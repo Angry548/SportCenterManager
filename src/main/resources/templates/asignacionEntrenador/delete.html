@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Asignación</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <div class="card border-danger shadow">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Confirmar Eliminación de Asignación</h4>
+        </div>
+        <div class="card-body">
+
+            <div class="alert alert-warning" role="alert">
+                <strong>¡Atención!</strong> ¿Está seguro de que desea eliminar la siguiente asignación? Esta acción no se puede deshacer.
+            </div>
+
+            <!-- Resumen del registro a eliminar -->
+            <div class="row my-4">
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">ID:</label>
+                    <p class="fs-5" th:text="${asignacionEntrenador.id}">1</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">Cliente:</label>
+                    <p class="fs-5"
+                       th:text="${asignacionEntrenador.cliente != null ? asignacionEntrenador.cliente.nombre : 'Cliente #' + asignacionEntrenador.cliente.id}">Cliente</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">Entrenador:</label>
+                    <p class="fs-5"
+                       th:text="${asignacionEntrenador.entrenador != null and asignacionEntrenador.entrenador.usuario != null ? asignacionEntrenador.entrenador.usuario.nombre : 'Entrenador #' + asignacionEntrenador.entrenador.id}">Entrenador</p>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">Fecha de Asignación:</label>
+                    <p class="fs-5" th:text="${#temporals.format(asignacionEntrenador.fechaAsignacion, 'dd/MM/yyyy')}">01/01/2026</p>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">Fecha Fin:</label>
+                    <p class="fs-5" th:text="${asignacionEntrenador.fechaFin != null ? #temporals.format(asignacionEntrenador.fechaFin, 'dd/MM/yyyy') : 'Activa (Sin finalizar)'}">-</p>
+                </div>
+            </div>
+
+            <!-- Formulario de envío del borrado -->
+            <form th:action="@{/asignaciones-entrenador/delete}" method="post">
+                <input type="hidden" name="id" th:value="${asignacionEntrenador.id}" />
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a th:href="@{/asignaciones-entrenador}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        Confirmar y Eliminar
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
