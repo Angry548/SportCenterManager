@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles del Entrenador</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <div class="card shadow mb-4">
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Detalles del Entrenador</h4>
+            <div>
+                <a th:href="@{/entrenadores/edit/{id}(id=${entrenador.id})}" class="btn btn-warning btn-sm">
+                    Editar
+                </a>
+                <a th:href="@{/entrenadores}" class="btn btn-light btn-sm">
+                    Volver a la lista
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- Información principal del Entrenador -->
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">ID:</label>
+                    <p class="fs-5" th:text="${entrenador.id}">1</p>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">Usuario Asociado:</label>
+                    <p class="fs-5" th:text="${entrenador.usuario != null ? entrenador.usuario.nombre : 'Sin asignar'}">Nombre Usuario</p>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">DUI:</label>
+                    <p class="fs-5" th:text="${entrenador.dui}">00000000-0</p>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">Teléfono:</label>
+                    <p class="fs-5" th:text="${entrenador.telefono}">0000-0000</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">Especialidad:</label>
+                    <p>
+                        <span class="badge bg-info text-dark fs-6" th:text="${entrenador.especialidad}">Especialidad</span>
+                    </p>
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- Sección de Clientes Activos Asignados -->
+            <h5 class="mt-4 mb-3 text-primary">Clientes Activos Asignados</h5>
+
+            <div class="table-responsive" th:if="${clientesActivos != null and !clientesActivos.empty}">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>DUI</th>
+                        <th>Teléfono</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cliente : ${clientesActivos}">
+                        <td th:text="${cliente.id}">1</td>
+                        <td th:text="${cliente.nombre != null ? cliente.nombre : 'Cliente #' + cliente.id}">Nombre Cliente</td>
+                        <td th:text="${cliente.dui != null ? cliente.dui : 'N/A'}">00000000-0</td>
+                        <td th:text="${cliente.telefono != null ? cliente.telefono : 'N/A'}">0000-0000</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mensaje cuando no hay clientes asignados -->
+            <div th:if="${clientesActivos == null or clientesActivos.empty}" class="alert alert-secondary text-center my-3" role="alert">
+                Este entrenador no tiene clientes activos asignados actualmente.
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
