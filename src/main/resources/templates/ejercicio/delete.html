@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Ejercicio</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <div class="card border-danger shadow">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Confirmar Eliminación de Ejercicio</h4>
+        </div>
+        <div class="card-body">
+
+            <div class="alert alert-warning" role="alert">
+                <strong>¡Atención!</strong> ¿Está seguro de que desea eliminar el siguiente ejercicio? Esta acción no se puede deshacer.
+            </div>
+
+            <div class="row my-4">
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">ID:</label>
+                    <p class="fs-5" th:text="${ejercicio.id}">1</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">Nombre:</label>
+                    <p class="fs-5" th:text="${ejercicio.nombre}">Nombre Ejercicio</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">Grupo Muscular:</label>
+                    <p class="fs-5" th:text="${ejercicio.grupoMuscular != null ? ejercicio.grupoMuscular.nombre : 'Sin asignar'}">Grupo Muscular</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">Dificultad:</label>
+                    <p class="fs-5" th:text="${ejercicio.dificultad}">DIFICULTAD</p>
+                </div>
+            </div>
+
+            <!-- Formulario de eliminación POST -->
+            <form th:action="@{/ejercicios/delete}" method="post">
+                <input type="hidden" name="id" th:value="${ejercicio.id}" />
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a th:href="@{/ejercicios}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        Confirmar y Eliminar
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
