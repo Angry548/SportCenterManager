@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Ejercicio</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <div th:if="${error != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Editar Ejercicio</h4>
+        </div>
+        <div class="card-body">
+
+            <form th:action="@{/ejercicios/save}" th:object="${ejercicio}" method="post">
+
+                <!-- ID Oculto -->
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="row">
+                    <!-- Nombre -->
+                    <div class="col-md-6 mb-3">
+                        <label for="nombre" class="form-label font-weight-bold">Nombre del Ejercicio *</label>
+                        <input type="text" id="nombre" th:field="*{nombre}" class="form-control"
+                               placeholder="Ej. Press de Banca, Sentadilla" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                    </div>
+
+                    <!-- Grupo Muscular -->
+                    <div class="col-md-6 mb-3">
+                        <label for="grupoMuscular" class="form-label font-weight-bold">Grupo Muscular *</label>
+                        <select id="grupoMuscular" th:field="*{grupoMuscular}" class="form-select" th:classappend="${#fields.hasErrors('grupoMuscular')} ? 'is-invalid'">
+                            <option value="">-- Seleccione un Grupo Muscular --</option>
+                            <option th:each="grupo : ${gruposMusculares}"
+                                    th:value="${grupo.id}"
+                                    th:text="${grupo.nombre != null ? grupo.nombre : 'Grupo #' + grupo.id}"
+                                    th:selected="${ejercicio.grupoMuscular != null and grupo.id == ejercicio.grupoMuscular.id}">
+                            </option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('grupoMuscular')}" th:errors="*{grupoMuscular}"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Dificultad -->
+                    <div class="col-md-6 mb-3">
+                        <label for="dificultad" class="form-label font-weight-bold">Dificultad *</label>
+                        <select id="dificultad" th:field="*{dificultad}" class="form-select" th:classappend="${#fields.hasErrors('dificultad')} ? 'is-invalid'">
+                            <option value="">-- Seleccione Dificultad --</option>
+                            <option th:each="dif : ${dificultades}"
+                                    th:value="${dif}"
+                                    th:text="${dif}"
+                                    th:selected="${ejercicio.dificultad != null and dif == ejercicio.dificultad}">
+                            </option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('dificultad')}" th:errors="*{dificultad}"></div>
+                    </div>
+
+                    <!-- URL de Imagen -->
+                    <div class="col-md-6 mb-3">
+                        <label for="imagenUrl" class="form-label font-weight-bold">URL de la Imagen (Opcional)</label>
+                        <input type="text" id="imagenUrl" th:field="*{imagenUrl}" class="form-control"
+                               placeholder="https://ejemplo.com/imagen.jpg" th:classappend="${#fields.hasErrors('imagenUrl')} ? 'is-invalid'" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('imagenUrl')}" th:errors="*{imagenUrl}"></div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <a th:href="@{/ejercicios}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-warning">
+                        Actualizar Ejercicio
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
