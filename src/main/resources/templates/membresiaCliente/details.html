@@ -1,0 +1,76 @@
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/layouts/_mainLayout">
+
+<div layout:fragment="content">
+
+    <h1>Detalles de Membresía de Cliente</h1>
+
+    <div class="mb-3">
+        <label class="form-label">ID</label>
+        <input type="text"
+               class="form-control"
+               th:value="${membresiaCliente.id}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Cliente</label>
+        <input type="text"
+               class="form-control"
+               th:value="${membresiaCliente.cliente.usuario.email}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Tipo de membresía</label>
+        <input type="text"
+               class="form-control"
+               th:value="${membresiaCliente.tipoMembresia.nombre}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Fecha de inicio</label>
+        <input type="text"
+               class="form-control"
+               th:value="${membresiaCliente.fechaInicio}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Fecha de vencimiento</label>
+        <input type="text"
+               class="form-control"
+               th:value="${membresiaCliente.fechaVencimiento}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Estado</label>
+        <input type="text"
+               class="form-control"
+               th:value="${vigente ? 'Vigente' : 'Vencida'}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Días restantes</label>
+        <input type="text"
+               class="form-control"
+               th:value="${diasRestantes}"
+               readonly>
+    </div>
+
+    <a th:href="@{/membresias-clientes}"
+       class="btn btn-outline-secondary">
+        Regresar
+    </a>
+
+    <a th:href="@{/membresias-clientes/edit/{id}(id=${membresiaCliente.id})}"
+       class="btn btn-outline-info">
+        Editar
+    </a>
+
+</div>
