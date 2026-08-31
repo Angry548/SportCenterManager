@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Entrenador</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <!-- Mensaje de error general -->
+    <div th:if="${error != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Editar Entrenador</h4>
+        </div>
+        <div class="card-body">
+
+            <form th:action="@{/entrenadores/save}" th:object="${entrenadorCliente}" method="post">
+
+                <!-- Campo oculto para el ID -->
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="row">
+                    <!-- Selección de Usuario -->
+                    <div class="col-md-6 mb-3">
+                        <label for="usuario" class="form-label font-weight-bold">Usuario Asociado *</label>
+                        <select id="usuario" th:field="*{usuario}" class="form-select" th:classappend="${#fields.hasErrors('usuario')} ? 'is-invalid'">
+                            <option value="">-- Seleccione un Usuario --</option>
+                            <option th:each="usr : ${usuarios}"
+                                    th:value="${usr.id}"
+                                    th:text="${usr.nombre != null ? usr.nombre : 'Usuario #' + usr.id}"
+                                    th:selected="${entrenadorCliente.usuario != null and usr.id == entrenadorCliente.usuario.id}">
+                            </option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('usuario')}" th:errors="*{usuario}"></div>
+                    </div>
+
+                    <!-- DUI -->
+                    <div class="col-md-6 mb-3">
+                        <label for="dui" class="form-label font-weight-bold">DUI *</label>
+                        <input type="text" id="dui" th:field="*{dui}" class="form-control"
+                               placeholder="00000000-0" th:classappend="${#fields.hasErrors('dui')} ? 'is-invalid'" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('dui')}" th:errors="*{dui}"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Especialidad -->
+                    <div class="col-md-6 mb-3">
+                        <label for="especialidad" class="form-label font-weight-bold">Especialidad *</label>
+                        <input type="text" id="especialidad" th:field="*{especialidad}" class="form-control"
+                               placeholder="Ej. Musculación, Funcional, Crossfit" th:classappend="${#fields.hasErrors('especialidad')} ? 'is-invalid'" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('especialidad')}" th:errors="*{especialidad}"></div>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="col-md-6 mb-3">
+                        <label for="telefono" class="form-label font-weight-bold">Teléfono *</label>
+                        <input type="text" id="telefono" th:field="*{telefono}" class="form-control"
+                               placeholder="0000-0000" th:classappend="${#fields.hasErrors('telefono')} ? 'is-invalid'" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <a th:href="@{/entrenadores}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-warning">
+                        Actualizar Entrenador
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
