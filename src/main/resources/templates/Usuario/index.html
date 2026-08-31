@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios - Sistema Gimnasio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Listado de Usuarios</h2>
+        <a th:href="@{/usuarios/create}" class="btn btn-primary">Nuevo Usuario</a>
+    </div>
+
+    <!-- Mensajes de éxito / error -->
+    <div th:if="${msg}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${msg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <table class="table table-striped table-hover shadow-sm bg-white">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="usuario : ${usuarios.content}">
+            <td th:text="${usuario.id}">1</td>
+            <td th:text="${usuario.nombre}">Juan Pérez</td>
+            <td th:text="${usuario.email}">juan@ejemplo.com</td>
+            <td th:text="${usuario.rol != null ? usuario.rol.nombre : 'Sin Rol'}">Admin</td>
+            <td>
+                <span th:if="${usuario.activo}" class="badge bg-success">Activo</span>
+                <span th:unless="${usuario.activo}" class="badge bg-danger">Inactivo</span>
+            </td>
+            <td class="d-flex gap-1">
+                <a th:href="@{/usuarios/details/{id}(id=${usuario.id})}" class="btn btn-info btn-sm">Detalles</a>
+                <a th:href="@{/usuarios/edit/{id}(id=${usuario.id})}" class="btn btn-warning btn-sm">Editar</a>
+                <a th:href="@{/usuarios/remove/{id}(id=${usuario.id})}" class="btn btn-danger btn-sm">Eliminar</a>
+
+                <!-- Botón rápido de Activar / Desactivar -->
+                <form th:if="${usuario.activo}" th:action="@{/usuarios/deactivate/{id}(id=${usuario.id})}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Desactivar</button>
+                </form>
+                <form th:unless="${usuario.activo}" th:action="@{/usuarios/activate/{id}(id=${usuario.id})}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-success btn-sm">Activar</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <nav th:if="${pageNumbers}" class="d-flex justify-content-center">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${usuarios.number == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/usuarios(page=${usuarios.number})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                th:classappend="${pageNumber == usuarios.number + 1} ? 'active'">
+                <a class="page-link" th:href="@{/usuarios(page=${pageNumber})}" th:text="${pageNumber}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${usuarios.number + 1 == usuarios.totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{/usuarios(page=${usuarios.number + 2})}">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
