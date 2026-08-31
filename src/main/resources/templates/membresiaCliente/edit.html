@@ -1,0 +1,105 @@
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/layouts/_mainLayout">
+
+<div layout:fragment="content">
+
+    <h1>Editar Membresía de Cliente</h1>
+
+    <form th:action="@{/membresias-clientes/save}"
+          th:object="${membresiaCliente}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+        <div class="mb-3">
+
+            <label class="form-label">Cliente</label>
+
+            <select class="form-select"
+                    th:field="*{cliente.id}">
+
+                <option value="">Seleccione un cliente</option>
+
+                <option th:each="cliente : ${clientes}"
+                        th:value="${cliente.id}"
+                        th:text="${cliente.usuario.email}">
+                </option>
+
+            </select>
+
+            <div class="text-danger"
+                 th:if="${#fields.hasErrors('cliente')}"
+                 th:errors="*{cliente}">
+            </div>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">Tipo de membresía</label>
+
+            <select class="form-select"
+                    th:field="*{tipoMembresia.id}">
+
+                <option value="">Seleccione un tipo de membresía</option>
+
+                <option th:each="tipo : ${tiposMembresia}"
+                        th:value="${tipo.id}"
+                        th:text="${tipo.nombre}">
+                </option>
+
+            </select>
+
+            <div class="text-danger"
+                 th:if="${#fields.hasErrors('tipoMembresia')}"
+                 th:errors="*{tipoMembresia}">
+            </div>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">Fecha de inicio</label>
+
+            <input type="date"
+                   class="form-control"
+                   th:field="*{fechaInicio}">
+
+            <div class="text-danger"
+                 th:if="${#fields.hasErrors('fechaInicio')}"
+                 th:errors="*{fechaInicio}">
+            </div>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">Fecha de vencimiento</label>
+
+            <input type="date"
+                   class="form-control"
+                   th:field="*{fechaVencimiento}">
+
+            <div class="text-danger"
+                 th:if="${#fields.hasErrors('fechaVencimiento')}"
+                 th:errors="*{fechaVencimiento}">
+            </div>
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-outline-success">
+            Guardar cambios
+        </button>
+
+        <a th:href="@{/membresias-clientes}"
+           class="btn btn-outline-secondary">
+            Regresar
+        </a>
+
+    </form>
+
+</div>
