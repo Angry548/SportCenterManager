@@ -1,0 +1,98 @@
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/layouts/_mainLayout">
+
+<div layout:fragment="content">
+
+    <h1>Eliminar Evaluación Física</h1>
+
+    <div class="alert alert-warning">
+        ¿Está seguro de que desea eliminar esta evaluación física?
+    </div>
+
+    <form th:action="@{/evaluaciones-fisicas/delete}"
+          th:object="${evaluacionFisica}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+        <div class="mb-3">
+            <label class="form-label">ID</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${evaluacionFisica.id}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cliente</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${evaluacionFisica.cliente.usuario.email}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Entrenador</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${evaluacionFisica.entrenador.usuario.email}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${evaluacionFisica.fecha}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Peso (kg)</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${evaluacionFisica.peso}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Estatura (m)</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${evaluacionFisica.estatura}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Porcentaje de grasa</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${evaluacionFisica.porcentajeGrasa}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Observaciones</label>
+            <textarea class="form-control"
+                      rows="4"
+                      readonly
+                      th:text="${evaluacionFisica.observaciones}">
+            </textarea>
+        </div>
+
+        <button type="submit"
+                class="btn btn-outline-danger">
+            Eliminar
+        </button>
+
+        <a th:href="@{/evaluaciones-fisicas}"
+           class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+
+    </form>
+
+</div>
