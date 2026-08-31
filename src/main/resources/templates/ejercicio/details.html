@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles del Ejercicio</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <div class="card shadow">
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Detalles del Ejercicio</h4>
+            <div>
+                <a th:href="@{/ejercicios/edit/{id}(id=${ejercicio.id})}" class="btn btn-warning btn-sm">
+                    Editar
+                </a>
+                <a th:href="@{/ejercicios}" class="btn btn-light btn-sm">
+                    Volver a la lista
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <div class="row align-items-center">
+                <!-- Imagen del Ejercicio -->
+                <div class="col-md-4 text-center mb-3">
+                    <img th:if="${ejercicio.imagenUrl != null and !ejercicio.imagenUrl.empty}"
+                         th:src="${ejercicio.imagenUrl}"
+                         alt="Imagen del Ejercicio"
+                         class="img-fluid rounded border shadow-sm"
+                         style="max-height: 250px; object-fit: cover;" />
+                    <div th:if="${ejercicio.imagenUrl == null or ejercicio.imagenUrl.empty}" class="p-4 border rounded bg-light text-muted">
+                        No hay vista previa disponible
+                    </div>
+                </div>
+
+                <!-- Datos principales -->
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold text-muted">ID Ejercicio:</label>
+                            <p class="fs-5" th:text="${ejercicio.id}">1</p>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold text-muted">Nombre:</label>
+                            <p class="fs-4 text-primary font-weight-bold" th:text="${ejercicio.nombre}">Nombre Ejercicio</p>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold text-muted">Grupo Muscular:</label>
+                            <p class="fs-5" th:text="${ejercicio.grupoMuscular != null ? ejercicio.grupoMuscular.nombre : 'Sin asignar'}">Grupo Muscular</p>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold text-muted">Dificultad:</label>
+                            <p>
+                                <span class="badge bg-secondary fs-6" th:text="${ejercicio.dificultad}">DIFICULTAD</span>
+                            </p>
+                        </div>
+
+                        <div class="col-12 mb-3" th:if="${ejercicio.imagenUrl != null and !ejercicio.imagenUrl.empty}">
+                            <label class="fw-bold text-muted">URL de Imagen:</label>
+                            <p class="text-break"><a th:href="${ejercicio.imagenUrl}" target="_blank" th:text="${ejercicio.imagenUrl}">https://...</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
