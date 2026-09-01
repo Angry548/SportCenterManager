@@ -1,92 +1,369 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Editar Ejercicio</title>
+
+    <title>Editar ejercicio</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/ejercicio.css}">
+    </th:block>
+
 </head>
+
 <body>
-<div layout:fragment="content" class="container mt-4">
 
-    <div th:if="${error != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span th:text="${error}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="exercise-breadcrumb">
+
+        <a th:href="@{/ejercicios}">
+            Ejercicios
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+
+        <a th:href="@{/ejercicios/details/{id}(id=${ejercicio.id})}"
+           th:text="${ejercicio.nombre}">
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Editar
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Editar ejercicio
+            </h1>
+
+            <p class="page-description">
+                Actualiza la clasificación e información
+                visual del ejercicio seleccionado.
+            </p>
+
+        </div>
+
     </div>
 
-    <div class="card shadow">
-        <div class="card-header bg-warning text-dark">
-            <h4 class="mb-0">Editar Ejercicio</h4>
-        </div>
-        <div class="card-body">
 
-            <form th:action="@{/ejercicios/save}" th:object="${ejercicio}" method="post">
+    <!-- FORM -->
 
-                <!-- ID Oculto -->
-                <input type="hidden" th:field="*{id}" />
+    <form th:action="@{/ejercicios/save}"
+          th:object="${ejercicio}"
+          method="post">
 
-                <div class="row">
-                    <!-- Nombre -->
-                    <div class="col-md-6 mb-3">
-                        <label for="nombre" class="form-label font-weight-bold">Nombre del Ejercicio *</label>
-                        <input type="text" id="nombre" th:field="*{nombre}" class="form-control"
-                               placeholder="Ej. Press de Banca, Sentadilla" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" />
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="exercise-form-container">
+
+            <div class="app-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title"
+                            th:text="${ejercicio.nombre}">
+                        </h2>
+
+                        <div class="app-card-subtitle">
+
+                            Ejercicio #
+
+                            <span th:text="${ejercicio.id}">
+                            </span>
+
+                        </div>
+
                     </div>
 
-                    <!-- Grupo Muscular -->
-                    <div class="col-md-6 mb-3">
-                        <label for="grupoMuscular" class="form-label font-weight-bold">Grupo Muscular *</label>
-                        <select id="grupoMuscular" th:field="*{grupoMuscular}" class="form-select" th:classappend="${#fields.hasErrors('grupoMuscular')} ? 'is-invalid'">
-                            <option value="">-- Seleccione un Grupo Muscular --</option>
-                            <option th:each="grupo : ${gruposMusculares}"
-                                    th:value="${grupo.id}"
-                                    th:text="${grupo.nombre != null ? grupo.nombre : 'Grupo #' + grupo.id}"
-                                    th:selected="${ejercicio.grupoMuscular != null and grupo.id == ejercicio.grupoMuscular.id}">
-                            </option>
-                        </select>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('grupoMuscular')}" th:errors="*{grupoMuscular}"></div>
+
+                    <div class="exercise-section-icon">
+                        <i class="bi bi-pencil-square"></i>
                     </div>
+
                 </div>
 
-                <div class="row">
-                    <!-- Dificultad -->
-                    <div class="col-md-6 mb-3">
-                        <label for="dificultad" class="form-label font-weight-bold">Dificultad *</label>
-                        <select id="dificultad" th:field="*{dificultad}" class="form-select" th:classappend="${#fields.hasErrors('dificultad')} ? 'is-invalid'">
-                            <option value="">-- Seleccione Dificultad --</option>
-                            <option th:each="dif : ${dificultades}"
-                                    th:value="${dif}"
-                                    th:text="${dif}"
-                                    th:selected="${ejercicio.dificultad != null and dif == ejercicio.dificultad}">
-                            </option>
-                        </select>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('dificultad')}" th:errors="*{dificultad}"></div>
-                    </div>
 
-                    <!-- URL de Imagen -->
-                    <div class="col-md-6 mb-3">
-                        <label for="imagenUrl" class="form-label font-weight-bold">URL de la Imagen (Opcional)</label>
-                        <input type="text" id="imagenUrl" th:field="*{imagenUrl}" class="form-control"
-                               placeholder="https://ejemplo.com/imagen.jpg" th:classappend="${#fields.hasErrors('imagenUrl')} ? 'is-invalid'" />
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('imagenUrl')}" th:errors="*{imagenUrl}"></div>
-                    </div>
+                <div class="app-card-body">
+
+                    <!-- INFORMACIÓN -->
+
+                    <section class="exercise-form-section">
+
+                        <div class="exercise-section-heading">
+
+                            <div class="exercise-section-heading-icon">
+                                <i class="bi bi-activity"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Información general
+                                </h3>
+
+                                <p>
+                                    Modifica los datos de clasificación
+                                    del ejercicio.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <!-- NOMBRE -->
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Nombre
+                                </label>
+
+
+                                <div class="exercise-input-wrapper">
+
+                                    <i class="bi bi-activity"></i>
+
+                                    <input type="text"
+                                           class="form-control exercise-input-icon"
+                                           th:field="*{nombre}"
+                                           maxlength="100">
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('nombre')}"
+                                     th:errors="*{nombre}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- GRUPO -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Grupo muscular
+                                </label>
+
+
+                                <select class="form-select"
+                                        th:field="*{grupoMuscular.id}">
+
+                                    <option value="">
+                                        Seleccione un grupo muscular
+                                    </option>
+
+                                    <option th:each="grupo : ${gruposMusculares}"
+                                            th:value="${grupo.id}"
+                                            th:text="${grupo.nombre}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('grupoMuscular')}"
+                                     th:errors="*{grupoMuscular}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- DIFICULTAD -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Dificultad
+                                </label>
+
+
+                                <select class="form-select"
+                                        th:field="*{dificultad}">
+
+                                    <option value="">
+                                        Seleccione una dificultad
+                                    </option>
+
+                                    <option th:each="dificultadItem : ${dificultades}"
+                                            th:value="${dificultadItem}"
+                                            th:text="${dificultadItem}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('dificultad')}"
+                                     th:errors="*{dificultad}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- IMAGEN -->
+
+                    <section class="exercise-form-section">
+
+                        <div class="exercise-section-heading">
+
+                            <div class="exercise-section-heading-icon">
+                                <i class="bi bi-image"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Imagen de referencia
+                                </h3>
+
+                                <p>
+                                    Actualiza la URL utilizada para
+                                    representar este ejercicio.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="exercise-image-form-layout">
+
+                            <div>
+
+                                <label class="form-label"
+                                       for="imagenUrl">
+
+                                    URL de imagen
+
+                                </label>
+
+
+                                <div class="exercise-input-wrapper">
+
+                                    <i class="bi bi-link-45deg"></i>
+
+                                    <input type="text"
+                                           id="imagenUrl"
+                                           class="form-control exercise-input-icon"
+                                           th:field="*{imagenUrl}"
+                                           maxlength="255">
+
+                                </div>
+
+
+                                <div class="exercise-field-help">
+
+                                    <i class="bi bi-info-circle"></i>
+
+                                    Campo opcional.
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('imagenUrl')}"
+                                     th:errors="*{imagenUrl}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- PREVIEW -->
+
+                            <div class="exercise-image-preview"
+                                 id="exerciseImagePreview">
+
+                                <div class="exercise-image-placeholder"
+                                     id="exerciseImagePlaceholder">
+
+                                    <i class="bi bi-image"></i>
+
+                                    <span>
+                                        Vista previa
+                                    </span>
+
+                                </div>
+
+
+                                <img id="exercisePreviewImage"
+                                     th:src="${ejercicio.imagenUrl}"
+                                     alt="Vista previa del ejercicio"
+                                     th:hidden="${ejercicio.imagenUrl == null
+                                        or #strings.isEmpty(ejercicio.imagenUrl)}">
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
                 </div>
 
-                <!-- Botones de Acción -->
-                <div class="d-flex justify-content-end gap-2 mt-3">
-                    <a th:href="@{/ejercicios}" class="btn btn-secondary">
+
+                <div class="exercise-form-footer">
+
+                    <a th:href="@{/ejercicios/details/{id}(id=${ejercicio.id})}"
+                       class="btn btn-light">
+
                         Cancelar
+
                     </a>
-                    <button type="submit" class="btn btn-warning">
-                        Actualizar Ejercicio
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+
+                        Guardar cambios
+
                     </button>
+
                 </div>
 
-            </form>
+            </div>
 
         </div>
-    </div>
+
+    </form>
+
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/ejercicio.js}"></script>
+</th:block>
+
 </body>
 </html>

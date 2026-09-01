@@ -1,120 +1,458 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Listado de Ejercicios</title>
+
+    <title>Ejercicios</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/ejercicio.css}">
+    </th:block>
+
 </head>
+
 <body>
-<div layout:fragment="content" class="container mt-4">
 
-    <!-- Mensajes de notificación -->
-    <div th:if="${msg != null}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${msg}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+<div layout:fragment="content">
 
-    <div th:if="${error != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span th:text="${error}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Listado de Ejercicios</h4>
-            <a th:href="@{/ejercicios/create}" class="btn btn-light btn-sm">
-                <i class="bi bi-plus-circle"></i> Nuevo Ejercicio
-            </a>
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Ejercicios
+            </h1>
+
+            <p class="page-description">
+                Administra el catálogo de ejercicios,
+                sus grupos musculares y nivel de dificultad.
+            </p>
+
         </div>
-        <div class="card-body">
 
-            <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Imagen</th>
-                        <th>Nombre</th>
-                        <th>Grupo Muscular</th>
-                        <th>Dificultad</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="ejercicio : ${ejercicios}">
-                        <td th:text="${ejercicio.id}">1</td>
-                        <td>
-                            <img th:if="${ejercicio.imagenUrl != null and !ejercicio.imagenUrl.empty}"
-                                 th:src="${ejercicio.imagenUrl}"
-                                 alt="Ejercicio"
-                                 class="rounded border"
-                                 style="width: 50px; height: 50px; object-fit: cover;" />
-                            <span th:if="${ejercicio.imagenUrl == null or ejercicio.imagenUrl.empty}" class="text-muted fs-7">Sin imagen</span>
-                        </td>
-                        <td th:text="${ejercicio.nombre}" class="fw-bold">Nombre Ejercicio</td>
-                        <td th:text="${ejercicio.grupoMuscular != null ? ejercicio.grupoMuscular.nombre : 'Sin asignar'}">Grupo Muscular</td>
-                        <td>
-                            <span th:text="${ejercicio.dificultad}" class="badge bg-secondary">DIFICULTAD</span>
-                        </td>
-                        <td class="text-center">
-                            <div class="btn-group btn-group-sm" role="group">
-                                <a th:href="@{/ejercicios/details/{id}(id=${ejercicio.id})}"
-                                   class="btn btn-info text-white"
-                                   title="Ver Detalles">
-                                    Detalles
-                                </a>
-                                <a th:href="@{/ejercicios/edit/{id}(id=${ejercicio.id})}"
-                                   class="btn btn-warning"
-                                   title="Editar">
-                                    Editar
-                                </a>
-                                <a th:href="@{/ejercicios/remove/{id}(id=${ejercicio.id})}"
-                                   class="btn btn-danger"
-                                   title="Eliminar">
-                                    Eliminar
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr th:if="${ejercicios.empty}">
-                        <td colspan="6" class="text-center text-muted py-4">
-                            No se encontraron ejercicios registrados.
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+
+        <div class="page-actions">
+
+            <a th:href="@{/ejercicios/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Nuevo ejercicio
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div th:if="${!ejercicios.isEmpty()}"
+         class="exercise-toolbar">
+
+        <div class="exercise-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="search"
+                   id="exerciseSearch"
+                   class="form-control"
+                   placeholder="Buscar por nombre, grupo muscular o dificultad..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="exerciseSearchClear"
+                    class="exercise-search-clear"
+                    aria-label="Limpiar búsqueda">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="exercise-result-count">
+
+            Mostrando
+
+            <strong id="exerciseVisibleCount"
+                    th:text="${ejercicios.numberOfElements}">
+                0
+            </strong>
+
+            de
+
+            <strong th:text="${ejercicios.totalElements}">
+                0
+            </strong>
+
+            ejercicios
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LISTADO
+         ===================================================== -->
+
+    <div th:if="${!ejercicios.isEmpty()}"
+         class="app-card exercise-list-card">
+
+        <div class="app-card-header">
+
+            <div>
+
+                <h2 class="app-card-title">
+                    Catálogo de ejercicios
+                </h2>
+
+                <div class="app-card-subtitle">
+                    Ejercicios disponibles para construir rutinas.
+                </div>
+
             </div>
 
-            <!-- Paginación -->
-            <nav th:if="${pageNumbers != null and !pageNumbers.empty}" aria-label="Navegación de páginas" class="mt-3">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${ejercicios.number == 0} ? 'disabled'">
-                        <a class="page-link"
-                           th:href="@{/ejercicios(page=${ejercicios.number}, size=${ejercicios.size})}">
-                            Anterior
-                        </a>
-                    </li>
 
-                    <li class="page-item"
-                        th:each="pageNumber : ${pageNumbers}"
-                        th:classappend="${pageNumber == ejercicios.number + 1} ? 'active'">
-                        <a class="page-link"
-                           th:href="@{/ejercicios(page=${pageNumber}, size=${ejercicios.size})}"
-                           th:text="${pageNumber}">1</a>
-                    </li>
-
-                    <li class="page-item" th:classappend="${ejercicios.number + 1 == ejercicios.totalPages} ? 'disabled'">
-                        <a class="page-link"
-                           th:href="@{/ejercicios(page=${ejercicios.number + 2}, size=${ejercicios.size})}">
-                            Siguiente
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <div class="exercise-section-icon">
+                <i class="bi bi-activity"></i>
+            </div>
 
         </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table exercise-table">
+
+                <thead>
+
+                <tr>
+                    <th>Ejercicio</th>
+                    <th>Grupo muscular</th>
+                    <th>Dificultad</th>
+                    <th>Imagen</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="item : ${ejercicios}"
+                    data-exercise-row
+                    th:attr="
+                        data-exercise-name=${item.nombre},
+                        data-exercise-group=${item.grupoMuscular.nombre},
+                        data-exercise-difficulty=${item.dificultad}
+                    ">
+
+                    <!-- EJERCICIO -->
+
+                    <td>
+
+                        <div class="exercise-cell">
+
+                            <div class="exercise-list-avatar">
+
+                                <i class="bi bi-activity"></i>
+
+                            </div>
+
+
+                            <div class="exercise-cell-info">
+
+                                <strong th:text="${item.nombre}">
+                                    Press de banca
+                                </strong>
+
+                                <span>
+                                    Ejercicio #
+                                    <span th:text="${item.id}"></span>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- GRUPO MUSCULAR -->
+
+                    <td>
+
+                        <span class="exercise-group-badge">
+
+                            <i class="bi bi-universal-access"></i>
+
+                            <span th:text="${item.grupoMuscular.nombre}">
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- DIFICULTAD -->
+
+                    <td>
+
+                        <span class="exercise-difficulty-badge"
+                              th:text="${item.dificultad}">
+                        </span>
+
+                    </td>
+
+
+                    <!-- IMAGEN -->
+
+                    <td>
+
+                        <div class="exercise-image-status">
+
+                            <span th:if="${item.imagenUrl != null
+                                and !#strings.isEmpty(item.imagenUrl)}"
+                                  class="exercise-image-available">
+
+                                <i class="bi bi-image"></i>
+                                Disponible
+
+                            </span>
+
+
+                            <span th:unless="${item.imagenUrl != null
+                                and !#strings.isEmpty(item.imagenUrl)}"
+                                  class="exercise-image-empty">
+
+                                <i class="bi bi-image"></i>
+                                Sin imagen
+
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="exercise-actions">
+
+                            <a th:href="@{/ejercicios/details/{id}(id=${item.id})}"
+                               class="exercise-action"
+                               title="Ver ejercicio">
+
+                                <i class="bi bi-eye"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/ejercicios/edit/{id}(id=${item.id})}"
+                               class="exercise-action"
+                               title="Editar ejercicio">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/ejercicios/remove/{id}(id=${item.id})}"
+                               class="exercise-action exercise-action-danger"
+                               title="Eliminar ejercicio">
+
+                                <i class="bi bi-trash3"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
+
+
+    <!-- =====================================================
+         SIN RESULTADOS
+         ===================================================== -->
+
+    <div id="exerciseNoSearchResults"
+         class="app-card"
+         hidden>
+
+        <div class="exercise-empty-state">
+
+            <div class="exercise-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h2>
+                No encontramos coincidencias
+            </h2>
+
+            <p>
+                Prueba buscando otro nombre,
+                grupo muscular o nivel de dificultad.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN EJERCICIOS
+         ===================================================== -->
+
+    <div th:if="${ejercicios.isEmpty()}"
+         class="app-card">
+
+        <div class="exercise-empty-state">
+
+            <div class="exercise-empty-icon">
+                <i class="bi bi-activity"></i>
+            </div>
+
+            <h2>
+                No hay ejercicios registrados
+            </h2>
+
+            <p>
+                Registra el primer ejercicio para comenzar
+                a construir el catálogo de entrenamiento.
+            </p>
+
+            <a th:href="@{/ejercicios/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Crear ejercicio
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGINACIÓN
+         ===================================================== -->
+
+    <div th:if="${ejercicios.totalPages > 1}"
+         class="exercise-pagination">
+
+        <div class="exercise-pagination-info">
+
+            Página
+
+            <strong th:text="${ejercicios.number + 1}">
+                1
+            </strong>
+
+            de
+
+            <strong th:text="${ejercicios.totalPages}">
+                1
+            </strong>
+
+        </div>
+
+
+        <nav aria-label="Paginación de ejercicios">
+
+            <ul class="pagination">
+
+
+                <!-- ANTERIOR -->
+
+                <li class="page-item"
+                    th:classappend="${ejercicios.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/ejercicios(
+                           page=${ejercicios.number},
+                           size=${ejercicios.size}
+                       )}">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+                </li>
+
+
+                <!-- PÁGINAS -->
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == ejercicios.number + 1}
+                        ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/ejercicios(
+                           page=${pageNumber},
+                           size=${ejercicios.size}
+                       )}"
+                       th:text="${pageNumber}">
+                    </a>
+
+                </li>
+
+
+                <!-- SIGUIENTE -->
+
+                <li class="page-item"
+                    th:classappend="${ejercicios.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/ejercicios(
+                           page=${ejercicios.number + 2},
+                           size=${ejercicios.size}
+                       )}">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/ejercicio.js}"></script>
+</th:block>
+
 </body>
 </html>
