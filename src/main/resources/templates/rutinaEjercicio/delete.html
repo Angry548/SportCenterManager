@@ -1,53 +1,208 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Eliminar Ejercicio de Rutina</title>
+
+    <title>Quitar ejercicio de rutina</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/rutina-ejercicio.css}">
+    </th:block>
+
 </head>
+
 <body>
-<div layout:fragment="content" class="container mt-4">
 
-    <div class="card border-danger shadow">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Confirmar Eliminación</h4>
-        </div>
-        <div class="card-body">
+<div layout:fragment="content">
 
-            <div class="alert alert-warning" role="alert">
-                <strong>¡Atención!</strong> ¿Está seguro de que desea eliminar esta asignación de ejercicio de la rutina? Esta acción no se puede deshacer.
+    <nav class="routine-exercise-breadcrumb">
+
+        <a th:href="@{/rutina-ejercicios}">
+            Rutina - ejercicios
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Quitar ejercicio
+        </span>
+
+    </nav>
+
+
+    <div class="routine-exercise-delete-container">
+
+        <div class="app-card routine-exercise-delete-card">
+
+            <div class="routine-exercise-delete-icon">
+                <i class="bi bi-trash3"></i>
             </div>
 
-            <div class="row my-4">
-                <div class="col-md-4 mb-3">
-                    <label class="fw-bold text-muted">ID:</label>
-                    <p class="fs-5" th:text="${rutinaEjercicio.id}">1</p>
-                </div>
 
-                <div class="col-md-4 mb-3">
-                    <label class="fw-bold text-muted">Rutina:</label>
-                    <p class="fs-5" th:text="${rutinaEjercicio.rutina != null ? rutinaEjercicio.rutina.nombre : 'Sin asignación'}">Rutina</p>
-                </div>
+            <span class="routine-exercise-delete-eyebrow">
+                Confirmación requerida
+            </span>
 
-                <div class="col-md-4 mb-3">
-                    <label class="fw-bold text-muted">Ejercicio:</label>
-                    <p class="fs-5" th:text="${rutinaEjercicio.ejercicio != null ? rutinaEjercicio.ejercicio.nombre : 'Sin asignación'}">Ejercicio</p>
-                </div>
+
+            <h1>
+                Quitar ejercicio de la rutina
+            </h1>
+
+
+            <p>
+
+                Estás a punto de quitar
+
+                <strong th:text="${rutinaEjercicio.ejercicio.nombre}">
+                    Ejercicio
+                </strong>
+
+                de la
+
+                <strong>
+                    Rutina #
+                    <span th:text="${rutinaEjercicio.rutina.id}">
+                    </span>
+                </strong>.
+
+            </p>
+
+
+            <div class="routine-exercise-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Se eliminará esta configuración de series,
+                    repeticiones, descanso y observaciones.
+                    El ejercicio original no será eliminado del catálogo.
+                </span>
+
             </div>
 
-            <form th:action="@{/rutina-ejercicios/delete}" method="post">
-                <input type="hidden" name="id" th:value="${rutinaEjercicio.id}" />
 
-                <div class="d-flex justify-content-end gap-2">
-                    <a th:href="@{/rutina-ejercicios}" class="btn btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn btn-danger">Confirmar y Eliminar</button>
+            <div class="routine-exercise-delete-summary">
+
+                <!-- EJERCICIO -->
+
+                <div class="routine-exercise-delete-summary-main">
+
+                    <div class="routine-exercise-delete-summary-icon">
+                        <i class="bi bi-activity"></i>
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Ejercicio
+                        </span>
+
+                        <strong th:text="${rutinaEjercicio.ejercicio.nombre}">
+                        </strong>
+
+                        <small th:text="${rutinaEjercicio.ejercicio.grupoMuscular.nombre}">
+                        </small>
+
+                    </div>
+
                 </div>
+
+
+                <!-- CONFIG -->
+
+                <div class="routine-exercise-delete-config">
+
+                    <div>
+
+                        <span>
+                            Series
+                        </span>
+
+                        <strong th:text="${rutinaEjercicio.series}">
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Repeticiones
+                        </span>
+
+                        <strong th:text="${rutinaEjercicio.repeticiones}">
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Descanso
+                        </span>
+
+                        <strong>
+
+                            <span th:text="${rutinaEjercicio.descansoSegundos}">
+                            </span>
+
+                            seg
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/rutina-ejercicios/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${rutinaEjercicio.id}">
+
+
+                <div class="routine-exercise-delete-actions">
+
+                    <a th:href="@{/rutina-ejercicios/details/{id}(id=${rutinaEjercicio.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+                        Quitar ejercicio
+
+                    </button>
+
+                </div>
+
             </form>
 
         </div>
+
     </div>
 
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/rutina-ejercicio.js}"></script>
+</th:block>
+
 </body>
 </html>
