@@ -1,6 +1,7 @@
 package com.esfe.sistemagimnasio.services.implementations;
 
 import com.esfe.sistemagimnasio.models.Rutina;
+import com.esfe.sistemagimnasio.models.RutinaEjercicio;
 import com.esfe.sistemagimnasio.repositories.IRutinaEjercicioRepository;
 import com.esfe.sistemagimnasio.repositories.IRutinaRepository;
 import com.esfe.sistemagimnasio.services.interfaces.IRutinaService;

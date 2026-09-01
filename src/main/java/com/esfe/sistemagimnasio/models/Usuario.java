@@ -40,6 +40,8 @@ public class Usuario {
     @Column(name = "fecha_registro", nullable = false, updatable = false)
     private LocalDateTime fechaRegistro;
 
+
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -87,4 +89,6 @@ public class Usuario {
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
+
+
 }

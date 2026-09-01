@@ -6,5 +6,5 @@ import java.util.List;
 
 
 public interface IMetodoPagoRepository extends JpaRepository<MetodoPago, Integer> {
-    List<MetodoPago> findByActivoTrue();
+
 }

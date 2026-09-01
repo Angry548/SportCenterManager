@@ -1,6 +1,7 @@
 package com.esfe.sistemagimnasio.services.interfaces;
 
 import com.esfe.sistemagimnasio.models.Rutina;
+import com.esfe.sistemagimnasio.models.RutinaEjercicio;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

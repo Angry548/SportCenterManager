@@ -28,6 +28,7 @@ public class Asistencia {
     @Column(name = "resultado", nullable = false, length = 15)
     private Resultado resultado;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -59,4 +60,6 @@ public class Asistencia {
     public void setResultado(Resultado resultado) {
         this.resultado = resultado;
     }
+
+
 }
