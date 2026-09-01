@@ -1,0 +1,117 @@
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/layouts/_mainLayout">
+
+<div layout:fragment="content">
+
+    <h1>Detalles de Rutina</h1>
+
+    <div class="mb-3">
+        <label class="form-label">ID</label>
+        <input type="text"
+               class="form-control"
+               th:value="${rutina.id}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input type="text"
+               class="form-control"
+               th:value="${rutina.nombre}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Cliente</label>
+        <input type="text"
+               class="form-control"
+               th:value="${rutina.cliente.usuario.email}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Entrenador</label>
+        <input type="text"
+               class="form-control"
+               th:value="${rutina.entrenador.usuario.email}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Fecha de creación</label>
+        <input type="text"
+               class="form-control"
+               th:value="${rutina.fechaCreacion}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Fecha de modificación</label>
+        <input type="text"
+               class="form-control"
+               th:value="${rutina.fechaModificacion != null
+               ? rutina.fechaModificacion
+               : 'Sin modificaciones'}"
+               readonly>
+    </div>
+
+    <hr>
+
+    <h4>Ejercicios de la Rutina</h4>
+
+    <table class="table table-striped">
+
+        <thead>
+        <tr>
+            <th>Ejercicio</th>
+            <th>Grupo muscular</th>
+            <th>Dificultad</th>
+            <th>Series</th>
+            <th>Repeticiones</th>
+            <th>Descanso</th>
+            <th>Observaciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="detalle : ${rutinaEjercicios}">
+
+            <td th:text="${detalle.ejercicio.nombre}"></td>
+
+            <td th:text="${detalle.ejercicio.grupoMuscular.nombre}"></td>
+
+            <td th:text="${detalle.ejercicio.dificultad}"></td>
+
+            <td th:text="${detalle.series}"></td>
+
+            <td th:text="${detalle.repeticiones}"></td>
+
+            <td th:text="${detalle.descansoSegundos}"></td>
+
+            <td th:text="${detalle.observaciones}"></td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <div th:if="${#lists.isEmpty(rutinaEjercicios)}"
+         class="alert alert-info">
+        Esta rutina todavía no tiene ejercicios.
+    </div>
+
+    <a th:href="@{/rutinas}"
+       class="btn btn-outline-secondary">
+        Regresar
+    </a>
+
+    <a th:href="@{/rutinas/edit/{id}(id=${rutina.id})}"
+       class="btn btn-outline-info">
+        Editar
+    </a>
+
+</div>
