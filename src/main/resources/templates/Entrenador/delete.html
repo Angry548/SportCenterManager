@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Entrenador</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <div class="card border-danger shadow">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Confirmar Eliminación de Entrenador</h4>
+        </div>
+        <div class="card-body">
+
+            <div class="alert alert-warning" role="alert">
+                <strong>¡Atención!</strong> ¿Está seguro de que desea eliminar al siguiente entrenador? Esta acción no se puede deshacer.
+            </div>
+
+            <!-- Resumen del registro a eliminar -->
+            <div class="row my-4">
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold">ID:</label>
+                    <p class="form-control-plaintext" th:text="${entrenadorCliente.id}">1</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold">Usuario Asociado:</label>
+                    <p class="form-control-plaintext"
+                       th:text="${entrenador.usuario != null ? entrenador.usuario.nombre : 'Sin asignar'}">Nombre Usuario</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold">DUI:</label>
+                    <p class="form-control-plaintext" th:text="${entrenador.dui}">00000000-0</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold">Especialidad:</label>
+                    <p class="form-control-plaintext" th:text="${entrenador.especialidad}">Especialidad</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold">Teléfono:</label>
+                    <p class="form-control-plaintext" th:text="${entrenador.telefono}">0000-0000</p>
+                </div>
+            </div>
+
+            <!-- Formulario de envío del borrado -->
+            <form th:action="@{/entrenadores/delete}" method="post">
+                <input type="hidden" name="id" th:value="${entrenador.id}" />
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a th:href="@{/entrenadores}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        Confirmar y Eliminar
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
