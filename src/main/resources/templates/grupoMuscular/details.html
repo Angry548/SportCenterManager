@@ -1,0 +1,36 @@
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/layouts/_mainLayout">
+
+<div layout:fragment="content">
+
+    <h1>Detalles del Grupo Muscular</h1>
+
+    <div class="mb-3">
+        <label class="form-label">ID</label>
+        <input type="text"
+               class="form-control"
+               th:value="${grupoMuscular.id}"
+               readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input type="text"
+               class="form-control"
+               th:value="${grupoMuscular.nombre}"
+               readonly>
+    </div>
+
+    <a th:href="@{/grupos-musculares}"
+       class="btn btn-outline-secondary">
+        Regresar
+    </a>
+
+    <a th:href="@{/grupos-musculares/edit/{id}(id=${grupoMuscular.id})}"
+       class="btn btn-outline-info">
+        Editar
+    </a>
+
+</div>
