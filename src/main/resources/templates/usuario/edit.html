@@ -1,53 +1,281 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Editar Usuario - Sistema Gimnasio</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <title>Editar usuario</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/usuario.css}">
+    </th:block>
+
 </head>
-<body class="bg-light">
-<div class="container mt-4 col-md-6">
-    <div class="card shadow-sm">
-        <div class="card-header bg-warning text-dark">
-            <h4 class="mb-0">Editar Usuario</h4>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="user-breadcrumb">
+
+        <a th:href="@{/usuarios}">
+            Usuarios
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <a th:href="@{/usuarios/details/{id}(id=${usuario.id})}"
+           th:text="${usuario.email}">
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>Editar</span>
+
+    </nav>
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Editar usuario
+            </h1>
+
+            <p class="page-description">
+                Actualiza el correo y rol asignado
+                a esta cuenta.
+            </p>
+
         </div>
-        <div class="card-body">
-            <form th:action="@{/usuarios/save}" th:object="${usuario}" method="post">
 
-                <!-- Campo ID oculto para la actualización -->
-                <input type="hidden" th:field="*{id}">
 
-                <div class="mb-3">
-                    <label for="nombre" class="form-label">Nombre Completo</label>
-                    <input type="text" th:field="*{nombre}" id="nombre" class="form-control" th:errorclass="is-invalid">
-                    <div class="invalid-feedback" th:errors="*{nombre}">Error de nombre</div>
-                </div>
+        <div class="page-actions">
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Correo Electrónico</label>
-                    <input type="email" th:field="*{email}" id="email" class="form-control" th:errorclass="is-invalid">
-                    <div class="invalid-feedback" th:errors="*{email}">Error de correo</div>
-                </div>
+            <a th:href="@{/usuarios/change-password/{id}(id=${usuario.id})}"
+               class="btn btn-light">
 
-                <div class="mb-3">
-                    <label for="rol" class="form-label">Rol del Usuario</label>
-                    <select th:field="*{rol.id}" id="rol" class="form-select">
-                        <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.nombre}"></option>
-                    </select>
-                </div>
+                <i class="bi bi-key me-1"></i>
+                Cambiar contraseña
 
-                <div class="form-check mb-3">
-                    <input type="checkbox" th:field="*{activo}" class="form-check-input" id="activo">
-                    <label class="form-check-label" for="activo">Usuario Activo</label>
-                </div>
+            </a>
 
-                <div class="d-flex justify-content-between">
-                    <a th:href="@{/usuarios}" class="btn btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn btn-warning">Actualizar Usuario</button>
-                </div>
-            </form>
         </div>
+
     </div>
+
+
+    <form th:action="@{/usuarios/save}"
+          th:object="${usuario}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+        <!-- Preservar campos gestionados por otros flujos -->
+        <input type="hidden"
+               th:field="*{passwordHash}">
+
+        <input type="hidden"
+               th:field="*{activo}">
+
+
+        <div class="user-form-container">
+
+            <div class="app-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Información del usuario
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Modifica únicamente los datos necesarios.
+                        </div>
+
+                    </div>
+
+                    <div class="user-section-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <section class="user-form-section">
+
+                        <div class="user-section-heading">
+
+                            <div class="user-section-heading-icon">
+                                <i class="bi bi-envelope"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Cuenta
+                                </h3>
+
+                                <p>
+                                    Información principal de identificación.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Correo electrónico
+                                </label>
+
+                                <div class="user-input-wrapper">
+
+                                    <i class="bi bi-envelope"></i>
+
+                                    <input type="email"
+                                           class="form-control user-input-icon"
+                                           th:field="*{email}"
+                                           maxlength="100">
+
+                                </div>
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('email')}"
+                                     th:errors="*{email}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <section class="user-form-section">
+
+                        <div class="user-section-heading">
+
+                            <div class="user-section-heading-icon">
+                                <i class="bi bi-person-lock"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Permisos
+                                </h3>
+
+                                <p>
+                                    Rol asignado a la cuenta.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Rol
+                                </label>
+
+                                <select class="form-select"
+                                        th:field="*{rol}">
+
+                                    <option value="">
+                                        Seleccione un rol
+                                    </option>
+
+                                    <option th:each="rolItem : ${roles}"
+                                            th:value="${rolItem}"
+                                            th:text="${rolItem}">
+                                    </option>
+
+                                </select>
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('rol')}"
+                                     th:errors="*{rol}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <div class="user-form-notice">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        <div>
+
+                            <strong>
+                                Estado y contraseña
+                            </strong>
+
+                            <span>
+                                Para mantener separados los flujos,
+                                el estado se administra desde Usuarios
+                                y la contraseña desde Cambiar contraseña.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="user-form-footer">
+
+                    <a th:href="@{/usuarios/details/{id}(id=${usuario.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+                        Guardar cambios
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/usuario.js}"></script>
+</th:block>
+
 </body>
 </html>

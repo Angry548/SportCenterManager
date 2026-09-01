@@ -1,76 +1,462 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Gestión de Usuarios - Sistema Gimnasio</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <title>Usuarios</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/usuario.css}">
+    </th:block>
+
 </head>
-<body class="bg-light">
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Listado de Usuarios</h2>
-        <a th:href="@{/usuarios/create}" class="btn btn-primary">Nuevo Usuario</a>
+
+<body>
+
+<div layout:fragment="content">
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Usuarios
+            </h1>
+
+            <p class="page-description">
+                Administra las cuentas de acceso, roles
+                y estado de los usuarios del sistema.
+            </p>
+
+        </div>
+
+        <div class="page-actions">
+
+            <a th:href="@{/usuarios/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-person-plus me-1"></i>
+                Nuevo usuario
+
+            </a>
+
+        </div>
+
     </div>
 
-    <!-- Mensajes de éxito / error -->
-    <div th:if="${msg}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${msg}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+    <!-- TOOLBAR -->
+
+    <div th:if="${!usuarios.isEmpty()}"
+         class="user-toolbar">
+
+        <div class="user-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="search"
+                   id="userSearch"
+                   class="form-control"
+                   placeholder="Buscar por correo o rol..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="userSearchClear"
+                    class="user-search-clear"
+                    aria-label="Limpiar búsqueda">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="user-result-count">
+
+            Mostrando
+
+            <strong id="userVisibleCount"
+                    th:text="${usuarios.numberOfElements}">
+                0
+            </strong>
+
+            de
+
+            <strong th:text="${usuarios.totalElements}">
+                0
+            </strong>
+
+            usuarios
+
+        </div>
+
     </div>
 
-    <table class="table table-striped table-hover shadow-sm bg-white">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Rol</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="usuario : ${usuarios.content}">
-            <td th:text="${usuario.id}">1</td>
-            <td th:text="${usuario.nombre}">Juan Pérez</td>
-            <td th:text="${usuario.email}">juan@ejemplo.com</td>
-            <td th:text="${usuario.rol != null ? usuario.rol.nombre : 'Sin Rol'}">Admin</td>
-            <td>
-                <span th:if="${usuario.activo}" class="badge bg-success">Activo</span>
-                <span th:unless="${usuario.activo}" class="badge bg-danger">Inactivo</span>
-            </td>
-            <td class="d-flex gap-1">
-                <a th:href="@{/usuarios/details/{id}(id=${usuario.id})}" class="btn btn-info btn-sm">Detalles</a>
-                <a th:href="@{/usuarios/edit/{id}(id=${usuario.id})}" class="btn btn-warning btn-sm">Editar</a>
-                <a th:href="@{/usuarios/remove/{id}(id=${usuario.id})}" class="btn btn-danger btn-sm">Eliminar</a>
 
-                <!-- Botón rápido de Activar / Desactivar -->
-                <form th:if="${usuario.activo}" th:action="@{/usuarios/deactivate/{id}(id=${usuario.id})}" method="post" class="d-inline">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm">Desactivar</button>
-                </form>
-                <form th:unless="${usuario.activo}" th:action="@{/usuarios/activate/{id}(id=${usuario.id})}" method="post" class="d-inline">
-                    <button type="submit" class="btn btn-outline-success btn-sm">Activar</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <!-- TABLA -->
 
-    <!-- Paginación -->
-    <nav th:if="${pageNumbers}" class="d-flex justify-content-center">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${usuarios.number == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{/usuarios(page=${usuarios.number})}">Anterior</a>
-            </li>
-            <li class="page-item" th:each="pageNumber : ${pageNumbers}"
-                th:classappend="${pageNumber == usuarios.number + 1} ? 'active'">
-                <a class="page-link" th:href="@{/usuarios(page=${pageNumber})}" th:text="${pageNumber}">1</a>
-            </li>
-            <li class="page-item" th:classappend="${usuarios.number + 1 == usuarios.totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{/usuarios(page=${usuarios.number + 2})}">Siguiente</a>
-            </li>
-        </ul>
-    </nav>
+    <div th:if="${!usuarios.isEmpty()}"
+         class="app-card user-list-card">
+
+        <div class="app-card-header">
+
+            <div>
+
+                <h2 class="app-card-title">
+                    Usuarios registrados
+                </h2>
+
+                <div class="app-card-subtitle">
+                    Cuentas que tienen acceso al sistema.
+                </div>
+
+            </div>
+
+            <div class="user-section-icon">
+                <i class="bi bi-person-gear"></i>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table">
+
+                <thead>
+
+                <tr>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Registro</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                <tr th:each="item : ${usuarios}"
+                    data-user-row
+                    th:attr="
+                        data-user-email=${item.email},
+                        data-user-role=${item.rol}
+                    ">
+
+                    <!-- USUARIO -->
+
+                    <td>
+
+                        <div class="user-cell">
+
+                            <div class="user-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+                            <div class="user-cell-info">
+
+                                <strong th:text="${item.email}">
+                                    usuario@email.com
+                                </strong>
+
+                                <span>
+                                    Usuario #
+                                    <span th:text="${item.id}"></span>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- ROL -->
+
+                    <td>
+
+                        <span class="user-role-badge"
+                              th:text="${item.rol}">
+                        </span>
+
+                    </td>
+
+
+                    <!-- FECHA -->
+
+                    <td>
+
+                        <span class="user-data-value"
+                              th:text="${#temporals.format(
+                                  item.fechaRegistro,
+                                  'dd/MM/yyyy HH:mm'
+                              )}">
+                        </span>
+
+                    </td>
+
+
+                    <!-- ESTADO -->
+
+                    <td>
+
+                        <span th:if="${item.activo}"
+                              class="status-badge status-active">
+                            Activo
+                        </span>
+
+                        <span th:unless="${item.activo}"
+                              class="status-badge status-inactive">
+                            Inactivo
+                        </span>
+
+                    </td>
+
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="user-actions">
+
+                            <a th:href="@{/usuarios/details/{id}(id=${item.id})}"
+                               class="user-action"
+                               title="Ver usuario">
+
+                                <i class="bi bi-eye"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/usuarios/edit/{id}(id=${item.id})}"
+                               class="user-action"
+                               title="Editar usuario">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/usuarios/change-password/{id}(id=${item.id})}"
+                               class="user-action"
+                               title="Cambiar contraseña">
+
+                                <i class="bi bi-key"></i>
+
+                            </a>
+
+
+                            <!-- DESACTIVAR -->
+
+                            <form th:if="${item.activo}"
+                                  th:action="@{/usuarios/deactivate/{id}(id=${item.id})}"
+                                  method="post"
+                                  class="d-inline user-status-form"
+                                  data-user-status-action="deactivate">
+
+                                <button type="submit"
+                                        class="user-action"
+                                        title="Desactivar usuario">
+
+                                    <i class="bi bi-person-dash"></i>
+
+                                </button>
+
+                            </form>
+
+
+                            <!-- ACTIVAR -->
+
+                            <form th:unless="${item.activo}"
+                                  th:action="@{/usuarios/activate/{id}(id=${item.id})}"
+                                  method="post"
+                                  class="d-inline user-status-form"
+                                  data-user-status-action="activate">
+
+                                <button type="submit"
+                                        class="user-action user-action-success"
+                                        title="Activar usuario">
+
+                                    <i class="bi bi-person-check"></i>
+
+                                </button>
+
+                            </form>
+
+
+                            <a th:href="@{/usuarios/remove/{id}(id=${item.id})}"
+                               class="user-action user-action-danger"
+                               title="Eliminar usuario">
+
+                                <i class="bi bi-trash3"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- SIN RESULTADOS -->
+
+    <div id="userNoSearchResults"
+         class="app-card"
+         hidden>
+
+        <div class="user-empty-state">
+
+            <div class="user-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h2>
+                No encontramos coincidencias
+            </h2>
+
+            <p>
+                Prueba buscando con otro correo electrónico
+                o rol de usuario.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- SIN USUARIOS -->
+
+    <div th:if="${usuarios.isEmpty()}"
+         class="app-card">
+
+        <div class="user-empty-state">
+
+            <div class="user-empty-icon">
+                <i class="bi bi-person-gear"></i>
+            </div>
+
+            <h2>
+                No hay usuarios registrados
+            </h2>
+
+            <p>
+                Crea la primera cuenta para comenzar
+                a administrar los accesos al sistema.
+            </p>
+
+            <a th:href="@{/usuarios/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-person-plus me-1"></i>
+                Crear usuario
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAGINACIÓN -->
+
+    <div th:if="${usuarios.totalPages > 1}"
+         class="user-pagination">
+
+        <div class="user-pagination-info">
+
+            Página
+
+            <strong th:text="${usuarios.number + 1}">
+                1
+            </strong>
+
+            de
+
+            <strong th:text="${usuarios.totalPages}">
+                1
+            </strong>
+
+        </div>
+
+
+        <nav aria-label="Paginación de usuarios">
+
+            <ul class="pagination">
+
+                <li class="page-item"
+                    th:classappend="${usuarios.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/usuarios(
+                           page=${usuarios.number},
+                           size=${usuarios.size}
+                       )}">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+                </li>
+
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == usuarios.number + 1}
+                        ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/usuarios(
+                           page=${pageNumber},
+                           size=${usuarios.size}
+                       )}"
+                       th:text="${pageNumber}">
+                    </a>
+
+                </li>
+
+
+                <li class="page-item"
+                    th:classappend="${usuarios.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/usuarios(
+                           page=${usuarios.number + 2},
+                           size=${usuarios.size}
+                       )}">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/usuario.js}"></script>
+</th:block>
+
 </body>
 </html>

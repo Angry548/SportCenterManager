@@ -1,34 +1,174 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Eliminar Usuario - Sistema Gimnasio</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body class="bg-light">
-<div class="container mt-4 col-md-6">
-    <div class="card shadow-sm border-danger">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Confirmar Eliminación</h4>
-        </div>
-        <div class="card-body">
-            <p class="fs-5">¿Estás seguro de que deseas eliminar permanentemente al siguiente usuario?</p>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
 
-            <div class="alert alert-secondary">
-                <p class="mb-1"><strong>ID:</strong> <span th:text="${usuario.id}"></span></p>
-                <p class="mb-1"><strong>Nombre:</strong> <span th:text="${usuario.nombre}"></span></p>
-                <p class="mb-0"><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
+<head>
+
+    <title>Eliminar usuario</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/usuario.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="user-breadcrumb">
+
+        <a th:href="@{/usuarios}">
+            Usuarios
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar usuario
+        </span>
+
+    </nav>
+
+
+    <div class="user-delete-container">
+
+        <div class="app-card user-delete-card">
+
+            <div class="user-delete-icon">
+                <i class="bi bi-trash3"></i>
             </div>
 
-            <form th:action="@{/usuarios/delete}" th:object="${usuario}" method="post">
-                <input type="hidden" th:field="*{id}">
-                <div class="d-flex justify-content-between">
-                    <a th:href="@{/usuarios}" class="btn btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
+            <span class="user-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+            <h1>
+                Eliminar usuario
+            </h1>
+
+            <p>
+
+                Estás a punto de eliminar la cuenta
+
+                <strong th:text="${usuario.email}">
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="user-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Si este usuario está vinculado con un cliente,
+                    entrenador u otros registros, la base de datos
+                    puede impedir su eliminación.
+                </span>
+
+            </div>
+
+
+            <div class="user-delete-summary">
+
+                <div>
+
+                    <span>
+                        Correo
+                    </span>
+
+                    <strong th:text="${usuario.email}">
+                    </strong>
+
                 </div>
+
+
+                <div>
+
+                    <span>
+                        Rol
+                    </span>
+
+                    <strong th:text="${usuario.rol}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Estado
+                    </span>
+
+                    <strong th:text="${usuario.activo
+                        ? 'Activo'
+                        : 'Inactivo'}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ID
+                    </span>
+
+                    <strong th:text="${usuario.id}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/usuarios/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${usuario.id}">
+
+
+                <div class="user-delete-actions">
+
+                    <a th:href="@{/usuarios/details/{id}(id=${usuario.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+                        Eliminar usuario
+
+                    </button>
+
+                </div>
+
             </form>
+
         </div>
+
     </div>
+
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/usuario.js}"></script>
+</th:block>
+
 </body>
 </html>
