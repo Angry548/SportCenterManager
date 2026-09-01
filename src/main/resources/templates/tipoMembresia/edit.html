@@ -6,11 +6,7 @@
 
 <head>
 
-    <title th:text="${tipoMembresia.id != null}
-        ? 'Corregir tipo de membresía'
-        : 'Nuevo tipo de membresía'">
-        Nuevo tipo de membresía
-    </title>
+    <title>Editar tipo de membresía</title>
 
     <th:block layout:fragment="styles">
         <link rel="stylesheet"
@@ -31,9 +27,14 @@
 
         <i class="bi bi-chevron-right"></i>
 
-        <span th:text="${tipoMembresia.id != null}
-            ? 'Corregir información'
-            : 'Nuevo tipo'">
+        <a th:href="@{/tipos-membresia/details/{id}(id=${tipoMembresia.id})}"
+           th:text="${tipoMembresia.nombre}">
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Editar
         </span>
 
     </nav>
@@ -43,15 +44,13 @@
 
         <div>
 
-            <h1 class="page-title"
-                th:text="${tipoMembresia.id != null}
-                    ? 'Corregir tipo de membresía'
-                    : 'Nuevo tipo de membresía'">
+            <h1 class="page-title">
+                Editar tipo de membresía
             </h1>
 
             <p class="page-description">
-                Define el nombre, precio y duración
-                del plan que estará disponible para los clientes.
+                Actualiza las condiciones comerciales
+                y duración de este plan.
             </p>
 
         </div>
@@ -63,12 +62,10 @@
           th:object="${tipoMembresia}"
           method="post">
 
-        <!-- Permite conservar edición si save() devuelve create -->
-
-        <input th:if="${tipoMembresia.id != null}"
-               type="hidden"
+        <input type="hidden"
                th:field="*{id}">
 
+        <!-- Activar/desactivar se administra con sus endpoints -->
         <input type="hidden"
                th:field="*{activo}">
 
@@ -81,26 +78,29 @@
 
                     <div>
 
-                        <h2 class="app-card-title">
-                            Información del plan
+                        <h2 class="app-card-title"
+                            th:text="${tipoMembresia.nombre}">
                         </h2>
 
                         <div class="app-card-subtitle">
-                            Configura las condiciones principales
-                            de este tipo de membresía.
+                            Tipo #
+                            <span th:text="${tipoMembresia.id}">
+                            </span>
                         </div>
 
                     </div>
 
 
                     <div class="membership-type-section-icon">
-                        <i class="bi bi-credit-card"></i>
+                        <i class="bi bi-pencil-square"></i>
                     </div>
 
                 </div>
 
 
                 <div class="app-card-body">
+
+                    <!-- IDENTIFICACIÓN -->
 
                     <section class="membership-type-form-section">
 
@@ -118,8 +118,8 @@
                                 </h3>
 
                                 <p>
-                                    Define cómo se mostrará
-                                    este plan dentro del sistema.
+                                    Modifica el nombre utilizado
+                                    para identificar el plan.
                                 </p>
 
                             </div>
@@ -127,51 +127,47 @@
                         </div>
 
 
-                        <div>
+                        <label class="form-label"
+                               for="nombre">
 
-                            <label class="form-label"
-                                   for="nombre">
-                                Nombre
-                            </label>
+                            Nombre
 
-
-                            <div class="membership-type-input-wrapper">
-
-                                <i class="bi bi-card-heading"></i>
-
-                                <input type="text"
-                                       id="nombre"
-                                       class="form-control membership-type-input-icon"
-                                       th:field="*{nombre}"
-                                       maxlength="60"
-                                       placeholder="Ej. Membresía mensual"
-                                       autocomplete="off"
-                                       data-membership-name>
-
-                            </div>
+                        </label>
 
 
-                            <div class="membership-type-field-footer">
+                        <div class="membership-type-input-wrapper">
 
-                                <span>
-                                    Nombre del plan.
+                            <i class="bi bi-card-heading"></i>
+
+                            <input type="text"
+                                   id="nombre"
+                                   class="form-control membership-type-input-icon"
+                                   th:field="*{nombre}"
+                                   maxlength="60"
+                                   data-membership-name>
+
+                        </div>
+
+
+                        <div class="membership-type-field-footer">
+
+                            <span>
+                                Máximo 60 caracteres.
+                            </span>
+
+                            <span>
+                                <span id="membershipTypeNameCount">
+                                    0
                                 </span>
+                                / 60
+                            </span>
 
-                                <span>
-                                    <span id="membershipTypeNameCount">
-                                        0
-                                    </span>
-                                    / 60
-                                </span>
-
-                            </div>
+                        </div>
 
 
-                            <div class="text-danger mt-1"
-                                 th:if="${#fields.hasErrors('nombre')}"
-                                 th:errors="*{nombre}">
-                            </div>
-
+                        <div class="text-danger mt-1"
+                             th:if="${#fields.hasErrors('nombre')}"
+                             th:errors="*{nombre}">
                         </div>
 
                     </section>
@@ -195,8 +191,8 @@
                                 </h3>
 
                                 <p>
-                                    Establece el precio y la cantidad
-                                    de días que tendrá el plan.
+                                    Actualiza el precio y duración
+                                    de este tipo de membresía.
                                 </p>
 
                             </div>
@@ -205,8 +201,6 @@
 
 
                         <div class="row g-4">
-
-                            <!-- PRECIO -->
 
                             <div class="col-md-6">
 
@@ -218,26 +212,13 @@
                                 </label>
 
 
-                                <div class="membership-type-number-field">
-
-                                    <input type="number"
-                                           id="precio"
-                                           class="form-control"
-                                           th:field="*{precio}"
-                                           min="0.01"
-                                           step="0.01"
-                                           placeholder="25.00"
-                                           data-membership-price>
-
-                                </div>
-
-
-                                <div class="membership-type-field-help">
-
-                                    <i class="bi bi-info-circle"></i>
-                                    Debe ser mayor que cero.
-
-                                </div>
+                                <input type="number"
+                                       id="precio"
+                                       class="form-control"
+                                       th:field="*{precio}"
+                                       min="0.01"
+                                       step="0.01"
+                                       data-membership-price>
 
 
                                 <div class="text-danger mt-1"
@@ -247,8 +228,6 @@
 
                             </div>
 
-
-                            <!-- DURACIÓN -->
 
                             <div class="col-md-6">
 
@@ -267,20 +246,11 @@
                                            class="form-control"
                                            th:field="*{duracionDias}"
                                            min="1"
-                                           placeholder="30"
                                            data-membership-duration>
 
                                     <span>
                                         días
                                     </span>
-
-                                </div>
-
-
-                                <div class="membership-type-field-help">
-
-                                    <i class="bi bi-calendar-range"></i>
-                                    Mínimo un día.
 
                                 </div>
 
@@ -295,8 +265,6 @@
                         </div>
 
 
-                        <!-- PREVIEW -->
-
                         <div class="membership-type-preview">
 
                             <div class="membership-type-preview-icon">
@@ -310,8 +278,8 @@
                                     Vista previa del plan
                                 </span>
 
-                                <strong id="membershipTypeNamePreview">
-                                    Nombre del plan
+                                <strong id="membershipTypeNamePreview"
+                                        th:text="${tipoMembresia.nombre}">
                                 </strong>
 
                             </div>
@@ -323,8 +291,8 @@
                                     Precio
                                 </span>
 
-                                <strong id="membershipTypePricePreview">
-                                    —
+                                <strong id="membershipTypePricePreview"
+                                        th:text="${tipoMembresia.precio}">
                                 </strong>
 
                             </div>
@@ -337,7 +305,6 @@
                                 </span>
 
                                 <strong id="membershipTypeDurationPreview">
-                                    —
                                 </strong>
 
                             </div>
@@ -349,17 +316,20 @@
 
                     <div class="membership-type-info-box">
 
-                        <i class="bi bi-toggle-on"></i>
+                        <i th:class="${tipoMembresia.activo}
+                            ? 'bi bi-check-circle'
+                            : 'bi bi-pause-circle'">
+                        </i>
 
                         <div>
 
                             <strong>
-                                Estado del tipo
+                                Estado actual
                             </strong>
 
                             <span th:text="${tipoMembresia.activo}
-                                ? 'Este tipo se encuentra activo.'
-                                : 'Este tipo se encuentra inactivo.'">
+                                ? 'Este tipo está activo. El estado se administra desde el listado o detalle.'
+                                : 'Este tipo está inactivo. El estado se administra desde el listado o detalle.'">
                             </span>
 
                         </div>
@@ -371,17 +341,7 @@
 
                 <div class="membership-type-form-footer">
 
-                    <a th:if="${tipoMembresia.id == null}"
-                       th:href="@{/tipos-membresia}"
-                       class="btn btn-light">
-
-                        Cancelar
-
-                    </a>
-
-
-                    <a th:if="${tipoMembresia.id != null}"
-                       th:href="@{/tipos-membresia/details/{id}(id=${tipoMembresia.id})}"
+                    <a th:href="@{/tipos-membresia/details/{id}(id=${tipoMembresia.id})}"
                        class="btn btn-light">
 
                         Cancelar
@@ -393,11 +353,7 @@
                             class="btn btn-primary">
 
                         <i class="bi bi-check-lg me-1"></i>
-
-                        <span th:text="${tipoMembresia.id != null}
-                            ? 'Guardar cambios'
-                            : 'Guardar tipo'">
-                        </span>
+                        Guardar cambios
 
                     </button>
 

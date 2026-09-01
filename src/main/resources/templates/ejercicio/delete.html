@@ -1,63 +1,179 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Eliminar Ejercicio</title>
+
+    <title>Eliminar ejercicio</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/ejercicio.css}">
+    </th:block>
+
 </head>
+
 <body>
-<div layout:fragment="content" class="container mt-4">
 
-    <div class="card border-danger shadow">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Confirmar Eliminación de Ejercicio</h4>
-        </div>
-        <div class="card-body">
+<div layout:fragment="content">
 
-            <div class="alert alert-warning" role="alert">
-                <strong>¡Atención!</strong> ¿Está seguro de que desea eliminar el siguiente ejercicio? Esta acción no se puede deshacer.
+    <!-- BREADCRUMB -->
+
+    <nav class="exercise-breadcrumb">
+
+        <a th:href="@{/ejercicios}">
+            Ejercicios
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar ejercicio
+        </span>
+
+    </nav>
+
+
+    <!-- DELETE -->
+
+    <div class="exercise-delete-container">
+
+        <div class="app-card exercise-delete-card">
+
+            <div class="exercise-delete-icon">
+                <i class="bi bi-trash3"></i>
             </div>
 
-            <div class="row my-4">
-                <div class="col-md-6 mb-3">
-                    <label class="fw-bold text-muted">ID:</label>
-                    <p class="fs-5" th:text="${ejercicio.id}">1</p>
-                </div>
 
-                <div class="col-md-6 mb-3">
-                    <label class="fw-bold text-muted">Nombre:</label>
-                    <p class="fs-5" th:text="${ejercicio.nombre}">Nombre Ejercicio</p>
-                </div>
+            <span class="exercise-delete-eyebrow">
+                Confirmación requerida
+            </span>
 
-                <div class="col-md-6 mb-3">
-                    <label class="fw-bold text-muted">Grupo Muscular:</label>
-                    <p class="fs-5" th:text="${ejercicio.grupoMuscular != null ? ejercicio.grupoMuscular.nombre : 'Sin asignar'}">Grupo Muscular</p>
-                </div>
 
-                <div class="col-md-6 mb-3">
-                    <label class="fw-bold text-muted">Dificultad:</label>
-                    <p class="fs-5" th:text="${ejercicio.dificultad}">DIFICULTAD</p>
-                </div>
+            <h1>
+                Eliminar ejercicio
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar
+
+                <strong th:text="${ejercicio.nombre}">
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="exercise-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Si el ejercicio forma parte de alguna rutina,
+                    la base de datos puede impedir su eliminación.
+                </span>
+
             </div>
 
-            <!-- Formulario de eliminación POST -->
-            <form th:action="@{/ejercicios/delete}" method="post">
-                <input type="hidden" name="id" th:value="${ejercicio.id}" />
 
-                <div class="d-flex justify-content-end gap-2">
-                    <a th:href="@{/ejercicios}" class="btn btn-secondary">
+            <div class="exercise-delete-summary">
+
+                <div>
+
+                    <span>
+                        Ejercicio
+                    </span>
+
+                    <strong th:text="${ejercicio.nombre}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Grupo muscular
+                    </span>
+
+                    <strong th:text="${ejercicio.grupoMuscular.nombre}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Dificultad
+                    </span>
+
+                    <strong th:text="${ejercicio.dificultad}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ID
+                    </span>
+
+                    <strong th:text="${ejercicio.id}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/ejercicios/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${ejercicio.id}">
+
+
+                <div class="exercise-delete-actions">
+
+                    <a th:href="@{/ejercicios/details/{id}(id=${ejercicio.id})}"
+                       class="btn btn-light">
+
                         Cancelar
+
                     </a>
-                    <button type="submit" class="btn btn-danger">
-                        Confirmar y Eliminar
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+
+                        Eliminar ejercicio
+
                     </button>
+
                 </div>
+
             </form>
 
         </div>
+
     </div>
 
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/ejercicio.js}"></script>
+</th:block>
+
 </body>
 </html>
