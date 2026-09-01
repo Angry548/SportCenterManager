@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles de Asignación</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <div class="card shadow">
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Detalles de la Asignación</h4>
+            <div>
+                <a th:href="@{/asignaciones-entrenador/edit/{id}(id=${asignacionEntrenador.id})}" class="btn btn-warning btn-sm">
+                    Editar
+                </a>
+                <a th:href="@{/asignaciones-entrenador}" class="btn btn-light btn-sm">
+                    Volver a la lista
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <!-- ID de Registro -->
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">ID Asignación:</label>
+                    <p class="fs-5" th:text="${asignacionEntrenador.id}">1</p>
+                </div>
+
+                <!-- Estado -->
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">Estado:</label>
+                    <p>
+                        <span th:if="${activa}" class="badge bg-success fs-6">Activa</span>
+                        <span th:if="${!activa}" class="badge bg-secondary fs-6">Finalizada</span>
+                    </p>
+                </div>
+
+                <!-- Fecha Asignación -->
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">Fecha de Asignación:</label>
+                    <p class="fs-5" th:text="${#temporals.format(asignacionEntrenador.fechaAsignacion, 'dd/MM/yyyy')}">01/01/2026</p>
+                </div>
+
+                <!-- Fecha Fin -->
+                <div class="col-md-3 mb-3">
+                    <label class="fw-bold text-muted">Fecha Fin:</label>
+                    <p class="fs-5" th:text="${asignacionEntrenador.fechaFin != null ? #temporals.format(asignacionEntrenador.fechaFin, 'dd/MM/yyyy') : 'N/A'}">-</p>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row mt-3">
+                <!-- Información del Cliente -->
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="text-primary mb-3">Información del Cliente</h5>
+                        <p class="mb-1"><strong>Nombre:</strong>
+                            <span th:text="${asignacionEntrenador.cliente != null ? asignacionEntrenador.cliente.nombre : 'Sin asignar'}">Nombre Cliente</span>
+                        </p>
+                        <p class="mb-1" th:if="${asignacionEntrenador.cliente != null and asignacionEntrenador.cliente.dui != null}">
+                            <strong>DUI:</strong> <span th:text="${asignacionEntrenador.cliente.dui}">00000000-0</span>
+                        </p>
+                        <p class="mb-0" th:if="${asignacionEntrenador.cliente != null and asignacionEntrenador.cliente.telefono != null}">
+                            <strong>Teléfono:</strong> <span th:text="${asignacionEntrenador.cliente.telefono}">0000-0000</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Información del Entrenador -->
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="text-primary mb-3">Información del Entrenador</h5>
+                        <p class="mb-1"><strong>Entrenador:</strong>
+                            <span th:text="${asignacionEntrenador.entrenador != null and asignacionEntrenador.entrenador.usuario != null ? asignacionEntrenador.entrenador.usuario.nombre : 'Sin asignar'}">Nombre Entrenador</span>
+                        </p>
+                        <p class="mb-1" th:if="${asignacionEntrenador.entrenador != null}">
+                            <strong>Especialidad:</strong> <span class="badge bg-info text-dark" th:text="${asignacionEntrenador.entrenador.especialidad}">Especialidad</span>
+                        </p>
+                        <p class="mb-0" th:if="${asignacionEntrenador.entrenador != null and asignacionEntrenador.entrenador.telefono != null}">
+                            <strong>Teléfono:</strong> <span th:text="${asignacionEntrenador.entrenador.telefono}">0000-0000</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón directo de Finalizar si está activa -->
+            <div th:if="${activa}" class="d-flex justify-content-end mt-3">
+                <a th:href="@{/asignaciones-entrenador/finalizar/{id}(id=${asignacionEntrenador.id})}"
+                   class="btn btn-dark"
+                   onclick="return confirm('¿Desea finalizar esta asignación?');">
+                    Finalizar esta Asignación
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
