@@ -1,98 +1,185 @@
+<!DOCTYPE html>
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/layouts/_mainLayout">
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Eliminar evaluación física</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/evaluacion-fisica.css}">
+    </th:block>
+
+</head>
+
+<body>
 
 <div layout:fragment="content">
 
-    <h1>Eliminar Evaluación Física</h1>
+    <nav class="evaluation-breadcrumb">
 
-    <div class="alert alert-warning">
-        ¿Está seguro de que desea eliminar esta evaluación física?
-    </div>
-
-    <form th:action="@{/evaluaciones-fisicas/delete}"
-          th:object="${evaluacionFisica}"
-          method="post">
-
-        <input type="hidden"
-               th:field="*{id}">
-
-        <div class="mb-3">
-            <label class="form-label">ID</label>
-            <input type="text"
-                   class="form-control"
-                   th:value="${evaluacionFisica.id}"
-                   readonly>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Cliente</label>
-            <input type="text"
-                   class="form-control"
-                   th:value="${evaluacionFisica.cliente.usuario.email}"
-                   readonly>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Entrenador</label>
-            <input type="text"
-                   class="form-control"
-                   th:value="${evaluacionFisica.entrenador.usuario.email}"
-                   readonly>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Fecha</label>
-            <input type="text"
-                   class="form-control"
-                   th:value="${evaluacionFisica.fecha}"
-                   readonly>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Peso (kg)</label>
-            <input type="text"
-                   class="form-control"
-                   th:value="${evaluacionFisica.peso}"
-                   readonly>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Estatura (m)</label>
-            <input type="text"
-                   class="form-control"
-                   th:value="${evaluacionFisica.estatura}"
-                   readonly>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Porcentaje de grasa</label>
-            <input type="text"
-                   class="form-control"
-                   th:value="${evaluacionFisica.porcentajeGrasa}"
-                   readonly>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Observaciones</label>
-            <textarea class="form-control"
-                      rows="4"
-                      readonly
-                      th:text="${evaluacionFisica.observaciones}">
-            </textarea>
-        </div>
-
-        <button type="submit"
-                class="btn btn-outline-danger">
-            Eliminar
-        </button>
-
-        <a th:href="@{/evaluaciones-fisicas}"
-           class="btn btn-outline-secondary">
-            Cancelar
+        <a th:href="@{/evaluaciones-fisicas}">
+            Evaluaciones físicas
         </a>
 
-    </form>
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar evaluación
+        </span>
+
+    </nav>
+
+
+    <div class="evaluation-delete-container">
+
+        <div class="app-card evaluation-delete-card">
+
+            <div class="evaluation-delete-icon">
+                <i class="bi bi-trash3"></i>
+            </div>
+
+
+            <span class="evaluation-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar evaluación
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar la evaluación física
+                registrada para
+
+                <strong th:text="${evaluacionFisica.cliente.usuario.email}">
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="evaluation-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Al eliminarla se perderán las mediciones y
+                    observaciones registradas en esta evaluación.
+                </span>
+
+            </div>
+
+
+            <div class="evaluation-delete-summary">
+
+                <div>
+
+                    <span>
+                        Cliente
+                    </span>
+
+                    <strong th:text="${evaluacionFisica.cliente.usuario.email}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Entrenador
+                    </span>
+
+                    <strong th:text="${evaluacionFisica.entrenador.usuario.email}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Fecha
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        evaluacionFisica.fecha,
+                        'dd/MM/yyyy'
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Peso
+                    </span>
+
+                    <strong>
+
+                        <span th:text="${evaluacionFisica.peso}">
+                        </span>
+
+                        kg
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/evaluaciones-fisicas/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${evaluacionFisica.id}">
+
+
+                <div class="evaluation-delete-actions">
+
+                    <a th:href="@{/evaluaciones-fisicas/details/{id}(id=${evaluacionFisica.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+
+                        Eliminar evaluación
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/evaluacion-fisica.js}"></script>
+</th:block>
+
+</body>
+</html>
