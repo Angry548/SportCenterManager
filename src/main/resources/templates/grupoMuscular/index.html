@@ -1,99 +1,407 @@
+<!DOCTYPE html>
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/layouts/_mainLayout">
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Grupos musculares</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/grupo-muscular.css}">
+    </th:block>
+
+</head>
+
+<body>
 
 <div layout:fragment="content">
 
-    <!-- Mostrar mensaje de confirmación en caso de éxito -->
-    <div th:if="${msg != null}">
-        <script>
-            Swal.fire({
-                title: "Confirmación",
-                text: '[[${msg}]]',
-                icon: "success"
-            });
-        </script>
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Grupos musculares
+            </h1>
+
+            <p class="page-description">
+                Administra las categorías musculares utilizadas
+                para clasificar los ejercicios del gimnasio.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/grupos-musculares/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Nuevo grupo
+
+            </a>
+
+        </div>
+
     </div>
 
-    <!-- Mostrar mensaje de error -->
-    <div th:if="${error != null}">
-        <script>
-            Swal.fire({
-                title: "Error",
-                text: '[[${error}]]',
-                icon: "error"
-            });
-        </script>
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div th:if="${!gruposMusculares.isEmpty()}"
+         class="muscle-toolbar">
+
+        <div class="muscle-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="search"
+                   id="muscleSearch"
+                   class="form-control"
+                   placeholder="Buscar grupo muscular..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="muscleSearchClear"
+                    class="muscle-search-clear"
+                    aria-label="Limpiar búsqueda">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="muscle-result-count">
+
+            Mostrando
+
+            <strong id="muscleVisibleCount"
+                    th:text="${gruposMusculares.numberOfElements}">
+                0
+            </strong>
+
+            de
+
+            <strong th:text="${gruposMusculares.totalElements}">
+                0
+            </strong>
+
+            grupos
+
+        </div>
+
     </div>
 
-    <h1>Listado de Grupos Musculares</h1>
 
-    <a th:href="@{/grupos-musculares/create}"
-       class="btn btn-outline-primary">
-        Nuevo grupo muscular
-    </a>
+    <!-- =====================================================
+         LISTADO
+         ===================================================== -->
 
-    <table class="table table-striped">
+    <div th:if="${!gruposMusculares.isEmpty()}"
+         class="app-card muscle-list-card">
 
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
+        <div class="app-card-header">
 
-        <tbody>
+            <div>
 
-        <tr th:each="item : ${gruposMusculares}">
+                <h2 class="app-card-title">
+                    Catálogo muscular
+                </h2>
 
-            <td th:text="${item.id}"></td>
+                <div class="app-card-subtitle">
+                    Grupos disponibles para clasificar ejercicios.
+                </div>
 
-            <td th:text="${item.nombre}"></td>
+            </div>
 
-            <td>
-                <a th:href="@{/grupos-musculares/details/{id}(id=${item.id})}"
-                   class="btn btn-outline-secondary">
-                    Detalles
-                </a>
 
-                |
+            <div class="muscle-section-icon">
+                <i class="bi bi-universal-access"></i>
+            </div>
 
-                <a th:href="@{/grupos-musculares/edit/{id}(id=${item.id})}"
-                   class="btn btn-outline-info">
-                    Editar
-                </a>
+        </div>
 
-                |
 
-                <a th:href="@{/grupos-musculares/remove/{id}(id=${item.id})}"
-                   class="btn btn-outline-danger">
-                    Eliminar
-                </a>
-            </td>
+        <div class="table-responsive">
 
-        </tr>
+            <table class="table muscle-table">
 
-        </tbody>
+                <thead>
 
-    </table>
+                <tr>
+                    <th>Grupo muscular</th>
+                    <th>Identificador</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
 
-    <!-- Paginación -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
+                </thead>
 
-            <li class="page-item"
-                th:each="pageNumber : ${pageNumbers}">
 
-                <a class="page-link"
-                   th:href="@{|/grupos-musculares?page=${pageNumber}|}"
-                   th:text="${pageNumber}">
-                </a>
+                <tbody>
 
-            </li>
+                <tr th:each="item : ${gruposMusculares}"
+                    data-muscle-row
+                    th:attr="data-muscle-name=${item.nombre}">
 
-        </ul>
-    </nav>
+                    <!-- GRUPO -->
+
+                    <td>
+
+                        <div class="muscle-cell">
+
+                            <div class="muscle-avatar">
+                                <i class="bi bi-universal-access"></i>
+                            </div>
+
+
+                            <div class="muscle-cell-info">
+
+                                <strong th:text="${item.nombre}">
+                                    Pecho
+                                </strong>
+
+                                <span>
+                                    Grupo muscular
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- ID -->
+
+                    <td>
+
+                        <span class="muscle-id-badge">
+
+                            #
+                            <span th:text="${item.id}">
+                                1
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="muscle-actions">
+
+                            <a th:href="@{/grupos-musculares/details/{id}(id=${item.id})}"
+                               class="muscle-action"
+                               title="Ver grupo muscular">
+
+                                <i class="bi bi-eye"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/grupos-musculares/edit/{id}(id=${item.id})}"
+                               class="muscle-action"
+                               title="Editar grupo muscular">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/grupos-musculares/remove/{id}(id=${item.id})}"
+                               class="muscle-action muscle-action-danger"
+                               title="Eliminar grupo muscular">
+
+                                <i class="bi bi-trash3"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN RESULTADOS
+         ===================================================== -->
+
+    <div id="muscleNoSearchResults"
+         class="app-card"
+         hidden>
+
+        <div class="muscle-empty-state">
+
+            <div class="muscle-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h2>
+                No encontramos coincidencias
+            </h2>
+
+            <p>
+                Prueba buscando con otro nombre
+                de grupo muscular.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN REGISTROS
+         ===================================================== -->
+
+    <div th:if="${gruposMusculares.isEmpty()}"
+         class="app-card">
+
+        <div class="muscle-empty-state">
+
+            <div class="muscle-empty-icon">
+                <i class="bi bi-universal-access"></i>
+            </div>
+
+            <h2>
+                No hay grupos musculares
+            </h2>
+
+            <p>
+                Registra el primer grupo muscular para comenzar
+                a clasificar los ejercicios.
+            </p>
+
+            <a th:href="@{/grupos-musculares/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Crear grupo muscular
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGINACIÓN
+         ===================================================== -->
+
+    <div th:if="${gruposMusculares.totalPages > 1}"
+         class="muscle-pagination">
+
+        <div class="muscle-pagination-info">
+
+            Página
+
+            <strong th:text="${gruposMusculares.number + 1}">
+                1
+            </strong>
+
+            de
+
+            <strong th:text="${gruposMusculares.totalPages}">
+                1
+            </strong>
+
+        </div>
+
+
+        <nav aria-label="Paginación de grupos musculares">
+
+            <ul class="pagination">
+
+                <!-- ANTERIOR -->
+
+                <li class="page-item"
+                    th:classappend="${gruposMusculares.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/grupos-musculares(
+                           page=${gruposMusculares.number},
+                           size=${gruposMusculares.size}
+                       )}">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+                </li>
+
+
+                <!-- PÁGINAS -->
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == gruposMusculares.number + 1}
+                        ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/grupos-musculares(
+                           page=${pageNumber},
+                           size=${gruposMusculares.size}
+                       )}"
+                       th:text="${pageNumber}">
+                    </a>
+
+                </li>
+
+
+                <!-- SIGUIENTE -->
+
+                <li class="page-item"
+                    th:classappend="${gruposMusculares.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/grupos-musculares(
+                           page=${gruposMusculares.number + 2},
+                           size=${gruposMusculares.size}
+                       )}">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
 
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/grupo-muscular.js}"></script>
+</th:block>
+
+</body>
+</html>

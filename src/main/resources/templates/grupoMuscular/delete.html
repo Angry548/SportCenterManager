@@ -1,49 +1,161 @@
+<!DOCTYPE html>
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/layouts/_mainLayout">
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Eliminar grupo muscular</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/grupo-muscular.css}">
+    </th:block>
+
+</head>
+
+<body>
 
 <div layout:fragment="content">
 
-    <h1>Eliminar Grupo Muscular</h1>
+    <nav class="muscle-breadcrumb">
 
-    <div class="alert alert-warning">
-        ¿Está seguro de que desea eliminar este grupo muscular?
-    </div>
-
-    <form th:action="@{/grupos-musculares/delete}"
-          th:object="${grupoMuscular}"
-          method="post">
-
-        <input type="hidden"
-               th:field="*{id}">
-
-        <div class="mb-3">
-            <label class="form-label">ID</label>
-            <input type="text"
-                   class="form-control"
-                   th:value="${grupoMuscular.id}"
-                   readonly>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text"
-                   class="form-control"
-                   th:value="${grupoMuscular.nombre}"
-                   readonly>
-        </div>
-
-        <button type="submit"
-                class="btn btn-outline-danger">
-            Eliminar
-        </button>
-
-        <a th:href="@{/grupos-musculares}"
-           class="btn btn-outline-secondary">
-            Cancelar
+        <a th:href="@{/grupos-musculares}">
+            Grupos musculares
         </a>
 
-    </form>
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar grupo
+        </span>
+
+    </nav>
+
+
+    <div class="muscle-delete-container">
+
+        <div class="app-card muscle-delete-card">
+
+            <div class="muscle-delete-icon">
+                <i class="bi bi-trash3"></i>
+            </div>
+
+
+            <span class="muscle-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar grupo muscular
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar
+
+                <strong th:text="${grupoMuscular.nombre}">
+                    Grupo muscular
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="muscle-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Si existen ejercicios relacionados con este
+                    grupo muscular, la base de datos puede impedir
+                    su eliminación.
+                </span>
+
+            </div>
+
+
+            <div class="muscle-delete-summary">
+
+                <div class="muscle-delete-summary-icon">
+                    <i class="bi bi-universal-access"></i>
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Grupo muscular
+                    </span>
+
+                    <strong th:text="${grupoMuscular.nombre}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ID
+                    </span>
+
+                    <strong>
+                        #
+                        <span th:text="${grupoMuscular.id}">
+                        </span>
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/grupos-musculares/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${grupoMuscular.id}">
+
+
+                <div class="muscle-delete-actions">
+
+                    <a th:href="@{/grupos-musculares/details/{id}(id=${grupoMuscular.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+
+                        Eliminar grupo
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/grupo-muscular.js}"></script>
+</th:block>
+
+</body>
+</html>
