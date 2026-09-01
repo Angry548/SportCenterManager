@@ -1,91 +1,591 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Detalles del Entrenador</title>
+
+    <title>Detalle del entrenador</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/entrenador.css}">
+    </th:block>
+
 </head>
+
 <body>
-<div layout:fragment="content" class="container mt-4">
 
-    <div class="card shadow mb-4">
-        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Detalles del Entrenador</h4>
-            <div>
-                <a th:href="@{/entrenadores/edit/{id}(id=${entrenador.id})}" class="btn btn-warning btn-sm">
-                    Editar
-                </a>
-                <a th:href="@{/entrenadores}" class="btn btn-light btn-sm">
-                    Volver a la lista
-                </a>
-            </div>
-        </div>
-        <div class="card-body">
-            <!-- Información principal del Entrenador -->
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label class="fw-bold text-muted">ID:</label>
-                    <p class="fs-5" th:text="${entrenador.id}">1</p>
-                </div>
+<div layout:fragment="content">
 
-                <div class="col-md-3 mb-3">
-                    <label class="fw-bold text-muted">Usuario Asociado:</label>
-                    <p class="fs-5" th:text="${entrenador.usuario != null ? entrenador.usuario.nombre : 'Sin asignar'}">Nombre Usuario</p>
-                </div>
 
-                <div class="col-md-3 mb-3">
-                    <label class="fw-bold text-muted">DUI:</label>
-                    <p class="fs-5" th:text="${entrenador.dui}">00000000-0</p>
-                </div>
+    <!-- BREADCRUMB -->
 
-                <div class="col-md-3 mb-3">
-                    <label class="fw-bold text-muted">Teléfono:</label>
-                    <p class="fs-5" th:text="${entrenador.telefono}">0000-0000</p>
-                </div>
+    <nav class="trainer-breadcrumb">
 
-                <div class="col-md-6 mb-3">
-                    <label class="fw-bold text-muted">Especialidad:</label>
-                    <p>
-                        <span class="badge bg-info text-dark fs-6" th:text="${entrenador.especialidad}">Especialidad</span>
-                    </p>
-                </div>
-            </div>
+        <a th:href="@{/entrenadores}">
+            Entrenadores
+        </a>
 
-            <hr />
+        <i class="bi bi-chevron-right"></i>
 
-            <!-- Sección de Clientes Activos Asignados -->
-            <h5 class="mt-4 mb-3 text-primary">Clientes Activos Asignados</h5>
+        <span th:text="${entrenador.usuario.email}">
+            entrenador@email.com
+        </span>
 
-            <div class="table-responsive" th:if="${clientesActivos != null and !clientesActivos.empty}">
-                <table class="table table-bordered table-striped align-middle">
-                    <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>DUI</th>
-                        <th>Teléfono</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="cliente : ${clientesActivos}">
-                        <td th:text="${cliente.id}">1</td>
-                        <td th:text="${cliente.nombre != null ? cliente.nombre : 'Cliente #' + cliente.id}">Nombre Cliente</td>
-                        <td th:text="${cliente.dui != null ? cliente.dui : 'N/A'}">00000000-0</td>
-                        <td th:text="${cliente.telefono != null ? cliente.telefono : 'N/A'}">0000-0000</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+    </nav>
 
-            <!-- Mensaje cuando no hay clientes asignados -->
-            <div th:if="${clientesActivos == null or clientesActivos.empty}" class="alert alert-secondary text-center my-3" role="alert">
-                Este entrenador no tiene clientes activos asignados actualmente.
-            </div>
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Perfil del entrenador
+            </h1>
+
+            <p class="page-description">
+                Consulta su información profesional y los
+                clientes que actualmente tiene asignados.
+            </p>
 
         </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/entrenadores}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/entrenadores/edit/{id}(id=${entrenador.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar entrenador
+
+            </a>
+
+        </div>
+
     </div>
 
+
+    <!-- =====================================================
+         PROFILE
+         ===================================================== -->
+
+    <section class="trainer-profile">
+
+        <div class="trainer-profile-main">
+
+            <div class="trainer-profile-avatar">
+
+                <i class="bi bi-person-badge"></i>
+
+            </div>
+
+
+            <div class="trainer-profile-identity">
+
+                <span class="trainer-profile-label">
+                    Entrenador registrado
+                </span>
+
+
+                <h2 th:text="${entrenador.usuario.email}">
+                    entrenador@email.com
+                </h2>
+
+
+                <div class="trainer-profile-meta">
+
+                    <span>
+                        Entrenador #
+                        <strong th:text="${entrenador.id}"></strong>
+                    </span>
+
+                    <span class="trainer-meta-dot"></span>
+
+                    <span>
+                        DUI
+                        <strong th:text="${entrenador.dui}"></strong>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="trainer-summary-grid">
+
+
+            <!-- CUENTA -->
+
+            <div class="trainer-summary-item">
+
+                <div class="trainer-summary-icon"
+                     th:classappend="${entrenador.usuario.activo}
+                        ? 'trainer-summary-success'
+                        : 'trainer-summary-neutral'">
+
+                    <i class="bi bi-person-check"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Cuenta
+                    </span>
+
+                    <strong th:text="${entrenador.usuario.activo
+                        ? 'Activa'
+                        : 'Inactiva'}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ESPECIALIDAD -->
+
+            <div class="trainer-summary-item">
+
+                <div class="trainer-summary-icon trainer-summary-primary">
+
+                    <i class="bi bi-award"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Especialidad
+                    </span>
+
+                    <strong th:text="${entrenador.especialidad}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- CLIENTES ACTIVOS -->
+
+            <div class="trainer-summary-item">
+
+                <div class="trainer-summary-icon trainer-summary-primary">
+
+                    <i class="bi bi-people"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Clientes activos
+                    </span>
+
+                    <strong>
+
+                        <span th:text="${#lists.size(clientesActivos)}">
+                            0
+                        </span>
+
+                        asignados
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTENT
+         ===================================================== -->
+
+    <div class="trainer-details-layout">
+
+
+        <!-- INFORMACIÓN -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Información profesional
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Datos registrados para el entrenador.
+                    </div>
+
+                </div>
+
+
+                <div class="trainer-section-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="trainer-detail-list">
+
+
+                    <!-- DUI -->
+
+                    <div class="trainer-detail-item">
+
+                        <div class="trainer-detail-icon">
+                            <i class="bi bi-person-vcard"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                DUI
+                            </span>
+
+                            <strong th:text="${entrenador.dui}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TELÉFONO -->
+
+                    <div class="trainer-detail-item">
+
+                        <div class="trainer-detail-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Teléfono
+                            </span>
+
+                            <strong th:text="${entrenador.telefono}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ESPECIALIDAD -->
+
+                    <div class="trainer-detail-item trainer-detail-full">
+
+                        <div class="trainer-detail-icon">
+                            <i class="bi bi-award"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Especialidad
+                            </span>
+
+                            <strong th:text="${entrenador.especialidad}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="trainer-detail-item trainer-detail-full">
+
+                        <div class="trainer-detail-icon">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Correo electrónico
+                            </span>
+
+                            <strong th:text="${entrenador.usuario.email}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CUENTA -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Cuenta de usuario
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Información relacionada con su acceso.
+                    </div>
+
+                </div>
+
+
+                <div class="trainer-section-icon">
+                    <i class="bi bi-person-gear"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="trainer-account-property">
+
+                    <span>
+                        Rol
+                    </span>
+
+                    <strong th:text="${entrenador.usuario.rol}">
+                    </strong>
+
+                </div>
+
+
+                <div class="trainer-account-property">
+
+                    <span>
+                        Estado
+                    </span>
+
+                    <span th:if="${entrenador.usuario.activo}"
+                          class="status-badge status-active">
+                        Activo
+                    </span>
+
+                    <span th:unless="${entrenador.usuario.activo}"
+                          class="status-badge status-inactive">
+                        Inactivo
+                    </span>
+
+                </div>
+
+
+                <div class="trainer-account-property">
+
+                    <span>
+                        Fecha de registro
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        entrenador.usuario.fechaRegistro,
+                        'dd/MM/yyyy HH:mm'
+                    )}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- =====================================================
+         CLIENTES ACTIVOS
+         ===================================================== -->
+
+    <section class="app-card trainer-clients-card">
+
+        <div class="app-card-header">
+
+            <div>
+
+                <h2 class="app-card-title">
+                    Clientes activos
+                </h2>
+
+                <div class="app-card-subtitle">
+
+                    <span th:text="${#lists.size(clientesActivos)}">
+                        0
+                    </span>
+
+                    clientes actualmente asignados.
+
+                </div>
+
+            </div>
+
+
+            <div class="trainer-section-icon">
+                <i class="bi bi-people"></i>
+            </div>
+
+        </div>
+
+
+        <!-- LISTA -->
+
+        <div th:if="${!#lists.isEmpty(clientesActivos)}"
+             class="table-responsive">
+
+            <table class="table">
+
+                <thead>
+
+                <tr>
+                    <th>Cliente</th>
+                    <th>DUI</th>
+                    <th>Teléfono</th>
+                    <th class="text-end">Acción</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="cliente : ${clientesActivos}">
+
+                    <td>
+
+                        <div class="trainer-client-cell">
+
+                            <div class="trainer-client-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+
+                            <div>
+
+                                <strong th:text="${cliente.usuario.email}">
+                                    cliente@email.com
+                                </strong>
+
+                                <span>
+                                    Cliente #
+                                    <span th:text="${cliente.id}"></span>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td th:text="${cliente.dui}">
+                    </td>
+
+
+                    <td th:text="${cliente.telefono}">
+                    </td>
+
+
+                    <td>
+
+                        <div class="trainer-actions">
+
+                            <a th:href="@{/clientes/details/{id}(id=${cliente.id})}"
+                               class="trainer-action"
+                               title="Ver cliente">
+
+                                <i class="bi bi-arrow-up-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- EMPTY -->
+
+        <div th:if="${#lists.isEmpty(clientesActivos)}"
+             class="trainer-clients-empty">
+
+            <div class="trainer-clients-empty-icon">
+                <i class="bi bi-person-check"></i>
+            </div>
+
+            <strong>
+                Sin clientes activos
+            </strong>
+
+            <p>
+                Este entrenador no tiene clientes
+                activos asignados actualmente.
+            </p>
+
+        </div>
+
+    </section>
+
 </div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/entrenador.js}"></script>
+
+</th:block>
+
 </body>
 </html>
