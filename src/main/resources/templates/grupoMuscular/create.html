@@ -1,0 +1,41 @@
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/layouts/_mainLayout">
+
+<div layout:fragment="content">
+
+    <h1>Nuevo Grupo Muscular</h1>
+
+    <form th:action="@{/grupos-musculares/save}"
+          th:object="${grupoMuscular}"
+          method="post">
+
+        <div class="mb-3">
+
+            <label class="form-label">Nombre</label>
+
+            <input type="text"
+                   class="form-control"
+                   th:field="*{nombre}">
+
+            <div class="text-danger"
+                 th:if="${#fields.hasErrors('nombre')}"
+                 th:errors="*{nombre}">
+            </div>
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-outline-success">
+            Guardar
+        </button>
+
+        <a th:href="@{/grupos-musculares}"
+           class="btn btn-outline-secondary">
+            Regresar
+        </a>
+
+    </form>
+
+</div>
