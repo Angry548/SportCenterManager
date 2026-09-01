@@ -1,71 +1,190 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Eliminar Asignación</title>
+
+    <title>Eliminar asignación</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/asignacion-entrenador.css}">
+    </th:block>
+
 </head>
+
 <body>
-<div layout:fragment="content" class="container mt-4">
 
-    <div class="card border-danger shadow">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Confirmar Eliminación de Asignación</h4>
-        </div>
-        <div class="card-body">
+<div layout:fragment="content">
 
-            <div class="alert alert-warning" role="alert">
-                <strong>¡Atención!</strong> ¿Está seguro de que desea eliminar la siguiente asignación? Esta acción no se puede deshacer.
+    <nav class="assignment-breadcrumb">
+
+        <a th:href="@{/asignaciones-entrenador}">
+            Asignaciones
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar asignación
+        </span>
+
+    </nav>
+
+
+    <div class="assignment-delete-container">
+
+        <div class="app-card assignment-delete-card">
+
+            <div class="assignment-delete-icon">
+                <i class="bi bi-trash3"></i>
             </div>
 
-            <!-- Resumen del registro a eliminar -->
-            <div class="row my-4">
-                <div class="col-md-6 mb-3">
-                    <label class="fw-bold text-muted">ID:</label>
-                    <p class="fs-5" th:text="${asignacionEntrenador.id}">1</p>
+
+            <span class="assignment-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar asignación
+            </h1>
+
+
+            <p>
+                Estás a punto de eliminar la relación registrada
+                entre este cliente y entrenador. Confirma la operación
+                antes de continuar.
+            </p>
+
+
+            <div class="assignment-delete-connection">
+
+                <div>
+
+                    <span>
+                        Cliente
+                    </span>
+
+                    <strong th:text="${asignacionEntrenador.cliente.usuario.email}">
+                    </strong>
+
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label class="fw-bold text-muted">Cliente:</label>
-                    <p class="fs-5"
-                       th:text="${asignacionEntrenador.cliente != null ? asignacionEntrenador.cliente.nombre : 'Cliente #' + asignacionEntrenador.cliente.id}">Cliente</p>
+
+                <div class="assignment-delete-arrow">
+                    <i class="bi bi-arrow-left-right"></i>
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label class="fw-bold text-muted">Entrenador:</label>
-                    <p class="fs-5"
-                       th:text="${asignacionEntrenador.entrenador != null and asignacionEntrenador.entrenador.usuario != null ? asignacionEntrenador.entrenador.usuario.nombre : 'Entrenador #' + asignacionEntrenador.entrenador.id}">Entrenador</p>
+
+                <div>
+
+                    <span>
+                        Entrenador
+                    </span>
+
+                    <strong th:text="${asignacionEntrenador.entrenador.usuario.email}">
+                    </strong>
+
                 </div>
 
-                <div class="col-md-3 mb-3">
-                    <label class="fw-bold text-muted">Fecha de Asignación:</label>
-                    <p class="fs-5" th:text="${#temporals.format(asignacionEntrenador.fechaAsignacion, 'dd/MM/yyyy')}">01/01/2026</p>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <label class="fw-bold text-muted">Fecha Fin:</label>
-                    <p class="fs-5" th:text="${asignacionEntrenador.fechaFin != null ? #temporals.format(asignacionEntrenador.fechaFin, 'dd/MM/yyyy') : 'Activa (Sin finalizar)'}">-</p>
-                </div>
             </div>
 
-            <!-- Formulario de envío del borrado -->
-            <form th:action="@{/asignaciones-entrenador/delete}" method="post">
-                <input type="hidden" name="id" th:value="${asignacionEntrenador.id}" />
 
-                <div class="d-flex justify-content-end gap-2">
-                    <a th:href="@{/asignaciones-entrenador}" class="btn btn-secondary">
+            <div class="assignment-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Si solamente deseas terminar la relación,
+                    considera utilizar Finalizar asignación en lugar
+                    de eliminar su registro histórico.
+                </span>
+
+            </div>
+
+
+            <div class="assignment-delete-summary">
+
+                <div>
+
+                    <span>
+                        Fecha de asignación
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        asignacionEntrenador.fechaAsignacion,
+                        'dd/MM/yyyy'
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Fecha de finalización
+                    </span>
+
+                    <strong th:text="${asignacionEntrenador.fechaFin != null
+                        ? #temporals.format(
+                            asignacionEntrenador.fechaFin,
+                            'dd/MM/yyyy'
+                          )
+                        : 'No finalizada'}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/asignaciones-entrenador/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${asignacionEntrenador.id}">
+
+
+                <div class="assignment-delete-actions">
+
+                    <a th:href="@{/asignaciones-entrenador/details/{id}(id=${asignacionEntrenador.id})}"
+                       class="btn btn-light">
+
                         Cancelar
+
                     </a>
-                    <button type="submit" class="btn btn-danger">
-                        Confirmar y Eliminar
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+
+                        Eliminar asignación
+
                     </button>
+
                 </div>
+
             </form>
 
         </div>
+
     </div>
 
 </div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/asignacion-entrenador.js}"></script>
+
+</th:block>
+
 </body>
 </html>
