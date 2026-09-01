@@ -1,34 +1,181 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Eliminar Cliente - Sistema Gimnasio</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body class="bg-light">
-<div class="container mt-4 col-md-6">
-    <div class="card shadow-sm border-danger">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Confirmar Eliminación</h4>
-        </div>
-        <div class="card-body">
-            <p class="fs-5">¿Estás seguro de que deseas eliminar permanentemente al siguiente cliente?</p>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
 
-            <div class="alert alert-secondary">
-                <p class="mb-1"><strong>ID:</strong> <span th:text="${cliente.id}"></span></p>
-                <p class="mb-1"><strong>Cliente:</strong> <span th:text="${cliente.nombre + ' ' + cliente.apellido}"></span></p>
-                <p class="mb-0"><strong>Teléfono:</strong> <span th:text="${cliente.telefono}"></span></p>
+<head>
+
+    <title>Eliminar cliente</title>
+
+    <th:block layout:fragment="styles">
+
+        <link rel="stylesheet"
+              th:href="@{/css/cliente.css}">
+
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="client-breadcrumb">
+
+        <a th:href="@{/clientes}">
+            Clientes
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar cliente
+        </span>
+
+    </nav>
+
+
+    <div class="client-delete-container">
+
+        <div class="app-card client-delete-card">
+
+            <div class="client-delete-icon">
+
+                <i class="bi bi-trash3"></i>
+
             </div>
 
-            <form th:action="@{/clientes/delete}" th:object="${cliente}" method="post">
-                <input type="hidden" th:field="*{id}">
-                <div class="d-flex justify-content-between">
-                    <a th:href="@{/clientes}" class="btn btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
+
+            <span class="client-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar cliente
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar el registro asociado a
+
+                <strong th:text="${cliente.usuario.email}">
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="client-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Si este cliente posee información relacionada,
+                    la eliminación puede no ser permitida por el sistema.
+                </span>
+
+            </div>
+
+
+            <div class="client-delete-summary">
+
+                <div>
+
+                    <span>
+                        Cliente
+                    </span>
+
+                    <strong th:text="${cliente.usuario.email}">
+                    </strong>
+
                 </div>
+
+
+                <div>
+
+                    <span>
+                        DUI
+                    </span>
+
+                    <strong th:text="${cliente.dui}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Teléfono
+                    </span>
+
+                    <strong th:text="${cliente.telefono}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ID
+                    </span>
+
+                    <strong th:text="${cliente.id}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/clientes/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${cliente.id}">
+
+
+                <div class="client-delete-actions">
+
+                    <a th:href="@{/clientes/details/{id}(id=${cliente.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+
+                        Eliminar cliente
+
+                    </button>
+
+                </div>
+
             </form>
+
         </div>
+
     </div>
+
 </div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/cliente.js}"></script>
+
+</th:block>
+
 </body>
 </html>
