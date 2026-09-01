@@ -1,107 +1,470 @@
+<!DOCTYPE html>
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/layouts/_mainLayout">
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Membresías de clientes</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/membresia-cliente.css}">
+    </th:block>
+
+</head>
+
+<body>
 
 <div layout:fragment="content">
 
-    <!-- Mostrar mensaje de confirmación en caso de éxito -->
-    <div th:if="${msg != null}">
-        <script>
-            Swal.fire({
-                title: "Confirmación",
-                text: '[[${msg}]]',
-                icon: "success"
-            });
-        </script>
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Membresías de clientes
+            </h1>
+
+            <p class="page-description">
+                Administra las membresías asignadas,
+                sus periodos de vigencia y clientes asociados.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/membresias-clientes/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Nueva membresía
+
+            </a>
+
+        </div>
+
     </div>
 
-    <!-- Mostrar mensaje de error -->
-    <div th:if="${error != null}">
-        <script>
-            Swal.fire({
-                title: "Error",
-                text: '[[${error}]]',
-                icon: "error"
-            });
-        </script>
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div th:if="${!membresias.isEmpty()}"
+         class="membership-toolbar">
+
+        <div class="membership-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="search"
+                   id="membershipSearch"
+                   class="form-control"
+                   placeholder="Buscar por cliente o tipo..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="membershipSearchClear"
+                    class="membership-search-clear"
+                    aria-label="Limpiar búsqueda">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="membership-result-count">
+
+            Mostrando
+
+            <strong id="membershipVisibleCount"
+                    th:text="${membresias.numberOfElements}">
+                0
+            </strong>
+
+            de
+
+            <strong th:text="${membresias.totalElements}">
+                0
+            </strong>
+
+            membresías
+
+        </div>
+
     </div>
 
-    <h1>Listado de Membresías de Clientes</h1>
 
-    <a th:href="@{/membresias-clientes/create}"
-       class="btn btn-outline-primary">
-        Nueva membresía
-    </a>
+    <!-- =====================================================
+         LISTADO
+         ===================================================== -->
 
-    <table class="table table-striped">
+    <div th:if="${!membresias.isEmpty()}"
+         class="app-card membership-list-card">
 
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Tipo de membresía</th>
-            <th>Fecha de inicio</th>
-            <th>Fecha de vencimiento</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
+        <div class="app-card-header">
 
-        <tbody>
+            <div>
 
-        <tr th:each="item : ${membresias}">
+                <h2 class="app-card-title">
+                    Membresías registradas
+                </h2>
 
-            <td th:text="${item.id}"></td>
+                <div class="app-card-subtitle">
+                    Historial de membresías asignadas a clientes.
+                </div>
 
-            <td th:text="${item.cliente.usuario.email}"></td>
+            </div>
 
-            <td th:text="${item.tipoMembresia.nombre}"></td>
 
-            <td th:text="${item.fechaInicio}"></td>
+            <div class="membership-section-icon">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
 
-            <td th:text="${item.fechaVencimiento}"></td>
+        </div>
 
-            <td>
-                <a th:href="@{/membresias-clientes/details/{id}(id=${item.id})}"
-                   class="btn btn-outline-secondary">
-                    Detalles
-                </a>
 
-                |
+        <div class="table-responsive">
 
-                <a th:href="@{/membresias-clientes/edit/{id}(id=${item.id})}"
-                   class="btn btn-outline-info">
-                    Editar
-                </a>
+            <table class="table membership-table">
 
-                |
+                <thead>
 
-                <a th:href="@{/membresias-clientes/remove/{id}(id=${item.id})}"
-                   class="btn btn-outline-danger">
-                    Eliminar
-                </a>
-            </td>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Tipo</th>
+                    <th>Inicio</th>
+                    <th>Vencimiento</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
 
-        </tr>
+                </thead>
 
-        </tbody>
 
-    </table>
+                <tbody>
 
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
+                <tr th:each="item : ${membresias}"
+                    data-membership-row
+                    th:attr="
+                        data-membership-client=${item.cliente.usuario.email},
+                        data-membership-type=${item.tipoMembresia.id}
+                    ">
 
-            <li class="page-item"
-                th:each="pageNumber : ${pageNumbers}">
+                    <!-- CLIENTE -->
 
-                <a class="page-link"
-                   th:href="@{|/membresias-clientes?page=${pageNumber}|}"
-                   th:text="${pageNumber}">
-                </a>
+                    <td>
 
-            </li>
+                        <div class="membership-client-cell">
 
-        </ul>
-    </nav>
+                            <div class="membership-client-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+
+                            <div class="membership-client-info">
+
+                                <strong th:text="${item.cliente.usuario.email}">
+                                    cliente@email.com
+                                </strong>
+
+                                <span>
+                                    Cliente #
+                                    <span th:text="${item.cliente.id}">
+                                    </span>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- TIPO -->
+
+                    <td>
+
+                        <span class="membership-type-badge">
+
+                            <i class="bi bi-card-checklist"></i>
+
+                            <span th:text="|Tipo #${item.tipoMembresia.id}|">
+                                Tipo #1
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- INICIO -->
+
+                    <td>
+
+                        <span class="membership-date">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            <span th:text="${#temporals.format(
+                                item.fechaInicio,
+                                'dd/MM/yyyy'
+                            )}">
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- VENCIMIENTO -->
+
+                    <td>
+
+                        <span class="membership-date">
+
+                            <i class="bi bi-calendar-check"></i>
+
+                            <span th:text="${#temporals.format(
+                                item.fechaVencimiento,
+                                'dd/MM/yyyy'
+                            )}">
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ESTADO -->
+
+                    <td>
+
+                        <span th:if="${!item.fechaVencimiento.isBefore(T(java.time.LocalDate).now())}"
+                              class="status-badge status-active">
+
+                            Vigente
+
+                        </span>
+
+
+                        <span th:if="${item.fechaVencimiento.isBefore(T(java.time.LocalDate).now())}"
+                              class="status-badge status-inactive">
+
+                            Vencida
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="membership-actions">
+
+                            <a th:href="@{/membresias-clientes/details/{id}(id=${item.id})}"
+                               class="membership-action"
+                               title="Ver membresía">
+
+                                <i class="bi bi-eye"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/membresias-clientes/edit/{id}(id=${item.id})}"
+                               class="membership-action"
+                               title="Editar membresía">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/membresias-clientes/remove/{id}(id=${item.id})}"
+                               class="membership-action membership-action-danger"
+                               title="Eliminar membresía">
+
+                                <i class="bi bi-trash3"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN RESULTADOS
+         ===================================================== -->
+
+    <div id="membershipNoSearchResults"
+         class="app-card"
+         hidden>
+
+        <div class="membership-empty-state">
+
+            <div class="membership-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h2>
+                No encontramos coincidencias
+            </h2>
+
+            <p>
+                Prueba buscando por correo del cliente
+                o identificador del tipo de membresía.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN MEMBRESÍAS
+         ===================================================== -->
+
+    <div th:if="${membresias.isEmpty()}"
+         class="app-card">
+
+        <div class="membership-empty-state">
+
+            <div class="membership-empty-icon">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+
+            <h2>
+                No hay membresías registradas
+            </h2>
+
+            <p>
+                Asigna la primera membresía para comenzar
+                a gestionar el acceso de los clientes.
+            </p>
+
+            <a th:href="@{/membresias-clientes/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Crear membresía
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGINACIÓN
+         ===================================================== -->
+
+    <div th:if="${membresias.totalPages > 1}"
+         class="membership-pagination">
+
+        <div class="membership-pagination-info">
+
+            Página
+
+            <strong th:text="${membresias.number + 1}">
+                1
+            </strong>
+
+            de
+
+            <strong th:text="${membresias.totalPages}">
+                1
+            </strong>
+
+        </div>
+
+
+        <nav aria-label="Paginación de membresías">
+
+            <ul class="pagination">
+
+                <li class="page-item"
+                    th:classappend="${membresias.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/membresias-clientes(
+                           page=${membresias.number},
+                           size=${membresias.size}
+                       )}">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+                </li>
+
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == membresias.number + 1}
+                        ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/membresias-clientes(
+                           page=${pageNumber},
+                           size=${membresias.size}
+                       )}"
+                       th:text="${pageNumber}">
+                    </a>
+
+                </li>
+
+
+                <li class="page-item"
+                    th:classappend="${membresias.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/membresias-clientes(
+                           page=${membresias.number + 2},
+                           size=${membresias.size}
+                       )}">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
 
 </div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/membresia-cliente.js}"></script>
+</th:block>
+
+</body>
+</html>
