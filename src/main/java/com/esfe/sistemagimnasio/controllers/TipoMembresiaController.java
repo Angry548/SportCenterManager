@@ -141,7 +141,7 @@ public class TipoMembresiaController {
     // 7. ACTIVACIÓN DEL TIPO DE MEMBRESÍA
     @PostMapping("/activate/{id}")
     public String activate(@PathVariable("id") Integer id, RedirectAttributes attributes) {
-        tipoMembresiaService.cambiarEstado(id, true);
+        tipoMembresiaService.activar(id);
         attributes.addFlashAttribute("msg", "Tipo de membresía activado correctamente");
         return "redirect:/tipos-membresia";
     }
@@ -149,7 +149,7 @@ public class TipoMembresiaController {
     // 8. DESACTIVACIÓN DEL TIPO DE MEMBRESÍA
     @PostMapping("/deactivate/{id}")
     public String deactivate(@PathVariable("id") Integer id, RedirectAttributes attributes) {
-        tipoMembresiaService.cambiarEstado(id, false);
+        tipoMembresiaService.desactivar(id);
         attributes.addFlashAttribute("msg", "Tipo de membresía desactivado correctamente");
         return "redirect:/tipos-membresia";
     }

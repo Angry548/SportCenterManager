@@ -3,7 +3,6 @@ package com.esfe.sistemagimnasio.controllers;
 import com.esfe.sistemagimnasio.models.Cliente;
 import com.esfe.sistemagimnasio.services.interfaces.IClienteService;
 import com.esfe.sistemagimnasio.services.interfaces.IEntrenadorService;
-import com.esfe.sistemagimnasio.services.interfaces.IMembresiaClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,9 +27,6 @@ public class ClienteController {
     private IClienteService clienteService;
 
     @Autowired
-    private IMembresiaClienteService membresiaClienteService;
-
-    @Autowired
     private IEntrenadorService entrenadorService;
 
     @GetMapping
@@ -43,11 +39,14 @@ public class ClienteController {
         int pageSize = size.orElse(5);
 
         Pageable pageable = PageRequest.of(currentPage, pageSize);
-        Page<Cliente> clientes = clienteService.obtenerTodosPaginados(pageable);
+
+        Page<Cliente> clientes =
+                clienteService.obtenerTodosPaginados(pageable);
 
         model.addAttribute("clientes", clientes);
 
         int totalPages = clientes.getTotalPages();
+
         if (totalPages > 0) {
             List<Integer> pageNumbers = IntStream
                     .rangeClosed(1, totalPages)
@@ -60,14 +59,19 @@ public class ClienteController {
         return "cliente/index";
     }
 
-    // 2. CREACIÓN (Formulario)
     @GetMapping("/create")
-    public String create(Cliente cliente, Model model) {
-        model.addAttribute("entrenadores", entrenadorService.obtenerTodosActivos());
+    public String create(
+            Cliente cliente,
+            Model model) {
+
+        model.addAttribute(
+                "entrenadores",
+                entrenadorService.obtenerTodos()
+        );
+
         return "cliente/create";
     }
 
-    // 2. GUARDADO
     @PostMapping("/save")
     public String save(
             @Valid Cliente cliente,
@@ -76,62 +80,115 @@ public class ClienteController {
             RedirectAttributes attributes) {
 
         if (result.hasErrors()) {
-            model.addAttribute("entrenadores", entrenadorService.obtenerTodosActivos());
-            model.addAttribute("error", "No se pudo guardar debido a un error de validación.");
+
+            model.addAttribute(
+                    "entrenadores",
+                    entrenadorService.obtenerTodos()
+            );
+
+            model.addAttribute(
+                    "error",
+                    "No se pudo guardar debido a un error de validación."
+            );
+
+            if (cliente.getId() != null) {
+                return "cliente/edit";
+            }
+
             return "cliente/create";
         }
 
         clienteService.guardar(cliente);
-        attributes.addFlashAttribute("msg", "Cliente guardado correctamente");
+
+        attributes.addFlashAttribute(
+                "msg",
+                "Cliente guardado correctamente"
+        );
 
         return "redirect:/clientes";
     }
 
-    // 3. VISTA DE DETALLES (Incluye edad, membresía vigente y entrenador activo)
     @GetMapping("/details/{id}")
-    public String details(@PathVariable("id") Integer id, Model model) {
-        Cliente cliente = clienteService.obtenerPorId(id).orElseThrow();
+    public String details(
+            @PathVariable("id") Integer id,
+            Model model) {
 
-        // Datos principales del cliente
-        model.addAttribute("cliente", cliente);
+        Cliente cliente =
+                clienteService.obtenerPorId(id).orElseThrow();
 
-        // 6. Consulta de edad del cliente
-        model.addAttribute("edad", clienteService.calcularEdad(id));
+        model.addAttribute(
+                "cliente",
+                cliente
+        );
 
-        // 7. Consulta de membresía vigente
-        model.addAttribute("membresiaVigente", membresiaClienteService.obtenerMembresiaVigentePorCliente(id));
+        model.addAttribute(
+                "edad",
+                clienteService.obtenerEdad(id)
+        );
 
-        // 8. Consulta de entrenador activo asignado
-        model.addAttribute("entrenadorActivo", entrenadorService.obtenerEntrenadorActivoPorCliente(id));
+        model.addAttribute(
+                "membresiaVigente",
+                clienteService.tieneMembresiaVigente(id)
+        );
+
+        model.addAttribute(
+                "entrenadorActivo",
+                clienteService.tieneEntrenadorActivo(id)
+        );
 
         return "cliente/details";
     }
 
-    // 4. EDICIÓN (Formulario)
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model) {
-        Cliente cliente = clienteService.obtenerPorId(id).orElseThrow();
+    public String edit(
+            @PathVariable("id") Integer id,
+            Model model) {
 
-        model.addAttribute("cliente", cliente);
-        model.addAttribute("entrenadores", entrenadorService.obtenerTodosActivos());
+        Cliente cliente =
+                clienteService.obtenerPorId(id).orElseThrow();
+
+        model.addAttribute(
+                "cliente",
+                cliente
+        );
+
+        model.addAttribute(
+                "entrenadores",
+                entrenadorService.obtenerTodos()
+        );
 
         return "cliente/edit";
     }
 
-    // 5. ELIMINACIÓN (Vista de Confirmación)
     @GetMapping("/remove/{id}")
-    public String remove(@PathVariable("id") Integer id, Model model) {
-        Cliente cliente = clienteService.obtenerPorId(id).orElseThrow();
+    public String remove(
+            @PathVariable("id") Integer id,
+            Model model) {
 
-        model.addAttribute("cliente", cliente);
+        Cliente cliente =
+                clienteService.obtenerPorId(id).orElseThrow();
+
+        model.addAttribute(
+                "cliente",
+                cliente
+        );
+
         return "cliente/delete";
     }
 
-    // 5. ELIMINACIÓN (Acción)
     @PostMapping("/delete")
-    public String delete(Cliente cliente, RedirectAttributes attributes) {
-        clienteService.eliminar(cliente.getId());
-        attributes.addFlashAttribute("msg", "Cliente eliminado correctamente");
+    public String delete(
+            Cliente cliente,
+            RedirectAttributes attributes) {
+
+        clienteService.eliminar(
+                cliente.getId()
+        );
+
+        attributes.addFlashAttribute(
+                "msg",
+                "Cliente eliminado correctamente"
+        );
 
         return "redirect:/clientes";
     }

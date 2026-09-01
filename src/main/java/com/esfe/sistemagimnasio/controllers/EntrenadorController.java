@@ -185,4 +185,4 @@ import java.util.stream.IntStream;
             return "redirect:/entrenadores";
         }
     }
-}
+
