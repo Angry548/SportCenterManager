@@ -1,0 +1,281 @@
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/layouts/_mainLayout">
+
+<div layout:fragment="content">
+
+    <!-- Mensaje de éxito -->
+    <div th:if="${msg != null}">
+        <script>
+            Swal.fire({
+                title: "Confirmación",
+                text: '[[${msg}]]',
+                icon: "success"
+            });
+        </script>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div th:if="${error != null}">
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: '[[${error}]]',
+                icon: "error"
+            });
+        </script>
+    </div>
+
+    <h1>Listado de Rutinas</h1>
+
+    <a th:href="@{/rutinas/create}"
+       class="btn btn-outline-primary">
+        Nueva rutina
+    </a>
+
+    <!-- MAESTRO -->
+    <div th:each="item : ${rutinas}"
+         class="card mt-3">
+
+        <div class="card-header">
+            <h5 th:text="${item.nombre}"></h5>
+        </div>
+
+        <div class="card-body">
+
+            <p>
+                <strong>ID:</strong>
+                <span th:text="${item.id}"></span>
+            </p>
+
+            <p>
+                <strong>Cliente:</strong>
+                <span th:text="${item.cliente.usuario.email}"></span>
+            </p>
+
+            <p>
+                <strong>Entrenador:</strong>
+                <span th:text="${item.entrenador.usuario.email}"></span>
+            </p>
+
+            <p>
+                <strong>Fecha de creación:</strong>
+                <span th:text="${item.fechaCreacion}"></span>
+            </p>
+
+            <p>
+                <strong>Fecha de modificación:</strong>
+
+                <span th:text="${item.fechaModificacion != null
+                        ? item.fechaModificacion
+                        : 'Sin modificaciones'}">
+                </span>
+            </p>
+
+            <!-- Acciones del maestro -->
+            <div class="mb-3">
+
+                <a th:href="@{/rutinas/details/{id}(id=${item.id})}"
+                   class="btn btn-outline-secondary">
+                    Detalles
+                </a>
+
+                <a th:href="@{/rutinas/edit/{id}(id=${item.id})}"
+                   class="btn btn-outline-info">
+                    Editar
+                </a>
+
+                <a th:href="@{/rutinas/remove/{id}(id=${item.id})}"
+                   class="btn btn-outline-danger">
+                    Eliminar
+                </a>
+
+            </div>
+
+            <hr>
+
+            <!-- AGREGAR DETALLE -->
+            <h6>Agregar ejercicio</h6>
+
+            <form th:action="@{/rutinas/{id}/ejercicios/agregar(id=${item.id})}"
+                  th:object="${rutinaEjercicio}"
+                  method="post">
+
+                <div class="row">
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label">
+                            Ejercicio
+                        </label>
+
+                        <select class="form-select"
+                                th:field="*{ejercicio.id}">
+
+                            <option value="">
+                                Seleccione un ejercicio
+                            </option>
+
+                            <option th:each="ejercicio : ${ejercicios}"
+                                    th:value="${ejercicio.id}"
+                                    th:text="${ejercicio.nombre
+                                    + ' - '
+                                    + ejercicio.grupoMuscular.nombre
+                                    + ' - '
+                                    + ejercicio.dificultad}">
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+
+                        <label class="form-label">
+                            Series
+                        </label>
+
+                        <input type="number"
+                               class="form-control"
+                               th:field="*{series}"
+                               min="1">
+
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+
+                        <label class="form-label">
+                            Repeticiones
+                        </label>
+
+                        <input type="number"
+                               class="form-control"
+                               th:field="*{repeticiones}"
+                               min="1">
+
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+
+                        <label class="form-label">
+                            Descanso (segundos)
+                        </label>
+
+                        <input type="number"
+                               class="form-control"
+                               th:field="*{descansoSegundos}"
+                               min="0">
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label">
+                            Observaciones
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{observaciones}">
+
+                    </div>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-outline-success">
+                    Agregar ejercicio
+                </button>
+
+            </form>
+
+            <hr>
+
+            <!-- DETALLE -->
+            <h6>Ejercicios de la rutina</h6>
+
+            <table class="table table-striped">
+
+                <thead>
+                <tr>
+                    <th>Ejercicio</th>
+                    <th>Grupo muscular</th>
+                    <th>Dificultad</th>
+                    <th>Series</th>
+                    <th>Repeticiones</th>
+                    <th>Descanso</th>
+                    <th>Observaciones</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="detalle : ${ejerciciosPorRutina[item.id]}">
+
+                    <td th:text="${detalle.ejercicio.nombre}"></td>
+
+                    <td th:text="${detalle.ejercicio.grupoMuscular.nombre}"></td>
+
+                    <td th:text="${detalle.ejercicio.dificultad}"></td>
+
+                    <td th:text="${detalle.series}"></td>
+
+                    <td th:text="${detalle.repeticiones}"></td>
+
+                    <td th:text="${detalle.descansoSegundos}"></td>
+
+                    <td th:text="${detalle.observaciones}"></td>
+
+                    <td>
+
+                        <a th:href="@{/rutinas/{rutinaId}/ejercicios/quitar/{rutinaEjercicioId}
+                                   (rutinaId=${item.id},
+                                    rutinaEjercicioId=${detalle.id})}"
+                           class="btn btn-outline-danger btn-sm">
+
+                            Quitar
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+            <div th:if="${#lists.isEmpty(ejerciciosPorRutina[item.id])}"
+                 class="alert alert-info">
+
+                Esta rutina todavía no tiene ejercicios.
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Paginación -->
+    <nav aria-label="Page navigation"
+         class="mt-3">
+
+        <ul class="pagination">
+
+            <li class="page-item"
+                th:each="pageNumber : ${pageNumbers}">
+
+                <a class="page-link"
+                   th:href="@{|/rutinas?page=${pageNumber}|}"
+                   th:text="${pageNumber}">
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+
+</div>
