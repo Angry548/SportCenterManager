@@ -1,100 +1,761 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gimnasio</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+    <title>Dashboard</title>
 
-        .container {
-            background: white;
-            border-radius: 12px;
-            padding: 50px 60px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 500px;
-            border: 1px solid #e8eaed;
-        }
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/home.css}">
+    </th:block>
 
-        .icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #1a1a2e;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        .status {
-            display: inline-block;
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 8px 24px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            border: 1px solid #a5d6a7;
-        }
-
-        .status .dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #4caf50;
-            border-radius: 50%;
-            margin-right: 8px;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 13px;
-            color: #aaa;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-        }
-    </style>
 </head>
+
 <body>
-<div class="container">
-    <h1>¡Ejecución Exitosa!</h1>
-    <p class="subtitle">Sistema de Gestión de Gimnasio</p>
-    <div class="status">
-        <span class="dot"></span>
-        Aplicación iniciada correctamente
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <span class="dashboard-eyebrow">
+                SISTEMA DE GESTIÓN
+            </span>
+
+            <h1 class="page-title">
+                Panel general
+            </h1>
+
+            <p class="page-description">
+                Resumen del gimnasio y acceso rápido
+                a los principales módulos del sistema.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-header-actions">
+
+            <a th:href="@{/clientes/create}"
+               class="btn btn-light">
+
+                <i class="bi bi-person-plus me-1"></i>
+                Nuevo cliente
+
+            </a>
+
+
+            <a th:href="@{/membresias-clientes/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-credit-card me-1"></i>
+                Nueva membresía
+
+            </a>
+
+        </div>
+
     </div>
-    <div class="footer">
-        v1.0.0 • Spring Boot 3.3.5
+
+
+    <!-- =====================================================
+         INDICADORES PRINCIPALES
+         ===================================================== -->
+
+    <section class="dashboard-main-stats">
+
+        <!-- CLIENTES -->
+
+        <a th:href="@{/clientes}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-primary">
+                <i class="bi bi-people"></i>
+            </div>
+
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Clientes registrados
+                </span>
+
+                <strong th:text="${totalClientes}">
+                    0
+                </strong>
+
+                <small>
+                    Gestionar clientes
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- ENTRENADORES -->
+
+        <a th:href="@{/entrenadores}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-purple">
+                <i class="bi bi-person-badge"></i>
+            </div>
+
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Entrenadores
+                </span>
+
+                <strong th:text="${totalEntrenadores}">
+                    0
+                </strong>
+
+                <small>
+                    Gestionar entrenadores
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- MEMBRESÍAS -->
+
+        <a th:href="@{/membresias-clientes}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-orange">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Membresías
+                </span>
+
+                <strong th:text="${totalMembresias}">
+                    0
+                </strong>
+
+                <small>
+                    Gestionar membresías
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- RUTINAS -->
+
+        <a th:href="@{/rutinas}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-dark">
+                <i class="bi bi-journal-check"></i>
+            </div>
+
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Rutinas
+                </span>
+
+                <strong th:text="${totalRutinas}">
+                    0
+                </strong>
+
+                <small>
+                    Gestionar rutinas
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         ACCESOS DEL SISTEMA
+         ===================================================== -->
+
+    <div class="dashboard-layout">
+
+        <!-- =================================================
+             MÓDULOS
+             ================================================= -->
+
+        <section class="app-card dashboard-modules-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Módulos del sistema
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Accede rápidamente a cada área de administración.
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card-icon">
+                    <i class="bi bi-grid"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="dashboard-module-grid">
+
+                    <!-- CLIENTES -->
+
+                    <a th:href="@{/clientes}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Clientes
+                            </strong>
+
+                            <span>
+                                Registro y administración
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalClientes}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- ENTRENADORES -->
+
+                    <a th:href="@{/entrenadores}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Entrenadores
+                            </strong>
+
+                            <span>
+                                Personal de entrenamiento
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalEntrenadores}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- USUARIOS -->
+
+                    <a th:href="@{/usuarios}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-person-gear"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Usuarios
+                            </strong>
+
+                            <span>
+                                Acceso y roles
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalUsuarios}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- RUTINAS -->
+
+                    <a th:href="@{/rutinas}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-journal-check"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Rutinas
+                            </strong>
+
+                            <span>
+                                Planes de entrenamiento
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalRutinas}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- EJERCICIOS -->
+
+                    <a th:href="@{/ejercicios}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-activity"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Ejercicios
+                            </strong>
+
+                            <span>
+                                Catálogo de movimientos
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalEjercicios}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- GRUPOS MUSCULARES -->
+
+                    <a th:href="@{/grupos-musculares}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-universal-access"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Grupos musculares
+                            </strong>
+
+                            <span>
+                                Clasificación de ejercicios
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalGruposMusculares}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- RUTINA EJERCICIOS -->
+
+                    <a th:href="@{/rutina-ejercicios}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-list-check"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Rutina - ejercicios
+                            </strong>
+
+                            <span>
+                                Series y repeticiones
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalRutinaEjercicios}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- ASIGNACIONES -->
+
+                    <a th:href="@{/asignaciones-entrenador}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Asignaciones
+                            </strong>
+
+                            <span>
+                                Cliente y entrenador
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalAsignaciones}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- MEMBRESÍAS -->
+
+                    <a th:href="@{/membresias-clientes}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-credit-card-2-front"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Membresías
+                            </strong>
+
+                            <span>
+                                Membresías de clientes
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalMembresias}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- TIPOS -->
+
+                    <a th:href="@{/tipos-membresia}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-card-checklist"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Tipos de membresía
+                            </strong>
+
+                            <span>
+                                Planes y precios
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalTiposMembresia}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- EVALUACIONES -->
+
+                    <a th:href="@{/evaluaciones-fisicas}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-heart-pulse"></i>
+                        </div>
+
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Evaluaciones físicas
+                            </strong>
+
+                            <span>
+                                Seguimiento corporal
+                            </span>
+
+                        </div>
+
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalEvaluaciones}">
+                            0
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ACCIONES RÁPIDAS
+             ================================================= -->
+
+        <aside class="app-card dashboard-quick-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Acciones rápidas
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Operaciones frecuentes.
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card-icon">
+                    <i class="bi bi-lightning-charge"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <!-- CLIENTE -->
+
+                <a th:href="@{/clientes/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Registrar cliente
+                        </strong>
+
+                        <span>
+                            Crear un nuevo cliente
+                        </span>
+
+                    </div>
+
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- MEMBRESÍA -->
+
+                <a th:href="@{/membresias-clientes/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Asignar membresía
+                        </strong>
+
+                        <span>
+                            Crear membresía de cliente
+                        </span>
+
+                    </div>
+
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- ASIGNACIÓN -->
+
+                <a th:href="@{/asignaciones-entrenador/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Asignar entrenador
+                        </strong>
+
+                        <span>
+                            Vincular cliente y entrenador
+                        </span>
+
+                    </div>
+
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- EVALUACIÓN -->
+
+                <a th:href="@{/evaluaciones-fisicas/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-heart-pulse"></i>
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Nueva evaluación
+                        </strong>
+
+                        <span>
+                            Registrar medidas físicas
+                        </span>
+
+                    </div>
+
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- RUTINA -->
+
+                <a th:href="@{/rutinas/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-journal-plus"></i>
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Crear rutina
+                        </strong>
+
+                        <span>
+                            Registrar plan de entrenamiento
+                        </span>
+
+                    </div>
+
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+            </div>
+
+        </aside>
+
     </div>
+
 </div>
+
 </body>
 </html>
