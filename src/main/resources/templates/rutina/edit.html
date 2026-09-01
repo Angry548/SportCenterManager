@@ -1,11 +1,45 @@
+<!DOCTYPE html>
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/layouts/_mainLayout">
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Editar rutina</title>
+
+    <th:block layout:fragment="styles">
+
+        <link rel="stylesheet"
+              th:href="@{/css/rutina.css}">
+
+    </th:block>
+
+</head>
+
+
+<body>
 
 <div layout:fragment="content">
 
-    <h1>Editar Rutina</h1>
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Editar rutina
+            </h1>
+
+            <p class="page-description">
+                Actualiza los datos generales del plan
+                de entrenamiento.
+            </p>
+
+        </div>
+
+    </div>
+
 
     <form th:action="@{/rutinas/save}"
           th:object="${rutina}"
@@ -14,88 +48,244 @@
         <input type="hidden"
                th:field="*{id}">
 
-        <div class="mb-3">
+        <!-- Conservamos este valor durante el POST -->
+        <input type="hidden"
+               th:field="*{fechaCreacion}">
 
-            <label class="form-label">Cliente</label>
 
-            <select class="form-select"
-                    th:field="*{cliente.id}">
+        <div class="routine-form-container">
 
-                <option value="">Seleccione un cliente</option>
+            <div class="app-card">
 
-                <option th:each="cliente : ${clientes}"
-                        th:value="${cliente.id}"
-                        th:text="${cliente.usuario.email}">
-                </option>
 
-            </select>
+                <div class="app-card-header">
 
-            <div class="text-danger"
-                 th:if="${#fields.hasErrors('cliente')}"
-                 th:errors="*{cliente}">
+                    <div>
+
+                        <h2 class="app-card-title"
+                            th:text="${rutina.nombre}">
+                        </h2>
+
+                        <div class="app-card-subtitle">
+
+                            Rutina #
+
+                            <span th:text="${rutina.id}">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+
+                    <!-- DATOS -->
+
+                    <section class="routine-form-section">
+
+                        <div class="routine-section-heading">
+
+                            <h3>
+                                Datos generales
+                            </h3>
+
+                            <p>
+                                Información principal de la rutina.
+                            </p>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Nombre
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       th:field="*{nombre}">
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('nombre')}"
+                                     th:errors="*{nombre}">
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Cliente
+                                </label>
+
+                                <select class="form-select"
+                                        th:field="*{cliente.id}">
+
+                                    <option value="">
+                                        Seleccione un cliente
+                                    </option>
+
+
+                                    <option th:each="cliente : ${clientes}"
+                                            th:value="${cliente.id}"
+                                            th:text="${cliente.usuario.email}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('cliente')}"
+                                     th:errors="*{cliente}">
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Entrenador
+                                </label>
+
+                                <select class="form-select"
+                                        th:field="*{entrenador.id}">
+
+                                    <option value="">
+                                        Seleccione un entrenador
+                                    </option>
+
+
+                                    <option th:each="entrenador : ${entrenadores}"
+                                            th:value="${entrenador.id}"
+                                            th:text="${entrenador.usuario.email}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('entrenador')}"
+                                     th:errors="*{entrenador}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- REGISTRO -->
+
+                    <section class="routine-form-section">
+
+                        <div class="routine-section-heading">
+
+                            <h3>
+                                Información de registro
+                            </h3>
+
+                            <p>
+                                Datos generados durante el ciclo
+                                de vida de la rutina.
+                            </p>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Fecha de creación
+                                </label>
+
+                                <div class="routine-readonly-field">
+
+                                    <i class="bi bi-calendar3"></i>
+
+                                    <span th:text="${rutina.fechaCreacion}">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Última modificación
+                                </label>
+
+                                <div class="routine-readonly-field">
+
+                                    <i class="bi bi-clock-history"></i>
+
+                                    <span th:text="${rutina.fechaModificacion != null
+                                        ? rutina.fechaModificacion
+                                        : 'Sin modificaciones'}">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <div class="routine-form-footer">
+
+                    <a th:href="@{/rutinas}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+
+                        Guardar cambios
+
+                    </button>
+
+                </div>
+
             </div>
 
         </div>
-
-        <div class="mb-3">
-
-            <label class="form-label">Entrenador</label>
-
-            <select class="form-select"
-                    th:field="*{entrenador.id}">
-
-                <option value="">Seleccione un entrenador</option>
-
-                <option th:each="entrenador : ${entrenadores}"
-                        th:value="${entrenador.id}"
-                        th:text="${entrenador.usuario.email}">
-                </option>
-
-            </select>
-
-            <div class="text-danger"
-                 th:if="${#fields.hasErrors('entrenador')}"
-                 th:errors="*{entrenador}">
-            </div>
-
-        </div>
-
-        <div class="mb-3">
-
-            <label class="form-label">Nombre</label>
-
-            <input type="text"
-                   class="form-control"
-                   th:field="*{nombre}">
-
-            <div class="text-danger"
-                 th:if="${#fields.hasErrors('nombre')}"
-                 th:errors="*{nombre}">
-            </div>
-
-        </div>
-
-        <div class="mb-3">
-
-            <label class="form-label">Fecha de creación</label>
-
-            <input type="text"
-                   class="form-control"
-                   th:value="${rutina.fechaCreacion}"
-                   readonly>
-
-        </div>
-
-        <button type="submit"
-                class="btn btn-outline-success">
-            Guardar cambios
-        </button>
-
-        <a th:href="@{/rutinas}"
-           class="btn btn-outline-secondary">
-            Regresar
-        </a>
 
     </form>
 
 </div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/rutina.js}"></script>
+
+</th:block>
+
+</body>
+</html>
