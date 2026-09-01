@@ -1,0 +1,83 @@
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/layouts/_mainLayout">
+
+<div layout:fragment="content">
+
+    <h1>Eliminar Rutina</h1>
+
+    <div class="alert alert-warning">
+        ¿Está seguro de que desea eliminar esta rutina?
+    </div>
+
+    <form th:action="@{/rutinas/delete}"
+          th:object="${rutina}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+        <div class="mb-3">
+            <label class="form-label">ID</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${rutina.id}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${rutina.nombre}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cliente</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${rutina.cliente.usuario.email}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Entrenador</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${rutina.entrenador.usuario.email}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha de creación</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${rutina.fechaCreacion}"
+                   readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha de modificación</label>
+            <input type="text"
+                   class="form-control"
+                   th:value="${rutina.fechaModificacion != null
+                   ? rutina.fechaModificacion
+                   : 'Sin modificaciones'}"
+                   readonly>
+        </div>
+
+        <button type="submit"
+                class="btn btn-outline-danger">
+            Eliminar
+        </button>
+
+        <a th:href="@{/rutinas}"
+           class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+
+    </form>
+
+</div>
