@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Asignaciones de entrenador</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/asignacion-entrenador.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Asignaciones de entrenador
+            </h1>
+
+            <p class="page-description">
+                Administra la relación entre clientes y entrenadores,
+                así como la vigencia de cada asignación.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/asignaciones-entrenador/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-person-plus me-1"></i>
+                Nueva asignación
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div th:if="${!asignaciones.isEmpty()}"
+         class="assignment-toolbar">
+
+        <div class="assignment-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="search"
+                   id="assignmentSearch"
+                   class="form-control"
+                   placeholder="Buscar por cliente o entrenador..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="assignmentSearchClear"
+                    class="assignment-search-clear"
+                    aria-label="Limpiar búsqueda">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="assignment-result-count">
+
+            Mostrando
+
+            <strong id="assignmentVisibleCount"
+                    th:text="${asignaciones.numberOfElements}">
+                0
+            </strong>
+
+            de
+
+            <strong th:text="${asignaciones.totalElements}">
+                0
+            </strong>
+
+            asignaciones
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LISTADO
+         ===================================================== -->
+
+    <div th:if="${!asignaciones.isEmpty()}"
+         class="app-card assignment-list-card">
+
+        <div class="app-card-header">
+
+            <div>
+
+                <h2 class="app-card-title">
+                    Historial de asignaciones
+                </h2>
+
+                <div class="app-card-subtitle">
+                    Relaciones registradas entre clientes y entrenadores.
+                </div>
+
+            </div>
+
+
+            <div class="assignment-section-icon">
+                <i class="bi bi-person-check"></i>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table assignment-table">
+
+                <thead>
+
+                <tr>
+                    <th>Cliente</th>
+                    <th>Entrenador</th>
+                    <th>Fecha asignación</th>
+                    <th>Fecha finalización</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="item : ${asignaciones}"
+                    data-assignment-row
+                    th:attr="
+                        data-assignment-client=${item.cliente.usuario.email},
+                        data-assignment-trainer=${item.entrenador.usuario.email},
+                        data-assignment-specialty=${item.entrenador.especialidad}
+                    ">
+
+
+                    <!-- CLIENTE -->
+
+                    <td>
+
+                        <div class="assignment-person-cell">
+
+                            <div class="assignment-client-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+
+                            <div class="assignment-person-info">
+
+                                <strong th:text="${item.cliente.usuario.email}">
+                                    cliente@email.com
+                                </strong>
+
+                                <span>
+                                    Cliente #
+                                    <span th:text="${item.cliente.id}"></span>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- ENTRENADOR -->
+
+                    <td>
+
+                        <div class="assignment-person-cell">
+
+                            <div class="assignment-trainer-avatar">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+
+
+                            <div class="assignment-person-info">
+
+                                <strong th:text="${item.entrenador.usuario.email}">
+                                    entrenador@email.com
+                                </strong>
+
+                                <span th:text="${item.entrenador.especialidad}">
+                                    Especialidad
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- INICIO -->
+
+                    <td>
+
+                        <span class="assignment-date">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            <span th:text="${#temporals.format(
+                                item.fechaAsignacion,
+                                'dd/MM/yyyy'
+                            )}">
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- FIN -->
+
+                    <td>
+
+                        <span th:if="${item.fechaFin != null}"
+                              class="assignment-date">
+
+                            <i class="bi bi-calendar-check"></i>
+
+                            <span th:text="${#temporals.format(
+                                item.fechaFin,
+                                'dd/MM/yyyy'
+                            )}">
+                            </span>
+
+                        </span>
+
+
+                        <span th:unless="${item.fechaFin != null}"
+                              class="assignment-no-date">
+
+                            —
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ESTADO -->
+
+                    <td>
+
+                        <span th:if="${item.fechaFin == null}"
+                              class="status-badge status-active">
+
+                            Activa
+
+                        </span>
+
+
+                        <span th:unless="${item.fechaFin == null}"
+                              class="status-badge status-inactive">
+
+                            Finalizada
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="assignment-actions">
+
+
+                            <!-- DETALLE -->
+
+                            <a th:href="@{/asignaciones-entrenador/details/{id}(id=${item.id})}"
+                               class="assignment-action"
+                               title="Ver asignación">
+
+                                <i class="bi bi-eye"></i>
+
+                            </a>
+
+
+                            <!-- EDITAR -->
+
+                            <a th:href="@{/asignaciones-entrenador/edit/{id}(id=${item.id})}"
+                               class="assignment-action"
+                               title="Editar asignación">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+
+
+                            <!-- FINALIZAR -->
+
+                            <a th:if="${item.fechaFin == null}"
+                               th:href="@{/asignaciones-entrenador/finalizar/{id}(id=${item.id})}"
+                               class="assignment-action assignment-action-finish"
+                               data-finalize-assignment
+                               title="Finalizar asignación">
+
+                                <i class="bi bi-check2-circle"></i>
+
+                            </a>
+
+
+                            <!-- ELIMINAR -->
+
+                            <a th:href="@{/asignaciones-entrenador/remove/{id}(id=${item.id})}"
+                               class="assignment-action assignment-action-danger"
+                               title="Eliminar asignación">
+
+                                <i class="bi bi-trash3"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN RESULTADOS
+         ===================================================== -->
+
+    <div id="assignmentNoSearchResults"
+         class="app-card"
+         hidden>
+
+        <div class="assignment-empty-state">
+
+            <div class="assignment-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h2>
+                No encontramos coincidencias
+            </h2>
+
+            <p>
+                Prueba buscando por correo del cliente,
+                entrenador o especialidad.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN ASIGNACIONES
+         ===================================================== -->
+
+    <div th:if="${asignaciones.isEmpty()}"
+         class="app-card">
+
+        <div class="assignment-empty-state">
+
+            <div class="assignment-empty-icon">
+                <i class="bi bi-person-check"></i>
+            </div>
+
+            <h2>
+                No hay asignaciones registradas
+            </h2>
+
+            <p>
+                Crea la primera asignación para relacionar
+                un cliente con su entrenador.
+            </p>
+
+            <a th:href="@{/asignaciones-entrenador/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-person-plus me-1"></i>
+                Crear asignación
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGINACIÓN
+         ===================================================== -->
+
+    <div th:if="${asignaciones.totalPages > 1}"
+         class="assignment-pagination">
+
+        <div class="assignment-pagination-info">
+
+            Página
+
+            <strong th:text="${asignaciones.number + 1}">
+                1
+            </strong>
+
+            de
+
+            <strong th:text="${asignaciones.totalPages}">
+                1
+            </strong>
+
+        </div>
+
+
+        <nav aria-label="Paginación de asignaciones">
+
+            <ul class="pagination">
+
+
+                <!-- ANTERIOR -->
+
+                <li class="page-item"
+                    th:classappend="${asignaciones.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/asignaciones-entrenador(
+                           page=${asignaciones.number},
+                           size=${asignaciones.size}
+                       )}">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+                </li>
+
+
+                <!-- PÁGINAS -->
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == asignaciones.number + 1}
+                        ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/asignaciones-entrenador(
+                           page=${pageNumber},
+                           size=${asignaciones.size}
+                       )}"
+                       th:text="${pageNumber}">
+                    </a>
+
+                </li>
+
+
+                <!-- SIGUIENTE -->
+
+                <li class="page-item"
+                    th:classappend="${asignaciones.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/asignaciones-entrenador(
+                           page=${asignaciones.number + 2},
+                           size=${asignaciones.size}
+                       )}">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/asignacion-entrenador.js}"></script>
+
+</th:block>
+
+</body>
+</html>

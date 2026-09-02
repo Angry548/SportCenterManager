@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle del ejercicio</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/ejercicio.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="exercise-breadcrumb">
+
+        <a th:href="@{/ejercicios}">
+            Ejercicios
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span th:text="${ejercicio.nombre}">
+            Ejercicio
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle del ejercicio
+            </h1>
+
+            <p class="page-description">
+                Consulta la clasificación e información
+                disponible para este ejercicio.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/ejercicios}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/ejercicios/edit/{id}(id=${ejercicio.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar ejercicio
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="exercise-profile">
+
+        <!-- IMAGEN -->
+
+        <div class="exercise-profile-media">
+
+            <img th:if="${ejercicio.imagenUrl != null
+                    and !#strings.isEmpty(ejercicio.imagenUrl)}"
+                 th:src="${ejercicio.imagenUrl}"
+                 th:alt="${ejercicio.nombre}"
+                 class="exercise-profile-image">
+
+
+            <div th:unless="${ejercicio.imagenUrl != null
+                    and !#strings.isEmpty(ejercicio.imagenUrl)}"
+                 class="exercise-profile-placeholder">
+
+                <i class="bi bi-activity"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- INFORMACIÓN -->
+
+        <div class="exercise-profile-content">
+
+            <span class="exercise-profile-label">
+                Ejercicio registrado
+            </span>
+
+
+            <h2 th:text="${ejercicio.nombre}">
+                Press de banca
+            </h2>
+
+
+            <div class="exercise-profile-meta">
+
+                <span>
+                    Ejercicio #
+                    <strong th:text="${ejercicio.id}"></strong>
+                </span>
+
+            </div>
+
+
+            <div class="exercise-profile-tags">
+
+                <span class="exercise-group-badge">
+
+                    <i class="bi bi-universal-access"></i>
+
+                    <span th:text="${ejercicio.grupoMuscular.nombre}">
+                    </span>
+
+                </span>
+
+
+                <span class="exercise-difficulty-badge"
+                      th:text="${ejercicio.dificultad}">
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DETAILS
+         ===================================================== -->
+
+    <div class="exercise-details-layout">
+
+        <!-- CLASSIFICATION -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Clasificación
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Información utilizada dentro de las rutinas.
+                    </div>
+
+                </div>
+
+
+                <div class="exercise-section-icon">
+                    <i class="bi bi-sliders"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="exercise-detail-list">
+
+                    <div class="exercise-detail-item">
+
+                        <div class="exercise-detail-icon">
+                            <i class="bi bi-activity"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Nombre
+                            </span>
+
+                            <strong th:text="${ejercicio.nombre}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="exercise-detail-item">
+
+                        <div class="exercise-detail-icon">
+                            <i class="bi bi-universal-access"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Grupo muscular
+                            </span>
+
+                            <strong th:text="${ejercicio.grupoMuscular.nombre}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="exercise-detail-item">
+
+                        <div class="exercise-detail-icon">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Dificultad
+                            </span>
+
+                            <strong th:text="${ejercicio.dificultad}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- IMAGE DATA -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Imagen
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Recurso visual asociado al ejercicio.
+                    </div>
+
+                </div>
+
+
+                <div class="exercise-section-icon">
+                    <i class="bi bi-image"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div th:if="${ejercicio.imagenUrl != null
+                        and !#strings.isEmpty(ejercicio.imagenUrl)}"
+                     class="exercise-url-card">
+
+                    <div class="exercise-url-icon">
+                        <i class="bi bi-link-45deg"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            URL configurada
+                        </span>
+
+                        <strong th:text="${ejercicio.imagenUrl}">
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div th:unless="${ejercicio.imagenUrl != null
+                        and !#strings.isEmpty(ejercicio.imagenUrl)}"
+                     class="exercise-no-image">
+
+                    <i class="bi bi-image"></i>
+
+                    <strong>
+                        Sin imagen configurada
+                    </strong>
+
+                    <span>
+                        Este ejercicio no tiene una URL de imagen.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/ejercicio.js}"></script>
+</th:block>
+
+</body>
+</html>

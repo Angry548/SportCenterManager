@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Eliminar membresía</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/membresia-cliente.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="membership-breadcrumb">
+
+        <a th:href="@{/membresias-clientes}">
+            Membresías
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar membresía
+        </span>
+
+    </nav>
+
+
+    <div class="membership-delete-container">
+
+        <div class="app-card membership-delete-card">
+
+            <div class="membership-delete-icon">
+                <i class="bi bi-trash3"></i>
+            </div>
+
+
+            <span class="membership-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar membresía
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar la membresía
+                registrada para
+
+                <strong th:text="${membresiaCliente.cliente.usuario.email}">
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="membership-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Esta operación eliminará el registro de membresía
+                    y su periodo asociado.
+                </span>
+
+            </div>
+
+
+            <div class="membership-delete-summary">
+
+                <div>
+
+                    <span>
+                        Cliente
+                    </span>
+
+                    <strong th:text="${membresiaCliente.cliente.usuario.email}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Tipo
+                    </span>
+
+                    <strong th:text="|Tipo #${membresiaCliente.tipoMembresia.id}|">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Inicio
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        membresiaCliente.fechaInicio,
+                        'dd/MM/yyyy'
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Vencimiento
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        membresiaCliente.fechaVencimiento,
+                        'dd/MM/yyyy'
+                    )}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/membresias-clientes/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${membresiaCliente.id}">
+
+
+                <div class="membership-delete-actions">
+
+                    <a th:href="@{/membresias-clientes/details/{id}(id=${membresiaCliente.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+                        Eliminar membresía
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/membresia-cliente.js}"></script>
+</th:block>
+
+</body>
+</html>

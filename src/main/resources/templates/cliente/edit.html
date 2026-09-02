@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Editar cliente</title>
+
+    <th:block layout:fragment="styles">
+
+        <link rel="stylesheet"
+              th:href="@{/css/cliente.css}">
+
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="client-breadcrumb">
+
+        <a th:href="@{/clientes}">
+            Clientes
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <a th:href="@{/clientes/details/{id}(id=${cliente.id})}"
+           th:text="${cliente.usuario.email}">
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Editar
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div class="page-header-content">
+
+            <h1 class="page-title">
+                Editar cliente
+            </h1>
+
+            <p class="page-description">
+                Actualiza la información personal registrada
+                para este cliente.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <form th:action="@{/clientes/save}"
+          th:object="${cliente}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="client-form-container">
+
+            <div class="app-card">
+
+                <!-- HEADER CARD -->
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Información del cliente
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Modifica únicamente los datos necesarios.
+                        </div>
+
+                    </div>
+
+
+                    <div class="client-section-icon">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+
+                    <!-- CUENTA -->
+
+                    <section class="client-form-section">
+
+                        <div class="client-section-heading">
+
+                            <div class="client-section-heading-icon">
+                                <i class="bi bi-person-gear"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Cuenta asociada
+                                </h3>
+
+                                <p>
+                                    Usuario relacionado con este cliente.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Usuario
+                                </label>
+
+                                <select class="form-select"
+                                        th:field="*{usuario.id}">
+
+                                    <option value="">
+                                        Seleccione un usuario
+                                    </option>
+
+                                    <option th:each="usuario : ${usuarios}"
+                                            th:value="${usuario.id}"
+                                            th:text="${usuario.email}">
+                                    </option>
+
+                                </select>
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('usuario')}"
+                                     th:errors="*{usuario}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- DATOS -->
+
+                    <section class="client-form-section">
+
+                        <div class="client-section-heading">
+
+                            <div class="client-section-heading-icon">
+                                <i class="bi bi-person-vcard"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Datos personales
+                                </h3>
+
+                                <p>
+                                    Información general del cliente.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <!-- DUI -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    DUI
+                                </label>
+
+                                <div class="client-input-wrapper">
+
+                                    <i class="bi bi-person-vcard"></i>
+
+                                    <input type="text"
+                                           class="form-control client-input-icon"
+                                           th:field="*{dui}"
+                                           maxlength="10">
+
+                                </div>
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('dui')}"
+                                     th:errors="*{dui}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- TELÉFONO -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Teléfono
+                                </label>
+
+                                <div class="client-input-wrapper">
+
+                                    <i class="bi bi-telephone"></i>
+
+                                    <input type="text"
+                                           class="form-control client-input-icon"
+                                           th:field="*{telefono}">
+
+                                </div>
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('telefono')}"
+                                     th:errors="*{telefono}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- NACIMIENTO -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Fecha de nacimiento
+                                </label>
+
+                                <input type="date"
+                                       class="form-control"
+                                       th:field="*{fechaNacimiento}">
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('fechaNacimiento')}"
+                                     th:errors="*{fechaNacimiento}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- SEXO -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Sexo
+                                </label>
+
+                                <select class="form-select"
+                                        th:field="*{sexo}">
+
+                                    <option value="">
+                                        Seleccione una opción
+                                    </option>
+
+                                    <option th:each="sexoItem :
+                                            ${T(com.esfe.sistemagimnasio.enums.Sexo).values()}"
+                                            th:value="${sexoItem}"
+                                            th:text="${sexoItem}">
+                                    </option>
+
+                                </select>
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('sexo')}"
+                                     th:errors="*{sexo}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- DIRECCIÓN -->
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Dirección
+                                </label>
+
+                                <div class="client-textarea-wrapper">
+
+                                    <textarea class="form-control"
+                                              th:field="*{direccion}"
+                                              rows="4"
+                                              maxlength="200">
+                                    </textarea>
+
+                                    <span class="client-character-limit">
+                                        Máximo 200 caracteres
+                                    </span>
+
+                                </div>
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('direccion')}"
+                                     th:errors="*{direccion}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="client-form-footer">
+
+                    <a th:href="@{/clientes/details/{id}(id=${cliente.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+
+                        Guardar cambios
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/cliente.js}"></script>
+
+</th:block>
+
+</body>
+</html>

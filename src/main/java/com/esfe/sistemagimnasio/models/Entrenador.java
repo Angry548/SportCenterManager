@@ -34,6 +34,7 @@ public class Entrenador {
     @Column(name = "telefono", nullable = false, length = 20)
     private String telefono;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
@@ -73,4 +74,6 @@ public class Entrenador {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+
 }

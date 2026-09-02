@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Vencimiento proyectado</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/tipo-membresia.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="membership-type-breadcrumb">
+
+        <a th:href="@{/tipos-membresia}">
+            Tipos de membresía
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <a th:href="@{/tipos-membresia/details/{id}(id=${tipoMembresia.id})}"
+           th:text="${tipoMembresia.nombre}">
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Vencimiento proyectado
+        </span>
+
+    </nav>
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Vencimiento proyectado
+            </h1>
+
+            <p class="page-description">
+                Resultado calculado con la duración
+                configurada para este tipo de membresía.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/tipos-membresia/details/{id}(id=${tipoMembresia.id})}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="membership-expiration-container">
+
+        <div class="app-card membership-expiration-card">
+
+            <div class="membership-expiration-icon">
+                <i class="bi bi-calendar2-check"></i>
+            </div>
+
+
+            <span class="membership-expiration-label">
+                Resultado de la proyección
+            </span>
+
+
+            <h2 th:text="${tipoMembresia.nombre}">
+                Membresía mensual
+            </h2>
+
+
+            <div class="membership-expiration-route">
+
+                <!-- INICIO -->
+
+                <div class="membership-expiration-date">
+
+                    <span>
+                        Fecha de inicio
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        fechaInicio,
+                        'dd/MM/yyyy'
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <div class="membership-expiration-arrow">
+
+                    <span></span>
+
+                    <div>
+                        <i class="bi bi-arrow-right"></i>
+                    </div>
+
+                    <span></span>
+
+                </div>
+
+
+                <!-- FIN -->
+
+                <div class="membership-expiration-date highlighted">
+
+                    <span>
+                        Fecha de vencimiento
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        fechaVencimiento,
+                        'dd/MM/yyyy'
+                    )}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="membership-expiration-duration">
+
+                <i class="bi bi-calendar-range"></i>
+
+                <span>
+
+                    Duración configurada:
+
+                    <strong>
+                        <span th:text="${tipoMembresia.duracionDias}">
+                        </span>
+                        días
+                    </strong>
+
+                </span>
+
+            </div>
+
+
+            <div class="membership-expiration-actions">
+
+                <a th:href="@{/tipos-membresia/details/{id}(id=${tipoMembresia.id})}"
+                   class="btn btn-primary">
+
+                    <i class="bi bi-calculator me-1"></i>
+                    Calcular otra fecha
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/tipo-membresia.js}"></script>
+</th:block>
+
+</body>
+</html>

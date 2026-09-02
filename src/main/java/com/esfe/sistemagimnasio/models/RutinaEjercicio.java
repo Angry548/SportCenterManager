@@ -44,6 +44,8 @@ public class RutinaEjercicio {
     @Column(name = "observaciones", length = 300)
     private String observaciones;
 
+
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }

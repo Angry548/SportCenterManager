@@ -17,11 +17,6 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull(message = "El cliente es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "cliente_id", nullable = false, foreignKey = @ForeignKey(name = "FK_pago_cliente"))
-    private Cliente cliente;
-
     @NotNull(message = "La membresia asociada es obligatoria")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "membresia_cliente_id", nullable = false, foreignKey = @ForeignKey(name = "FK_pago_membresiaCliente"))
@@ -45,20 +40,13 @@ public class Pago {
     @Column(name = "numero_comprobante", nullable = false, length = 20, unique = true, updatable = false)
     private String numeroComprobante;
 
+    //Encapsulamiento
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
     }
 
     public MembresiaCliente getMembresiaCliente() {
@@ -100,4 +88,5 @@ public class Pago {
     public void setNumeroComprobante(String numeroComprobante) {
         this.numeroComprobante = numeroComprobante;
     }
+
 }

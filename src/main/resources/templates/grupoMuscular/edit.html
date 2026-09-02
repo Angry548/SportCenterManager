@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Editar grupo muscular</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/grupo-muscular.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="muscle-breadcrumb">
+
+        <a th:href="@{/grupos-musculares}">
+            Grupos musculares
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+
+        <a th:href="@{/grupos-musculares/details/{id}(id=${grupoMuscular.id})}"
+           th:text="${grupoMuscular.nombre}">
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Editar
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Editar grupo muscular
+            </h1>
+
+            <p class="page-description">
+                Actualiza el nombre utilizado para
+                identificar esta categoría muscular.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <form th:action="@{/grupos-musculares/save}"
+          th:object="${grupoMuscular}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="muscle-form-container">
+
+            <div class="app-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title"
+                            th:text="${grupoMuscular.nombre}">
+                            Grupo muscular
+                        </h2>
+
+                        <div class="app-card-subtitle">
+
+                            Grupo #
+                            <span th:text="${grupoMuscular.id}">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="muscle-section-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <section class="muscle-form-section">
+
+                        <div class="muscle-section-heading">
+
+                            <div class="muscle-section-heading-icon">
+                                <i class="bi bi-universal-access"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Identificación
+                                </h3>
+
+                                <p>
+                                    Modifica el nombre del grupo muscular.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-12">
+
+                                <label class="form-label"
+                                       for="nombre">
+
+                                    Nombre
+
+                                </label>
+
+
+                                <div class="muscle-input-wrapper">
+
+                                    <i class="bi bi-tag"></i>
+
+                                    <input type="text"
+                                           id="nombre"
+                                           class="form-control muscle-input-icon"
+                                           th:field="*{nombre}"
+                                           maxlength="50"
+                                           autocomplete="off"
+                                           data-muscle-name-input>
+
+                                </div>
+
+
+                                <div class="muscle-field-footer">
+
+                                    <div class="muscle-field-help">
+
+                                        <i class="bi bi-info-circle"></i>
+
+                                        Máximo 50 caracteres.
+
+                                    </div>
+
+
+                                    <div class="muscle-character-counter">
+
+                                        <span id="muscleCharacterCount">
+                                            0
+                                        </span>
+
+                                        / 50
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('nombre')}"
+                                     th:errors="*{nombre}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- PREVIEW -->
+
+                    <div class="muscle-form-preview">
+
+                        <div class="muscle-form-preview-icon">
+                            <i class="bi bi-universal-access"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Vista previa
+                            </span>
+
+                            <strong id="muscleNamePreview"
+                                    th:text="${grupoMuscular.nombre}">
+                                Grupo muscular
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="muscle-form-footer">
+
+                    <a th:href="@{/grupos-musculares/details/{id}(id=${grupoMuscular.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+
+                        Guardar cambios
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/grupo-muscular.js}"></script>
+</th:block>
+
+</body>
+</html>

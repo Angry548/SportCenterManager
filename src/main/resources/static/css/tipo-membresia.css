@@ -1,0 +1,1524 @@
+/* =========================================================
+   TIPO MEMBRESIA
+   ========================================================= */
+
+.membership-type-section-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+.membership-type-breadcrumb {
+    margin-bottom: 18px;
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+.membership-type-breadcrumb a {
+    max-width: 280px;
+
+    overflow: hidden;
+
+    color: var(--text-secondary);
+
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.membership-type-breadcrumb a:hover {
+    color: var(--color-primary);
+}
+
+
+.membership-type-breadcrumb i {
+    font-size: 7px;
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.membership-type-toolbar {
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+}
+
+
+.membership-type-search {
+    width: 100%;
+    max-width: 470px;
+
+    position: relative;
+}
+
+
+.membership-type-search > i {
+    position: absolute;
+
+    top: 50%;
+    left: 14px;
+
+    transform: translateY(-50%);
+
+    color: var(--text-muted);
+
+    pointer-events: none;
+}
+
+
+.membership-type-search .form-control {
+    padding-left: 40px;
+    padding-right: 42px;
+}
+
+
+.membership-type-search-clear {
+    width: 30px;
+    height: 30px;
+
+    position: absolute;
+
+    top: 50%;
+    right: 7px;
+
+    transform: translateY(-50%);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 8px;
+
+    color: var(--text-muted);
+    background: transparent;
+}
+
+
+.membership-type-search-clear.visible {
+    display: flex;
+}
+
+
+.membership-type-search-clear:hover {
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+}
+
+
+.membership-type-result-count {
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   LIST
+   ========================================================= */
+
+.membership-type-list-card {
+    overflow: hidden;
+}
+
+
+.membership-type-cell {
+    min-width: 230px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.membership-type-avatar {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    color: var(--color-primary);
+
+    background:
+            linear-gradient(
+                    135deg,
+                    #fff5ed,
+                    var(--color-primary-soft)
+            );
+
+    font-size: 17px;
+}
+
+
+.membership-type-cell-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.membership-type-cell-info strong {
+    max-width: 260px;
+
+    overflow: hidden;
+
+    font-size: 10px;
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.membership-type-cell-info span {
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-value {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.membership-type-value span {
+    color: var(--text-muted);
+
+    font-size: 7px;
+}
+
+
+.membership-type-value strong {
+    margin-top: 2px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+.membership-type-duration {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-duration strong {
+    color: var(--text-primary);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.membership-type-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 4px;
+}
+
+
+.membership-type-status-form {
+    margin: 0;
+
+    display: inline-flex;
+}
+
+
+.membership-type-action {
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    color: var(--text-secondary);
+    background: transparent;
+
+    text-decoration: none;
+}
+
+
+.membership-type-action:hover {
+    color: var(--color-primary);
+
+    border-color: #ffdadd;
+
+    background: var(--color-primary-soft);
+}
+
+
+.membership-type-action-success:hover {
+    color: var(--success);
+
+    border-color: #cdeee2;
+
+    background: var(--success-soft);
+}
+
+
+.membership-type-action-danger:hover {
+    color: var(--danger);
+
+    border-color: #ffd5da;
+
+    background: var(--danger-soft);
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.membership-type-empty-state {
+    padding: 68px 24px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+}
+
+
+.membership-type-empty-icon {
+    width: 62px;
+    height: 62px;
+
+    margin-bottom: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+
+    font-size: 24px;
+}
+
+
+.membership-type-empty-state h2 {
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.membership-type-empty-state p {
+    max-width: 400px;
+
+    margin: 7px 0 19px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.membership-type-pagination {
+    margin-top: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+}
+
+
+.membership-type-pagination-info {
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+.membership-type-pagination .pagination {
+    margin: 0;
+
+    gap: 5px;
+}
+
+
+.membership-type-pagination .page-link {
+    min-width: 35px;
+    height: 35px;
+
+    padding: 0 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border-color);
+    border-radius: 9px !important;
+
+    color: var(--text-secondary);
+    background: white;
+
+    font-size: 9px;
+}
+
+
+.membership-type-pagination
+.page-item.active
+.page-link {
+    color: white;
+
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.membership-type-form-container {
+    width: 100%;
+    max-width: 900px;
+}
+
+
+.membership-type-form-section
++ .membership-type-form-section {
+    margin-top: 31px;
+    padding-top: 28px;
+
+    border-top: 1px solid var(--border-color);
+}
+
+
+.membership-type-section-heading {
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 11px;
+}
+
+
+.membership-type-section-heading-icon {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    color: var(--text-secondary);
+    background: #f4f2f5;
+
+    font-size: 13px;
+}
+
+
+.membership-type-section-heading h3 {
+    margin: 1px 0 0;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.membership-type-section-heading p {
+    margin: 4px 0 0;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+.membership-type-input-wrapper {
+    position: relative;
+}
+
+
+.membership-type-input-wrapper > i {
+    position: absolute;
+
+    top: 50%;
+    left: 13px;
+
+    transform: translateY(-50%);
+
+    color: var(--text-muted);
+
+    pointer-events: none;
+}
+
+
+.membership-type-input-icon {
+    padding-left: 38px;
+}
+
+
+.membership-type-number-field {
+    position: relative;
+}
+
+
+.membership-type-number-field > span {
+    position: absolute;
+
+    top: 50%;
+    right: 13px;
+
+    transform: translateY(-50%);
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-number-field > span + * {
+    padding-right: 50px;
+}
+
+
+.membership-type-number-field .form-control {
+    padding-right: 52px;
+}
+
+
+.membership-type-field-footer {
+    margin-top: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-field-help {
+    margin-top: 7px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+/* PREVIEW */
+
+.membership-type-preview {
+    margin-top: 25px;
+    padding: 16px;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto
+        auto;
+
+    align-items: center;
+
+    gap: 18px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 13px;
+
+    background: #faf9fb;
+}
+
+
+.membership-type-preview-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+
+    font-size: 16px;
+}
+
+
+.membership-type-preview-main,
+.membership-type-preview-value {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.membership-type-preview span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-preview strong {
+    margin-top: 3px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+.membership-type-preview-main strong {
+    font-size: 11px;
+}
+
+
+.membership-type-info-box {
+    margin-top: 28px;
+    padding: 14px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    border-radius: 12px;
+
+    background: #f7f5f8;
+
+    color: var(--text-secondary);
+}
+
+
+.membership-type-info-box > i {
+    color: var(--color-primary);
+}
+
+
+.membership-type-info-box > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.membership-type-info-box strong {
+    font-size: 9px;
+}
+
+
+.membership-type-info-box span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-form-footer {
+    padding: 17px 23px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    border-top: 1px solid var(--border-color);
+
+    background: #fcfbfc;
+}
+
+
+/* =========================================================
+   DETAILS HERO
+   ========================================================= */
+
+.membership-type-profile {
+    margin-bottom: 22px;
+
+    overflow: hidden;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+
+    background: white;
+
+    box-shadow: var(--shadow-small);
+}
+
+
+.membership-type-profile-main {
+    min-width: 0;
+
+    padding: 27px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+}
+
+
+.membership-type-profile-icon {
+    width: 64px;
+    height: 64px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    color: white;
+
+    background:
+            linear-gradient(
+                    135deg,
+                    var(--color-accent),
+                    var(--color-primary)
+            );
+
+    font-size: 25px;
+}
+
+
+.membership-type-profile-content {
+    min-width: 0;
+}
+
+
+.membership-type-profile-label {
+    color: var(--text-muted);
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: .7px;
+
+    text-transform: uppercase;
+}
+
+
+.membership-type-profile-content h2 {
+    margin: 4px 0 0;
+
+    font-size: 20px;
+    font-weight: 750;
+}
+
+
+.membership-type-profile-meta {
+    margin-top: 7px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+.membership-type-profile-dot {
+    width: 3px;
+    height: 3px;
+
+    border-radius: 50%;
+
+    background: var(--text-muted);
+}
+
+
+.membership-type-profile-status {
+    min-width: 220px;
+
+    padding: 24px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    border-left: 1px solid var(--border-color);
+}
+
+
+.membership-type-status-active {
+    background: #f7fcfa;
+}
+
+
+.membership-type-status-inactive {
+    background: #faf9fb;
+}
+
+
+.membership-type-status-icon {
+    width: 39px;
+    height: 39px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+}
+
+
+.membership-type-status-active
+.membership-type-status-icon {
+    color: var(--success);
+    background: var(--success-soft);
+}
+
+
+.membership-type-status-inactive
+.membership-type-status-icon {
+    color: var(--text-secondary);
+    background: #efedf0;
+}
+
+
+.membership-type-profile-status > div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.membership-type-profile-status span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-profile-status strong {
+    margin-top: 2px;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   METRICS
+   ========================================================= */
+
+.membership-type-metrics {
+    margin-bottom: 22px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+.membership-type-metric {
+    padding: 17px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background: white;
+
+    box-shadow: var(--shadow-small);
+}
+
+
+.membership-type-metric-icon {
+    width: 39px;
+    height: 39px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+}
+
+
+.membership-type-metric > div:last-child {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.membership-type-metric span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-metric strong {
+    margin-top: 3px;
+
+    font-size: 12px;
+    font-weight: 750;
+}
+
+
+.membership-type-metric small {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   DETAILS
+   ========================================================= */
+
+.membership-type-details-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(300px, .85fr);
+
+    gap: 22px;
+
+    align-items: start;
+}
+
+
+.membership-type-calculator-info {
+    margin: 14px 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-calculate-button {
+    width: 100%;
+}
+
+
+.membership-type-management-action {
+    width: 100%;
+
+    padding: 13px 0;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 10px;
+
+    border: 0;
+    border-bottom: 1px solid var(--border-color);
+
+    color: var(--text-primary);
+    background: transparent;
+
+    text-align: left;
+    text-decoration: none;
+}
+
+
+.membership-type-management-action:last-child {
+    border-bottom: 0;
+}
+
+
+.membership-type-management-icon {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+}
+
+
+.membership-type-management-action > span:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.membership-type-management-action strong {
+    font-size: 9px;
+}
+
+
+.membership-type-management-action small {
+    margin-top: 2px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-management-danger:hover {
+    color: var(--danger);
+}
+
+
+.membership-type-management-danger
+.membership-type-management-icon {
+    color: var(--danger);
+    background: var(--danger-soft);
+}
+
+
+/* =========================================================
+   EXPIRATION RESULT
+   ========================================================= */
+
+.membership-expiration-container {
+    width: 100%;
+    max-width: 760px;
+
+    margin: 25px auto;
+}
+
+
+.membership-expiration-card {
+    padding: 35px;
+
+    text-align: center;
+}
+
+
+.membership-expiration-icon {
+    width: 65px;
+    height: 65px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 19px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+
+    font-size: 25px;
+}
+
+
+.membership-expiration-label {
+    color: var(--text-muted);
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: .7px;
+    text-transform: uppercase;
+}
+
+
+.membership-expiration-card h2 {
+    margin: 5px 0 25px;
+
+    font-size: 20px;
+    font-weight: 750;
+}
+
+
+.membership-expiration-route {
+    padding: 22px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        120px
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 16px;
+
+    border-radius: 14px;
+
+    background: #f8f7f9;
+}
+
+
+.membership-expiration-date {
+    padding: 16px;
+
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+
+    background: white;
+}
+
+
+.membership-expiration-date.highlighted {
+    border-color: #ffdadd;
+
+    background: var(--color-primary-soft);
+}
+
+
+.membership-expiration-date span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-expiration-date strong {
+    margin-top: 5px;
+
+    font-size: 13px;
+}
+
+
+.membership-expiration-arrow {
+    display: flex;
+    align-items: center;
+}
+
+
+.membership-expiration-arrow > span {
+    height: 1px;
+
+    flex: 1;
+
+    background: var(--border-color);
+}
+
+
+.membership-expiration-arrow > div {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: var(--color-primary);
+    background: white;
+}
+
+
+.membership-expiration-duration {
+    margin-top: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+.membership-expiration-duration strong {
+    color: var(--text-primary);
+}
+
+
+.membership-expiration-actions {
+    margin-top: 23px;
+}
+
+
+/* =========================================================
+   DELETE
+   ========================================================= */
+
+.membership-type-delete-container {
+    width: 100%;
+    max-width: 620px;
+
+    margin: 25px auto;
+}
+
+
+.membership-type-delete-card {
+    padding: 34px;
+
+    text-align: center;
+}
+
+
+.membership-type-delete-icon {
+    width: 62px;
+    height: 62px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    color: var(--danger);
+    background: var(--danger-soft);
+
+    font-size: 24px;
+}
+
+
+.membership-type-delete-eyebrow {
+    color: var(--danger);
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: .7px;
+
+    text-transform: uppercase;
+}
+
+
+.membership-type-delete-card h1 {
+    margin: 5px 0 0;
+
+    font-size: 19px;
+    font-weight: 750;
+}
+
+
+.membership-type-delete-card > p {
+    max-width: 470px;
+
+    margin: 9px auto 20px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+
+    line-height: 1.7;
+}
+
+
+.membership-type-delete-warning {
+    margin-bottom: 20px;
+    padding: 13px 15px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    border: 1px solid #f6e2ba;
+    border-radius: 11px;
+
+    color: #9b6b17;
+    background: var(--warning-soft);
+
+    text-align: left;
+
+    font-size: 9px;
+
+    line-height: 1.55;
+}
+
+
+.membership-type-delete-summary {
+    margin-bottom: 22px;
+    padding: 16px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+
+    border-radius: 13px;
+
+    background: #f8f7f9;
+
+    text-align: left;
+}
+
+
+.membership-type-delete-summary > div {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.membership-type-delete-summary span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.membership-type-delete-summary strong {
+    margin-top: 3px;
+
+    font-size: 10px;
+}
+
+
+.membership-type-delete-actions {
+    display: flex;
+    justify-content: center;
+
+    gap: 9px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+
+    .membership-type-details-layout {
+        grid-template-columns: 1fr;
+    }
+
+
+    .membership-type-profile {
+        flex-direction: column;
+    }
+
+
+    .membership-type-profile-status {
+        min-width: 0;
+
+        border-top: 1px solid var(--border-color);
+        border-left: 0;
+    }
+
+}
+
+
+@media (max-width: 767.98px) {
+
+    .membership-type-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .membership-type-search {
+        max-width: none;
+    }
+
+
+    .membership-type-preview {
+        grid-template-columns:
+            auto
+            minmax(0, 1fr);
+    }
+
+
+    .membership-type-preview-value {
+        grid-column: 2;
+    }
+
+
+    .membership-type-metrics {
+        grid-template-columns: 1fr;
+    }
+
+
+    .membership-expiration-route {
+        grid-template-columns: 1fr;
+    }
+
+
+    .membership-expiration-arrow {
+        flex-direction: column;
+    }
+
+
+    .membership-expiration-arrow > span {
+        width: 1px;
+        height: 15px;
+
+        flex: none;
+    }
+
+
+    .membership-expiration-arrow i {
+        transform: rotate(90deg);
+    }
+
+}
+
+
+@media (max-width: 575.98px) {
+
+    .membership-type-pagination {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .membership-type-form-footer {
+        flex-direction: column-reverse;
+    }
+
+
+    .membership-type-form-footer .btn {
+        width: 100%;
+    }
+
+
+    .membership-type-profile-main {
+        padding: 20px;
+    }
+
+
+    .membership-type-profile-content h2 {
+        font-size: 16px;
+    }
+
+
+    .membership-type-delete-card,
+    .membership-expiration-card {
+        padding: 26px 18px;
+    }
+
+
+    .membership-type-delete-summary {
+        grid-template-columns: 1fr;
+    }
+
+
+    .membership-type-delete-actions {
+        flex-direction: column-reverse;
+    }
+
+
+    .membership-type-delete-actions .btn {
+        width: 100%;
+    }
+
+}

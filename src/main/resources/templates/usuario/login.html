@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión | GymSystem</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+
+    <link rel="stylesheet"
+          th:href="@{/css/app.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/usuario.css}">
+
+</head>
+
+<body class="user-login-page">
+
+<div class="user-login-shell">
+
+
+    <!-- BRAND SIDE -->
+
+    <section class="user-login-brand">
+
+        <div class="user-login-brand-content">
+
+            <div class="user-login-logo">
+
+                <span class="user-login-logo-icon">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </span>
+
+                <span>
+                    <strong>GYM</strong>SYSTEM
+                </span>
+
+            </div>
+
+
+            <div class="user-login-brand-copy">
+
+                <span class="user-login-eyebrow">
+                    SISTEMA DE GESTIÓN
+                </span>
+
+                <h1>
+                    Controla tu gimnasio desde un solo lugar.
+                </h1>
+
+                <p>
+                    Gestión de clientes, entrenadores,
+                    rutinas, membresías y seguimiento físico.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- LOGIN -->
+
+    <main class="user-login-content">
+
+        <div class="user-login-form-container">
+
+            <div class="user-login-mobile-brand">
+
+                <span>
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </span>
+
+                <strong>
+                    GYMSYSTEM
+                </strong>
+
+            </div>
+
+
+            <div class="user-login-heading">
+
+                <span>
+                    Bienvenido
+                </span>
+
+                <h2>
+                    Iniciar sesión
+                </h2>
+
+                <p>
+                    Ingresa tus credenciales para acceder
+                    al sistema.
+                </p>
+
+            </div>
+
+
+            <!-- MENSAJES -->
+
+            <div th:if="${error}"
+                 class="user-login-alert user-login-alert-danger">
+
+                <i class="bi bi-exclamation-circle"></i>
+
+                <span th:text="${error}">
+                </span>
+
+            </div>
+
+
+            <div th:if="${msg}"
+                 class="user-login-alert user-login-alert-success">
+
+                <i class="bi bi-check-circle"></i>
+
+                <span th:text="${msg}">
+                </span>
+
+            </div>
+
+
+            <form th:action="@{/usuarios/login}"
+                  method="post">
+
+                <!-- EMAIL -->
+
+                <div class="user-login-field">
+
+                    <label for="username">
+                        Correo electrónico
+                    </label>
+
+                    <div class="user-login-input">
+
+                        <i class="bi bi-envelope"></i>
+
+                        <input type="email"
+                               id="username"
+                               name="username"
+                               required
+                               autocomplete="username"
+                               placeholder="usuario@email.com">
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="user-login-field">
+
+                    <label for="loginPassword">
+                        Contraseña
+                    </label>
+
+                    <div class="user-login-input">
+
+                        <i class="bi bi-lock"></i>
+
+                        <input type="password"
+                               id="loginPassword"
+                               name="password"
+                               required
+                               autocomplete="current-password"
+                               placeholder="Ingresa tu contraseña">
+
+
+                        <button type="button"
+                                class="user-login-password-toggle"
+                                data-password-toggle="loginPassword"
+                                aria-label="Mostrar contraseña">
+
+                            <i class="bi bi-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit"
+                        class="user-login-submit">
+
+                    Iniciar sesión
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+            </form>
+
+
+            <div class="user-login-footer">
+                GymSystem
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script th:src="@{/js/usuario.js}"></script>
+
+</body>
+</html>

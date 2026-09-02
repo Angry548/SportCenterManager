@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">
+        GymSystem
+    </title>
+
+
+    <!-- =========================
+         BOOTSTRAP
+         ========================= -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+
+    <!-- =========================
+         BOOTSTRAP ICONS
+         ========================= -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+
+    <!-- =========================
+         FONT
+         ========================= -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+
+    <!-- =========================
+         ESTILOS GLOBALES
+         ========================= -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/app.css}">
+
+
+    <!-- =========================
+         ESTILOS PARTICULARES
+         ========================= -->
+
+    <th:block layout:fragment="styles"></th:block>
+
+</head>
+
+
+<body>
+
+<div class="app-shell">
+
+
+    <!-- =========================
+         SIDEBAR
+         ========================= -->
+
+    <div th:replace="~{fragments/_sidebar :: sidebar}"></div>
+
+
+    <!-- Fondo al abrir sidebar móvil -->
+
+    <div class="sidebar-overlay"
+         id="sidebarOverlay">
+    </div>
+
+
+    <!-- =========================
+         ÁREA PRINCIPAL
+         ========================= -->
+
+    <div class="app-main">
+
+
+        <!-- TOPBAR -->
+
+        <div th:replace="~{fragments/_topbar :: topbar}"></div>
+
+
+        <!-- CONTENIDO -->
+
+        <main class="app-content">
+
+            <div class="app-container"
+                 layout:fragment="content">
+
+                <!--
+                    Aquí Thymeleaf inyectará
+                    el contenido de cada vista
+                -->
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     SWEETALERT
+     ========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<!-- =========================
+     BOOTSTRAP JS
+     ========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- =========================
+     JAVASCRIPT GLOBAL
+     ========================= -->
+
+<script th:src="@{/js/app.js}"></script>
+
+
+<!-- =========================
+     MENSAJES DEL BACKEND
+     ========================= -->
+
+<script th:if="${msg != null}"
+        th:inline="javascript">
+
+    Swal.fire({
+        title: "Operación completada",
+        text: /*[[${msg}]]*/ "",
+        icon: "success",
+        confirmButtonText: "Aceptar"
+    });
+
+</script>
+
+
+<script th:if="${error != null}"
+        th:inline="javascript">
+
+    Swal.fire({
+        title: "Ha ocurrido un error",
+        text: /*[[${error}]]*/ "",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+    });
+
+</script>
+
+
+<!-- =========================
+     JS PARTICULAR DE LA VISTA
+     ========================= -->
+
+<th:block layout:fragment="scripts"></th:block>
+
+</body>
+</html>

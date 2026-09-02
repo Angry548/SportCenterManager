@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Eliminar tipo de membresía</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/tipo-membresia.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="membership-type-breadcrumb">
+
+        <a th:href="@{/tipos-membresia}">
+            Tipos de membresía
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar tipo
+        </span>
+
+    </nav>
+
+
+    <div class="membership-type-delete-container">
+
+        <div class="app-card membership-type-delete-card">
+
+            <div class="membership-type-delete-icon">
+                <i class="bi bi-trash3"></i>
+            </div>
+
+
+            <span class="membership-type-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar tipo de membresía
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar
+
+                <strong th:text="${tipoMembresia.nombre}">
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="membership-type-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Si existen membresías de clientes asociadas
+                    con este tipo, la base de datos puede impedir
+                    su eliminación. En ese caso puedes desactivarlo.
+                </span>
+
+            </div>
+
+
+            <div class="membership-type-delete-summary">
+
+                <div>
+
+                    <span>
+                        Nombre
+                    </span>
+
+                    <strong th:text="${tipoMembresia.nombre}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Precio
+                    </span>
+
+                    <strong th:text="${tipoMembresia.precio}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Duración
+                    </span>
+
+                    <strong>
+
+                        <span th:text="${tipoMembresia.duracionDias}">
+                        </span>
+
+                        días
+
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Estado
+                    </span>
+
+                    <strong th:text="${tipoMembresia.activo
+                        ? 'Activo'
+                        : 'Inactivo'}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/tipos-membresia/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${tipoMembresia.id}">
+
+
+                <div class="membership-type-delete-actions">
+
+                    <a th:href="@{/tipos-membresia/details/{id}(id=${tipoMembresia.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+                        Eliminar tipo
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/tipo-membresia.js}"></script>
+</th:block>
+
+</body>
+</html>

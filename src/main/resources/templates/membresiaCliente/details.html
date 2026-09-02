@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle de membresía</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/membresia-cliente.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="membership-breadcrumb">
+
+        <a th:href="@{/membresias-clientes}">
+            Membresías
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Membresía #
+            <span th:text="${membresiaCliente.id}"></span>
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle de membresía
+            </h1>
+
+            <p class="page-description">
+                Consulta la información y vigencia
+                de la membresía asignada al cliente.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/membresias-clientes}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/membresias-clientes/edit/{id}(id=${membresiaCliente.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar membresía
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="membership-profile">
+
+        <div class="membership-profile-main">
+
+            <div class="membership-profile-icon">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+
+
+            <div class="membership-profile-identity">
+
+                <span class="membership-profile-label">
+                    Membresía de cliente
+                </span>
+
+
+                <h2 th:text="${membresiaCliente.cliente.usuario.email}">
+                    cliente@email.com
+                </h2>
+
+
+                <div class="membership-profile-meta">
+
+                    <span>
+                        Membresía #
+                        <strong th:text="${membresiaCliente.id}">
+                        </strong>
+                    </span>
+
+                    <span class="membership-profile-dot"></span>
+
+                    <span th:text="|Tipo #${membresiaCliente.tipoMembresia.id}|">
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="membership-profile-status"
+             th:classappend="${vigente}
+                ? 'membership-status-current'
+                : 'membership-status-expired'">
+
+            <div class="membership-status-icon">
+
+                <i th:class="${vigente}
+                    ? 'bi bi-check-circle'
+                    : 'bi bi-x-circle'">
+                </i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Estado
+                </span>
+
+                <strong th:text="${vigente
+                    ? 'Membresía vigente'
+                    : 'Membresía vencida'}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MÉTRICAS
+         ===================================================== -->
+
+    <div class="membership-metrics">
+
+        <!-- TIPO -->
+
+        <div class="membership-metric-card">
+
+            <div class="membership-metric-icon">
+                <i class="bi bi-card-checklist"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Tipo de membresía
+                </span>
+
+                <strong th:text="|Tipo #${membresiaCliente.tipoMembresia.id}|">
+                    Tipo #1
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- INICIO -->
+
+        <div class="membership-metric-card">
+
+            <div class="membership-metric-icon">
+                <i class="bi bi-calendar-plus"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Fecha de inicio
+                </span>
+
+                <strong th:text="${#temporals.format(
+                    membresiaCliente.fechaInicio,
+                    'dd/MM/yyyy'
+                )}">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- FIN -->
+
+        <div class="membership-metric-card">
+
+            <div class="membership-metric-icon">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Vencimiento
+                </span>
+
+                <strong th:text="${#temporals.format(
+                    membresiaCliente.fechaVencimiento,
+                    'dd/MM/yyyy'
+                )}">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESTANTES -->
+
+        <div class="membership-metric-card">
+
+            <div class="membership-metric-icon">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Días restantes
+                </span>
+
+                <strong th:if="${vigente}">
+
+                    <span th:text="${diasRestantes}">
+                        0
+                    </span>
+
+                    <small>
+                        días
+                    </small>
+
+                </strong>
+
+
+                <strong th:unless="${vigente}"
+                        class="membership-expired-value">
+
+                    Vencida
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMACIÓN
+         ===================================================== -->
+
+    <div class="membership-details-layout">
+
+
+        <!-- PERIODO -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Periodo de vigencia
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Inicio y vencimiento registrados.
+                    </div>
+
+                </div>
+
+
+                <div class="membership-section-icon">
+                    <i class="bi bi-calendar-range"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="membership-timeline">
+
+                    <!-- INICIO -->
+
+                    <div class="membership-timeline-item">
+
+                        <div class="membership-timeline-marker active">
+                            <i class="bi bi-check"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Inicio
+                            </span>
+
+                            <strong th:text="${#temporals.format(
+                                membresiaCliente.fechaInicio,
+                                'dd/MM/yyyy'
+                            )}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="membership-timeline-line"></div>
+
+
+                    <!-- VENCIMIENTO -->
+
+                    <div class="membership-timeline-item">
+
+                        <div class="membership-timeline-marker"
+                             th:classappend="${vigente}
+                                 ? 'pending'
+                                 : 'expired'">
+
+                            <i th:class="${vigente}
+                                ? 'bi bi-clock'
+                                : 'bi bi-x'">
+                            </i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Vencimiento
+                            </span>
+
+                            <strong th:text="${#temporals.format(
+                                membresiaCliente.fechaVencimiento,
+                                'dd/MM/yyyy'
+                            )}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CLIENTE -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Cliente
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Propietario de esta membresía.
+                    </div>
+
+                </div>
+
+
+                <div class="membership-section-icon">
+                    <i class="bi bi-person"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="membership-client-summary">
+
+                    <div class="membership-client-avatar large">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Correo electrónico
+                        </span>
+
+                        <strong th:text="${membresiaCliente.cliente.usuario.email}">
+                        </strong>
+
+                        <small>
+                            Cliente #
+                            <span th:text="${membresiaCliente.cliente.id}">
+                            </span>
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <a th:href="@{/clientes/details/{id}(id=${membresiaCliente.cliente.id})}"
+                   class="membership-client-link">
+
+                    Ver perfil del cliente
+
+                    <i class="bi bi-arrow-up-right"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/membresia-cliente.js}"></script>
+</th:block>
+
+</body>
+</html>
