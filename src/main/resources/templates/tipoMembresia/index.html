@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Tipos de membresía</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/tipo-membresia.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Tipos de membresía
+            </h1>
+
+            <p class="page-description">
+                Administra los planes disponibles,
+                sus precios, duración y disponibilidad.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/tipos-membresia/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Nuevo tipo
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOOLBAR -->
+
+    <div th:if="${!tiposMembresia.isEmpty()}"
+         class="membership-type-toolbar">
+
+        <div class="membership-type-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="search"
+                   id="membershipTypeSearch"
+                   class="form-control"
+                   placeholder="Buscar por nombre, precio o duración..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="membershipTypeSearchClear"
+                    class="membership-type-search-clear"
+                    aria-label="Limpiar búsqueda">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="membership-type-result-count">
+
+            Mostrando
+
+            <strong id="membershipTypeVisibleCount"
+                    th:text="${tiposMembresia.numberOfElements}">
+                0
+            </strong>
+
+            de
+
+            <strong th:text="${tiposMembresia.totalElements}">
+                0
+            </strong>
+
+            tipos
+
+        </div>
+
+    </div>
+
+
+    <!-- LISTADO -->
+
+    <div th:if="${!tiposMembresia.isEmpty()}"
+         class="app-card membership-type-list-card">
+
+        <div class="app-card-header">
+
+            <div>
+
+                <h2 class="app-card-title">
+                    Planes disponibles
+                </h2>
+
+                <div class="app-card-subtitle">
+                    Configuración general de las membresías del gimnasio.
+                </div>
+
+            </div>
+
+
+            <div class="membership-type-section-icon">
+                <i class="bi bi-card-checklist"></i>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table">
+
+                <thead>
+
+                <tr>
+                    <th>Tipo de membresía</th>
+                    <th>Precio</th>
+                    <th>Duración</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="item : ${tiposMembresia}"
+                    data-membership-type-row
+                    th:attr="
+                        data-membership-type-name=${item.nombre},
+                        data-membership-type-price=${item.precio},
+                        data-membership-type-duration=${item.duracionDias},
+                        data-membership-type-status=${item.activo ? 'activo' : 'inactivo'}
+                    ">
+
+                    <!-- TIPO -->
+
+                    <td>
+
+                        <div class="membership-type-cell">
+
+                            <div class="membership-type-avatar">
+                                <i class="bi bi-credit-card"></i>
+                            </div>
+
+
+                            <div class="membership-type-cell-info">
+
+                                <strong th:text="${item.nombre}">
+                                    Mensual
+                                </strong>
+
+                                <span>
+                                    Tipo #
+                                    <span th:text="${item.id}">
+                                    </span>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- PRECIO -->
+
+                    <td>
+
+                        <div class="membership-type-value">
+
+                            <span>
+                                Precio
+                            </span>
+
+                            <strong th:text="${item.precio}">
+                                25.00
+                            </strong>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- DURACIÓN -->
+
+                    <td>
+
+                        <span class="membership-type-duration">
+
+                            <i class="bi bi-calendar-range"></i>
+
+                            <strong th:text="${item.duracionDias}">
+                                30
+                            </strong>
+
+                            días
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ESTADO -->
+
+                    <td>
+
+                        <span th:if="${item.activo}"
+                              class="status-badge status-active">
+                            Activo
+                        </span>
+
+
+                        <span th:unless="${item.activo}"
+                              class="status-badge status-inactive">
+                            Inactivo
+                        </span>
+
+                    </td>
+
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="membership-type-actions">
+
+                            <a th:href="@{/tipos-membresia/details/{id}(id=${item.id})}"
+                               class="membership-type-action"
+                               title="Ver tipo">
+
+                                <i class="bi bi-eye"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/tipos-membresia/edit/{id}(id=${item.id})}"
+                               class="membership-type-action"
+                               title="Editar tipo">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+
+
+                            <!-- DESACTIVAR -->
+
+                            <form th:if="${item.activo}"
+                                  th:action="@{/tipos-membresia/deactivate/{id}(id=${item.id})}"
+                                  method="post"
+                                  class="membership-type-status-form"
+                                  data-membership-status="deactivate">
+
+                                <button type="submit"
+                                        class="membership-type-action"
+                                        title="Desactivar tipo">
+
+                                    <i class="bi bi-toggle-on"></i>
+
+                                </button>
+
+                            </form>
+
+
+                            <!-- ACTIVAR -->
+
+                            <form th:unless="${item.activo}"
+                                  th:action="@{/tipos-membresia/activate/{id}(id=${item.id})}"
+                                  method="post"
+                                  class="membership-type-status-form"
+                                  data-membership-status="activate">
+
+                                <button type="submit"
+                                        class="membership-type-action membership-type-action-success"
+                                        title="Activar tipo">
+
+                                    <i class="bi bi-toggle-off"></i>
+
+                                </button>
+
+                            </form>
+
+
+                            <a th:href="@{/tipos-membresia/remove/{id}(id=${item.id})}"
+                               class="membership-type-action membership-type-action-danger"
+                               title="Eliminar tipo">
+
+                                <i class="bi bi-trash3"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- SIN RESULTADOS -->
+
+    <div id="membershipTypeNoSearchResults"
+         class="app-card"
+         hidden>
+
+        <div class="membership-type-empty-state">
+
+            <div class="membership-type-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h2>
+                No encontramos coincidencias
+            </h2>
+
+            <p>
+                Prueba buscando por nombre, precio,
+                duración o estado.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- SIN REGISTROS -->
+
+    <div th:if="${tiposMembresia.isEmpty()}"
+         class="app-card">
+
+        <div class="membership-type-empty-state">
+
+            <div class="membership-type-empty-icon">
+                <i class="bi bi-card-checklist"></i>
+            </div>
+
+            <h2>
+                No hay tipos de membresía
+            </h2>
+
+            <p>
+                Crea el primer plan para comenzar
+                a asignar membresías a los clientes.
+            </p>
+
+            <a th:href="@{/tipos-membresia/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Crear tipo
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAGINACIÓN -->
+
+    <div th:if="${tiposMembresia.totalPages > 1}"
+         class="membership-type-pagination">
+
+        <div class="membership-type-pagination-info">
+
+            Página
+
+            <strong th:text="${tiposMembresia.number + 1}">
+                1
+            </strong>
+
+            de
+
+            <strong th:text="${tiposMembresia.totalPages}">
+                1
+            </strong>
+
+        </div>
+
+
+        <nav aria-label="Paginación de tipos de membresía">
+
+            <ul class="pagination">
+
+                <li class="page-item"
+                    th:classappend="${tiposMembresia.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/tipos-membresia(
+                           page=${tiposMembresia.number},
+                           size=${tiposMembresia.size}
+                       )}">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+                </li>
+
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == tiposMembresia.number + 1}
+                        ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/tipos-membresia(
+                           page=${pageNumber},
+                           size=${tiposMembresia.size}
+                       )}"
+                       th:text="${pageNumber}">
+                    </a>
+
+                </li>
+
+
+                <li class="page-item"
+                    th:classappend="${tiposMembresia.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/tipos-membresia(
+                           page=${tiposMembresia.number + 2},
+                           size=${tiposMembresia.size}
+                       )}">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/tipo-membresia.js}"></script>
+</th:block>
+
+</body>
+</html>

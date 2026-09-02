@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Eliminar cliente</title>
+
+    <th:block layout:fragment="styles">
+
+        <link rel="stylesheet"
+              th:href="@{/css/cliente.css}">
+
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="client-breadcrumb">
+
+        <a th:href="@{/clientes}">
+            Clientes
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar cliente
+        </span>
+
+    </nav>
+
+
+    <div class="client-delete-container">
+
+        <div class="app-card client-delete-card">
+
+            <div class="client-delete-icon">
+
+                <i class="bi bi-trash3"></i>
+
+            </div>
+
+
+            <span class="client-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar cliente
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar el registro asociado a
+
+                <strong th:text="${cliente.usuario.email}">
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="client-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Si este cliente posee información relacionada,
+                    la eliminación puede no ser permitida por el sistema.
+                </span>
+
+            </div>
+
+
+            <div class="client-delete-summary">
+
+                <div>
+
+                    <span>
+                        Cliente
+                    </span>
+
+                    <strong th:text="${cliente.usuario.email}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        DUI
+                    </span>
+
+                    <strong th:text="${cliente.dui}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Teléfono
+                    </span>
+
+                    <strong th:text="${cliente.telefono}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ID
+                    </span>
+
+                    <strong th:text="${cliente.id}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/clientes/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${cliente.id}">
+
+
+                <div class="client-delete-actions">
+
+                    <a th:href="@{/clientes/details/{id}(id=${cliente.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+
+                        Eliminar cliente
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/cliente.js}"></script>
+
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<header class="app-topbar"
+        th:fragment="topbar">
+
+
+    <div class="topbar-left">
+
+        <!-- Botón móvil -->
+
+        <button type="button"
+                class="topbar-menu-button"
+                id="sidebarOpen"
+                aria-label="Abrir menú">
+
+            <i class="bi bi-list"></i>
+
+        </button>
+
+
+        <div class="topbar-brand-context">
+
+            <span>
+                Sistema de gestión
+            </span>
+
+            <strong>
+                GymSystem
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="topbar-right">
+
+
+        <button type="button"
+                class="topbar-icon-button"
+                aria-label="Notificaciones">
+
+            <i class="bi bi-bell"></i>
+
+        </button>
+
+
+        <div class="topbar-separator"></div>
+
+
+        <div class="topbar-user">
+
+            <div class="topbar-user-avatar">
+                AD
+            </div>
+
+
+            <div class="topbar-user-info">
+
+                <strong>
+                    Administrador
+                </strong>
+
+                <span>
+                    Administración
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+</body>
+</html>

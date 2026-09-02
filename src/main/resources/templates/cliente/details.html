@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle del cliente</title>
+
+    <th:block layout:fragment="styles">
+
+        <link rel="stylesheet"
+              th:href="@{/css/cliente.css}">
+
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+
+    <!-- BREADCRUMB -->
+
+    <nav class="client-breadcrumb">
+
+        <a th:href="@{/clientes}">
+            Clientes
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span th:text="${cliente.usuario.email}">
+            cliente@email.com
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div class="page-header-content">
+
+            <h1 class="page-title">
+                Perfil del cliente
+            </h1>
+
+            <p class="page-description">
+                Consulta la información personal y el estado
+                actual del cliente dentro del gimnasio.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/clientes}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+            <a th:href="@{/clientes/edit/{id}(id=${cliente.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar cliente
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- PERFIL -->
+
+    <section class="client-profile">
+
+        <div class="client-profile-main">
+
+            <div class="client-profile-avatar">
+
+                <i class="bi bi-person"></i>
+
+            </div>
+
+
+            <div class="client-profile-identity">
+
+                <span class="client-profile-label">
+                    Cliente registrado
+                </span>
+
+                <h2 th:text="${cliente.usuario.email}">
+                    cliente@email.com
+                </h2>
+
+
+                <div class="client-profile-meta">
+
+                    <span>
+                        ID #
+                        <strong th:text="${cliente.id}"></strong>
+                    </span>
+
+                    <span class="client-meta-dot"></span>
+
+                    <span>
+                        DUI
+                        <strong th:text="${cliente.dui}"></strong>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ESTADOS -->
+
+        <div class="client-status-grid">
+
+
+            <!-- CUENTA -->
+
+            <div class="client-status-item">
+
+                <div class="client-status-icon"
+                     th:classappend="${cliente.usuario.activo}
+                         ? 'client-status-success'
+                         : 'client-status-neutral'">
+
+                    <i class="bi bi-person-check"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Cuenta
+                    </span>
+
+                    <strong th:text="${cliente.usuario.activo
+                        ? 'Activa'
+                        : 'Inactiva'}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- MEMBRESÍA -->
+
+            <div class="client-status-item">
+
+                <div class="client-status-icon"
+                     th:classappend="${membresiaVigente}
+                         ? 'client-status-success'
+                         : 'client-status-warning'">
+
+                    <i class="bi bi-credit-card"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Membresía
+                    </span>
+
+                    <strong th:text="${membresiaVigente
+                        ? 'Vigente'
+                        : 'Sin membresía vigente'}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ENTRENADOR -->
+
+            <div class="client-status-item">
+
+                <div class="client-status-icon"
+                     th:classappend="${entrenadorActivo}
+                         ? 'client-status-success'
+                         : 'client-status-neutral'">
+
+                    <i class="bi bi-person-badge"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Entrenador
+                    </span>
+
+                    <strong th:text="${entrenadorActivo
+                        ? 'Asignado'
+                        : 'Sin asignación activa'}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTENT -->
+
+    <div class="client-details-layout">
+
+
+        <!-- INFORMACIÓN PERSONAL -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Información personal
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Datos generales registrados para el cliente.
+                    </div>
+
+                </div>
+
+                <div class="client-section-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="client-detail-list">
+
+
+                    <!-- DUI -->
+
+                    <div class="client-detail-item">
+
+                        <div class="client-detail-icon">
+                            <i class="bi bi-person-vcard"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                DUI
+                            </span>
+
+                            <strong th:text="${cliente.dui}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FECHA NACIMIENTO -->
+
+                    <div class="client-detail-item">
+
+                        <div class="client-detail-icon">
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Fecha de nacimiento
+                            </span>
+
+                            <strong th:text="${#temporals.format(
+                                cliente.fechaNacimiento,
+                                'dd/MM/yyyy'
+                            )}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EDAD -->
+
+                    <div class="client-detail-item">
+
+                        <div class="client-detail-icon">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Edad
+                            </span>
+
+                            <strong>
+                                <span th:text="${edad}"></span>
+                                años
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SEXO -->
+
+                    <div class="client-detail-item">
+
+                        <div class="client-detail-icon">
+                            <i class="bi bi-gender-ambiguous"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Sexo
+                            </span>
+
+                            <strong th:text="${cliente.sexo}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TELÉFONO -->
+
+                    <div class="client-detail-item">
+
+                        <div class="client-detail-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Teléfono
+                            </span>
+
+                            <strong th:text="${cliente.telefono}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DIRECCIÓN -->
+
+                    <div class="client-detail-item client-detail-full">
+
+                        <div class="client-detail-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Dirección
+                            </span>
+
+                            <strong th:text="${cliente.direccion}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CUENTA -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Cuenta de usuario
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Información relacionada con la cuenta.
+                    </div>
+
+                </div>
+
+                <div class="client-section-icon">
+                    <i class="bi bi-person-gear"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+
+                <!-- EMAIL -->
+
+                <div class="client-account-header">
+
+                    <div class="client-account-icon">
+
+                        <i class="bi bi-envelope"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Correo electrónico
+                        </span>
+
+                        <strong th:text="${cliente.usuario.email}">
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROL -->
+
+                <div class="client-account-property">
+
+                    <span>
+                        Rol
+                    </span>
+
+                    <strong th:text="${cliente.usuario.rol}">
+                    </strong>
+
+                </div>
+
+
+                <!-- ESTADO -->
+
+                <div class="client-account-property">
+
+                    <span>
+                        Estado
+                    </span>
+
+                    <span th:if="${cliente.usuario.activo}"
+                          class="status-badge status-active">
+                        Activo
+                    </span>
+
+                    <span th:unless="${cliente.usuario.activo}"
+                          class="status-badge status-inactive">
+                        Inactivo
+                    </span>
+
+                </div>
+
+
+                <!-- REGISTRO -->
+
+                <div class="client-account-property">
+
+                    <span>
+                        Fecha de registro
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        cliente.usuario.fechaRegistro,
+                        'dd/MM/yyyy HH:mm'
+                    )}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/cliente.js}"></script>
+
+</th:block>
+
+</body>
+</html>

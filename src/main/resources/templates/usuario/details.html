@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle del usuario</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/usuario.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="user-breadcrumb">
+
+        <a th:href="@{/usuarios}">
+            Usuarios
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span th:text="${usuario.email}">
+            usuario@email.com
+        </span>
+
+    </nav>
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle del usuario
+            </h1>
+
+            <p class="page-description">
+                Consulta la información, permisos y estado
+                actual de esta cuenta.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/usuarios}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+            <a th:href="@{/usuarios/edit/{id}(id=${usuario.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar usuario
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <section class="user-profile">
+
+        <div class="user-profile-main">
+
+            <div class="user-profile-avatar">
+                <i class="bi bi-person"></i>
+            </div>
+
+
+            <div class="user-profile-identity">
+
+                <span class="user-profile-label">
+                    Cuenta de usuario
+                </span>
+
+                <h2 th:text="${usuario.email}">
+                    usuario@email.com
+                </h2>
+
+                <div class="user-profile-meta">
+
+                    <span>
+                        Usuario #
+                        <strong th:text="${usuario.id}"></strong>
+                    </span>
+
+                    <span class="user-meta-dot"></span>
+
+                    <span th:text="${usuario.rol}">
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="user-profile-status">
+
+            <div class="user-status-icon"
+                 th:classappend="${usuario.activo}
+                    ? 'user-status-success'
+                    : 'user-status-neutral'">
+
+                <i th:class="${usuario.activo}
+                    ? 'bi bi-person-check'
+                    : 'bi bi-person-dash'">
+                </i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Estado de la cuenta
+                </span>
+
+                <strong th:text="${usuario.activo
+                    ? 'Usuario activo'
+                    : 'Usuario inactivo'}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTENT -->
+
+    <div class="user-details-layout">
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Información de la cuenta
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Datos generales registrados para este usuario.
+                    </div>
+
+                </div>
+
+                <div class="user-section-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="user-detail-list">
+
+                    <div class="user-detail-item">
+
+                        <div class="user-detail-icon">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Correo electrónico
+                            </span>
+
+                            <strong th:text="${usuario.email}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="user-detail-item">
+
+                        <div class="user-detail-icon">
+                            <i class="bi bi-person-lock"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Rol
+                            </span>
+
+                            <strong th:text="${usuario.rol}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="user-detail-item">
+
+                        <div class="user-detail-icon">
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Fecha de registro
+                            </span>
+
+                            <strong th:text="${#temporals.format(
+                                usuario.fechaRegistro,
+                                'dd/MM/yyyy HH:mm'
+                            )}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="user-detail-item">
+
+                        <div class="user-detail-icon">
+                            <i class="bi bi-power"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Estado
+                            </span>
+
+                            <strong th:text="${usuario.activo
+                                ? 'Activo'
+                                : 'Inactivo'}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SEGURIDAD -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Seguridad
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Acciones relacionadas con acceso y estado.
+                    </div>
+
+                </div>
+
+                <div class="user-section-icon">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <a th:href="@{/usuarios/change-password/{id}(id=${usuario.id})}"
+                   class="user-management-action">
+
+                    <div class="user-management-icon">
+                        <i class="bi bi-key"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Cambiar contraseña
+                        </strong>
+
+                        <span>
+                            Establecer una nueva contraseña para la cuenta.
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- DESACTIVAR -->
+
+                <form th:if="${usuario.activo}"
+                      th:action="@{/usuarios/deactivate/{id}(id=${usuario.id})}"
+                      method="post"
+                      class="user-status-form"
+                      data-user-status-action="deactivate">
+
+                    <button type="submit"
+                            class="user-management-action user-management-button">
+
+                        <div class="user-management-icon user-management-warning">
+                            <i class="bi bi-person-dash"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Desactivar usuario
+                            </strong>
+
+                            <span>
+                                Impedir temporalmente el acceso de esta cuenta.
+                            </span>
+
+                        </div>
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </button>
+
+                </form>
+
+
+                <!-- ACTIVAR -->
+
+                <form th:unless="${usuario.activo}"
+                      th:action="@{/usuarios/activate/{id}(id=${usuario.id})}"
+                      method="post"
+                      class="user-status-form"
+                      data-user-status-action="activate">
+
+                    <button type="submit"
+                            class="user-management-action user-management-button">
+
+                        <div class="user-management-icon user-management-success">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Activar usuario
+                            </strong>
+
+                            <span>
+                                Habilitar nuevamente esta cuenta.
+                            </span>
+
+                        </div>
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </button>
+
+                </form>
+
+
+                <a th:href="@{/usuarios/remove/{id}(id=${usuario.id})}"
+                   class="user-management-action user-management-danger">
+
+                    <div class="user-management-icon">
+                        <i class="bi bi-trash3"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Eliminar usuario
+                        </strong>
+
+                        <span>
+                            Ir a la confirmación de eliminación.
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/usuario.js}"></script>
+</th:block>
+
+</body>
+</html>

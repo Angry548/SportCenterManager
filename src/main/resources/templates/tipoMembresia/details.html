@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle del tipo de membresía</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/tipo-membresia.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="membership-type-breadcrumb">
+
+        <a th:href="@{/tipos-membresia}">
+            Tipos de membresía
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span th:text="${tipoMembresia.nombre}">
+        </span>
+
+    </nav>
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle del tipo de membresía
+            </h1>
+
+            <p class="page-description">
+                Consulta las condiciones, duración
+                y disponibilidad de este plan.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/tipos-membresia}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/tipos-membresia/edit/{id}(id=${tipoMembresia.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar tipo
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- HERO -->
+
+    <section class="membership-type-profile">
+
+        <div class="membership-type-profile-main">
+
+            <div class="membership-type-profile-icon">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+
+
+            <div class="membership-type-profile-content">
+
+                <span class="membership-type-profile-label">
+                    Tipo de membresía
+                </span>
+
+                <h2 th:text="${tipoMembresia.nombre}">
+                </h2>
+
+
+                <div class="membership-type-profile-meta">
+
+                    <span>
+                        Tipo #
+                        <strong th:text="${tipoMembresia.id}">
+                        </strong>
+                    </span>
+
+                    <span class="membership-type-profile-dot">
+                    </span>
+
+                    <span>
+                        <strong th:text="${tipoMembresia.duracionDias}">
+                        </strong>
+                        días
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="membership-type-profile-status"
+             th:classappend="${tipoMembresia.activo}
+                 ? 'membership-type-status-active'
+                 : 'membership-type-status-inactive'">
+
+            <div class="membership-type-status-icon">
+
+                <i th:class="${tipoMembresia.activo}
+                    ? 'bi bi-check-circle'
+                    : 'bi bi-pause-circle'">
+                </i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Estado
+                </span>
+
+                <strong th:text="${tipoMembresia.activo
+                    ? 'Tipo activo'
+                    : 'Tipo inactivo'}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MÉTRICAS -->
+
+    <div class="membership-type-metrics">
+
+        <div class="membership-type-metric">
+
+            <div class="membership-type-metric-icon">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Precio
+                </span>
+
+                <strong th:text="${tipoMembresia.precio}">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="membership-type-metric">
+
+            <div class="membership-type-metric-icon">
+                <i class="bi bi-calendar-range"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Duración
+                </span>
+
+                <strong>
+
+                    <span th:text="${tipoMembresia.duracionDias}">
+                    </span>
+
+                    <small>días</small>
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="membership-type-metric">
+
+            <div class="membership-type-metric-icon">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Si inicia hoy, vence
+                </span>
+
+                <strong th:text="${#temporals.format(
+                    fechaVencimientoProyectada,
+                    'dd/MM/yyyy'
+                )}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="membership-type-details-layout">
+
+        <!-- CALCULADORA -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Proyectar vencimiento
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Calcula la fecha final a partir
+                        de una fecha de inicio personalizada.
+                    </div>
+
+                </div>
+
+
+                <div class="membership-type-section-icon">
+                    <i class="bi bi-calculator"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <form th:action="@{/tipos-membresia/calcular-vencimiento/{id}(id=${tipoMembresia.id})}"
+                      method="get">
+
+                    <label for="fechaInicio"
+                           class="form-label">
+
+                        Fecha de inicio
+
+                    </label>
+
+
+                    <input type="date"
+                           id="fechaInicio"
+                           name="fechaInicio"
+                           class="form-control"
+                           required>
+
+
+                    <div class="membership-type-calculator-info">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        <span>
+
+                            Este plan tiene una duración de
+
+                            <strong>
+                                <span th:text="${tipoMembresia.duracionDias}">
+                                </span>
+                                días.
+                            </strong>
+
+                        </span>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="btn btn-primary membership-type-calculate-button">
+
+                        <i class="bi bi-calendar2-check me-1"></i>
+                        Calcular vencimiento
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- ADMINISTRACIÓN -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Administración
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Estado y acciones del tipo.
+                    </div>
+
+                </div>
+
+
+                <div class="membership-type-section-icon">
+                    <i class="bi bi-sliders"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <!-- ACTIVAR / DESACTIVAR -->
+
+                <form th:if="${tipoMembresia.activo}"
+                      th:action="@{/tipos-membresia/deactivate/{id}(id=${tipoMembresia.id})}"
+                      method="post"
+                      class="membership-type-status-form"
+                      data-membership-status="deactivate">
+
+                    <button type="submit"
+                            class="membership-type-management-action">
+
+                        <span class="membership-type-management-icon">
+                            <i class="bi bi-toggle-on"></i>
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Desactivar tipo
+                            </strong>
+
+                            <small>
+                                Evitar que continúe disponible como plan activo.
+                            </small>
+
+                        </span>
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </button>
+
+                </form>
+
+
+                <form th:unless="${tipoMembresia.activo}"
+                      th:action="@{/tipos-membresia/activate/{id}(id=${tipoMembresia.id})}"
+                      method="post"
+                      class="membership-type-status-form"
+                      data-membership-status="activate">
+
+                    <button type="submit"
+                            class="membership-type-management-action">
+
+                        <span class="membership-type-management-icon">
+                            <i class="bi bi-toggle-off"></i>
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Activar tipo
+                            </strong>
+
+                            <small>
+                                Habilitar nuevamente este tipo de membresía.
+                            </small>
+
+                        </span>
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </button>
+
+                </form>
+
+
+                <a th:href="@{/tipos-membresia/remove/{id}(id=${tipoMembresia.id})}"
+                   class="membership-type-management-action membership-type-management-danger">
+
+                    <span class="membership-type-management-icon">
+                        <i class="bi bi-trash3"></i>
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Eliminar tipo
+                        </strong>
+
+                        <small>
+                            Ir a la confirmación de eliminación.
+                        </small>
+
+                    </span>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/tipo-membresia.js}"></script>
+</th:block>
+
+</body>
+</html>

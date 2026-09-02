@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Rutina - ejercicios</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/rutina-ejercicio.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Rutina - ejercicios
+            </h1>
+
+            <p class="page-description">
+                Administra los ejercicios incluidos en cada rutina
+                y configura sus series, repeticiones y descansos.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/rutina-ejercicios/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Nueva asignación
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div th:if="${!rutinaEjercicios.isEmpty()}"
+         class="routine-exercise-toolbar">
+
+        <div class="routine-exercise-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="search"
+                   id="routineExerciseSearch"
+                   class="form-control"
+                   placeholder="Buscar por ejercicio, grupo muscular o dificultad..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="routineExerciseSearchClear"
+                    class="routine-exercise-search-clear"
+                    aria-label="Limpiar búsqueda">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="routine-exercise-result-count">
+
+            Mostrando
+
+            <strong id="routineExerciseVisibleCount"
+                    th:text="${rutinaEjercicios.numberOfElements}">
+                0
+            </strong>
+
+            de
+
+            <strong th:text="${rutinaEjercicios.totalElements}">
+                0
+            </strong>
+
+            asignaciones
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LISTADO
+         ===================================================== -->
+
+    <div th:if="${!rutinaEjercicios.isEmpty()}"
+         class="app-card routine-exercise-list-card">
+
+        <div class="app-card-header">
+
+            <div>
+
+                <h2 class="app-card-title">
+                    Ejercicios configurados
+                </h2>
+
+                <div class="app-card-subtitle">
+                    Configuración de entrenamiento asociada a cada rutina.
+                </div>
+
+            </div>
+
+
+            <div class="routine-exercise-section-icon">
+                <i class="bi bi-list-check"></i>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table routine-exercise-table">
+
+                <thead>
+
+                <tr>
+                    <th>Rutina</th>
+                    <th>Ejercicio</th>
+                    <th>Configuración</th>
+                    <th>Descanso</th>
+                    <th>Observaciones</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="item : ${rutinaEjercicios}"
+                    data-routine-exercise-row
+                    th:attr="
+                        data-routine-id=${item.rutina.id},
+                        data-exercise-name=${item.ejercicio.nombre},
+                        data-exercise-group=${item.ejercicio.grupoMuscular.nombre},
+                        data-exercise-difficulty=${item.ejercicio.dificultad}
+                    ">
+
+                    <!-- RUTINA -->
+
+                    <td>
+
+                        <div class="routine-reference">
+
+                            <div class="routine-reference-icon">
+                                <i class="bi bi-journal-check"></i>
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Rutina #
+                                    <span th:text="${item.rutina.id}">
+                                    </span>
+                                </strong>
+
+                                <span>
+                                    Plan de entrenamiento
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- EJERCICIO -->
+
+                    <td>
+
+                        <div class="routine-exercise-cell">
+
+                            <div class="routine-exercise-thumbnail">
+
+                                <img th:if="${item.ejercicio.imagenUrl != null
+                                        and !#strings.isEmpty(item.ejercicio.imagenUrl)}"
+                                     th:src="${item.ejercicio.imagenUrl}"
+                                     th:alt="${item.ejercicio.nombre}"
+                                     data-routine-exercise-image>
+
+
+                                <div class="routine-exercise-image-fallback"
+                                     th:classappend="${item.ejercicio.imagenUrl != null
+                                            and !#strings.isEmpty(item.ejercicio.imagenUrl)}
+                                            ? 'has-image'">
+
+                                    <i class="bi bi-activity"></i>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="routine-exercise-cell-info">
+
+                                <strong th:text="${item.ejercicio.nombre}">
+                                    Press de banca
+                                </strong>
+
+                                <span>
+
+                                    <span th:text="${item.ejercicio.grupoMuscular.nombre}">
+                                    </span>
+
+                                    ·
+
+                                    <span th:text="${item.ejercicio.dificultad}">
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- CONFIGURACIÓN -->
+
+                    <td>
+
+                        <div class="routine-exercise-training">
+
+                            <span>
+
+                                <strong th:text="${item.series}">
+                                    3
+                                </strong>
+
+                                series
+
+                            </span>
+
+
+                            <span class="routine-exercise-training-dot"></span>
+
+
+                            <span>
+
+                                <strong th:text="${item.repeticiones}">
+                                    12
+                                </strong>
+
+                                reps
+
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- DESCANSO -->
+
+                    <td>
+
+                        <span class="routine-exercise-rest">
+
+                            <i class="bi bi-stopwatch"></i>
+
+                            <strong th:text="${item.descansoSegundos}">
+                                60
+                            </strong>
+
+                            seg
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- OBSERVACIONES -->
+
+                    <td>
+
+                        <span th:if="${item.observaciones != null
+                                and !#strings.isEmpty(item.observaciones)}"
+                              class="routine-exercise-observation"
+                              th:text="${item.observaciones}">
+                        </span>
+
+
+                        <span th:unless="${item.observaciones != null
+                                and !#strings.isEmpty(item.observaciones)}"
+                              class="routine-exercise-no-value">
+
+                            Sin observaciones
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="routine-exercise-actions">
+
+                            <a th:href="@{/rutina-ejercicios/details/{id}(id=${item.id})}"
+                               class="routine-exercise-action"
+                               title="Ver configuración">
+
+                                <i class="bi bi-eye"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/rutina-ejercicios/edit/{id}(id=${item.id})}"
+                               class="routine-exercise-action"
+                               title="Editar configuración">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/rutina-ejercicios/remove/{id}(id=${item.id})}"
+                               class="routine-exercise-action routine-exercise-action-danger"
+                               title="Quitar ejercicio">
+
+                                <i class="bi bi-trash3"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN RESULTADOS
+         ===================================================== -->
+
+    <div id="routineExerciseNoSearchResults"
+         class="app-card"
+         hidden>
+
+        <div class="routine-exercise-empty-state">
+
+            <div class="routine-exercise-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h2>
+                No encontramos coincidencias
+            </h2>
+
+            <p>
+                Prueba buscando por ejercicio, grupo muscular,
+                dificultad o identificador de rutina.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN REGISTROS
+         ===================================================== -->
+
+    <div th:if="${rutinaEjercicios.isEmpty()}"
+         class="app-card">
+
+        <div class="routine-exercise-empty-state">
+
+            <div class="routine-exercise-empty-icon">
+                <i class="bi bi-list-check"></i>
+            </div>
+
+            <h2>
+                No hay ejercicios asignados
+            </h2>
+
+            <p>
+                Agrega un ejercicio a una rutina para comenzar
+                a configurar el plan de entrenamiento.
+            </p>
+
+            <a th:href="@{/rutina-ejercicios/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Agregar ejercicio
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGINACIÓN
+         ===================================================== -->
+
+    <div th:if="${rutinaEjercicios.totalPages > 1}"
+         class="routine-exercise-pagination">
+
+        <div class="routine-exercise-pagination-info">
+
+            Página
+
+            <strong th:text="${rutinaEjercicios.number + 1}">
+                1
+            </strong>
+
+            de
+
+            <strong th:text="${rutinaEjercicios.totalPages}">
+                1
+            </strong>
+
+        </div>
+
+
+        <nav aria-label="Paginación de ejercicios de rutina">
+
+            <ul class="pagination">
+
+                <!-- ANTERIOR -->
+
+                <li class="page-item"
+                    th:classappend="${rutinaEjercicios.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/rutina-ejercicios(
+                           page=${rutinaEjercicios.number},
+                           size=${rutinaEjercicios.size}
+                       )}">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+                </li>
+
+
+                <!-- PÁGINAS -->
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == rutinaEjercicios.number + 1}
+                        ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/rutina-ejercicios(
+                           page=${pageNumber},
+                           size=${rutinaEjercicios.size}
+                       )}"
+                       th:text="${pageNumber}">
+                    </a>
+
+                </li>
+
+
+                <!-- SIGUIENTE -->
+
+                <li class="page-item"
+                    th:classappend="${rutinaEjercicios.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/rutina-ejercicios(
+                           page=${rutinaEjercicios.number + 2},
+                           size=${rutinaEjercicios.size}
+                       )}">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/rutina-ejercicio.js}"></script>
+</th:block>
+
+</body>
+</html>

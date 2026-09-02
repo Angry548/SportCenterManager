@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle de rutina</title>
+
+    <th:block layout:fragment="styles">
+
+        <link rel="stylesheet"
+              th:href="@{/css/rutina.css}">
+
+    </th:block>
+
+</head>
+
+
+<body>
+
+<div layout:fragment="content">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle de rutina
+            </h1>
+
+            <p class="page-description">
+                Consulta la información general y los ejercicios
+                que conforman este plan de entrenamiento.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/rutinas}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/rutinas/edit/{id}(id=${rutina.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+
+                Editar
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <div class="routine-detail-hero">
+
+        <div class="routine-detail-main">
+
+            <div class="routine-detail-icon">
+                <i class="bi bi-clipboard2-pulse"></i>
+            </div>
+
+
+            <div>
+
+                <h2 th:text="${rutina.nombre}">
+                    Rutina
+                </h2>
+
+                <p>
+
+                    Plan de entrenamiento · Rutina #
+
+                    <span th:text="${rutina.id}">
+                    </span>
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="routine-detail-grid">
+
+
+            <div class="routine-detail-item">
+
+                <span>
+                    Cliente
+                </span>
+
+                <strong th:text="${rutina.cliente.usuario.email}">
+                </strong>
+
+            </div>
+
+
+            <div class="routine-detail-item">
+
+                <span>
+                    Entrenador
+                </span>
+
+                <strong th:text="${rutina.entrenador.usuario.email}">
+                </strong>
+
+            </div>
+
+
+            <div class="routine-detail-item">
+
+                <span>
+                    Fecha creación
+                </span>
+
+                <strong th:text="${rutina.fechaCreacion}">
+                </strong>
+
+            </div>
+
+
+            <div class="routine-detail-item">
+
+                <span>
+                    Última modificación
+                </span>
+
+                <strong th:text="${rutina.fechaModificacion != null
+                    ? rutina.fechaModificacion
+                    : 'Sin modificaciones'}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EJERCICIOS
+         ===================================================== -->
+
+    <div class="app-card">
+
+        <div class="app-card-header">
+
+            <div>
+
+                <h2 class="app-card-title">
+                    Ejercicios de la rutina
+                </h2>
+
+                <div class="app-card-subtitle">
+
+                    <span th:text="${#lists.size(rutinaEjercicios)}">
+                        0
+                    </span>
+
+                    ejercicios configurados
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLA -->
+
+        <div th:if="${!#lists.isEmpty(rutinaEjercicios)}"
+             class="table-responsive">
+
+            <table class="table">
+
+                <thead>
+
+                <tr>
+                    <th>Ejercicio</th>
+                    <th>Grupo muscular</th>
+                    <th>Dificultad</th>
+                    <th>Series</th>
+                    <th>Repeticiones</th>
+                    <th>Descanso</th>
+                    <th>Observaciones</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="detalle : ${rutinaEjercicios}">
+
+
+                    <td>
+
+                        <div class="exercise-name-cell">
+
+                            <span class="exercise-mini-icon">
+                                <i class="bi bi-activity"></i>
+                            </span>
+
+                            <strong th:text="${detalle.ejercicio.nombre}">
+                            </strong>
+
+                        </div>
+
+                    </td>
+
+
+                    <td th:text="${detalle.ejercicio.grupoMuscular.nombre}">
+                    </td>
+
+
+                    <td>
+
+                        <span class="exercise-difficulty"
+                              th:text="${detalle.ejercicio.dificultad}">
+                        </span>
+
+                    </td>
+
+
+                    <td th:text="${detalle.series}">
+                    </td>
+
+
+                    <td th:text="${detalle.repeticiones}">
+                    </td>
+
+
+                    <td>
+
+                        <span th:text="${detalle.descansoSegundos}">
+                        </span>
+
+                        s
+
+                    </td>
+
+
+                    <td th:text="${detalle.observaciones != null
+                        && !detalle.observaciones.isEmpty()
+                        ? detalle.observaciones
+                        : 'Sin observaciones'}">
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- EMPTY -->
+
+        <div th:if="${#lists.isEmpty(rutinaEjercicios)}"
+             class="routine-empty-state">
+
+            <div class="routine-empty-state-icon">
+                <i class="bi bi-activity"></i>
+            </div>
+
+            <h2>
+                Esta rutina no tiene ejercicios
+            </h2>
+
+            <p>
+                Los ejercicios pueden administrarse desde
+                el listado principal de rutinas.
+            </p>
+
+
+            <a th:href="@{/rutinas}"
+               class="btn btn-primary">
+
+                Ir a administrar rutina
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/rutina.js}"></script>
+
+</th:block>
+
+</body>
+</html>

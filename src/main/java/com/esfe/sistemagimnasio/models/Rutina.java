@@ -85,4 +85,6 @@ public class Rutina {
     public void setFechaModificacion(LocalDate fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
+
+
 }

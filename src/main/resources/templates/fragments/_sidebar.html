@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<aside class="app-sidebar"
+       id="appSidebar"
+       th:fragment="sidebar">
+
+    <!-- =====================================================
+         HEADER / BRAND
+         ===================================================== -->
+
+    <div class="sidebar-header">
+
+        <!--
+            Todavía no existe Dashboard.
+            Por eso el logo dirige temporalmente a Clientes.
+        -->
+        <a th:href="@{/home}" class="sidebar-brand">
+
+            <span class="sidebar-brand-icon">
+                <i class="bi bi-lightning-charge-fill"></i>
+            </span>
+
+            <span class="sidebar-brand-text">
+                <strong>GYM</strong>
+                <span>SYSTEM</span>
+            </span>
+
+        </a>
+
+
+        <!-- Cerrar sidebar en móvil -->
+
+        <button type="button"
+                class="sidebar-close"
+                id="sidebarClose"
+                aria-label="Cerrar menú">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         NAVEGACIÓN
+         ===================================================== -->
+
+    <nav class="sidebar-nav">
+
+        <div class="sidebar-section">
+
+            <a th:href="@{/home}"
+               class="sidebar-link">
+
+                <i class="bi bi-grid-1x2-fill"></i>
+
+                <span>
+            Dashboard
+        </span>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             GESTIÓN
+             ================================================= -->
+
+        <div class="sidebar-section">
+
+            <span class="sidebar-section-title">
+                GESTIÓN
+            </span>
+
+
+            <!-- CLIENTES -->
+
+            <a th:href="@{/clientes}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-people"></i>
+                </span>
+
+                <span>Clientes</span>
+
+            </a>
+
+
+            <!-- ENTRENADORES -->
+
+            <a th:href="@{/entrenadores}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-person-badge"></i>
+                </span>
+
+                <span>Entrenadores</span>
+
+            </a>
+
+
+            <!-- USUARIOS -->
+
+            <a th:href="@{/usuarios}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-person-gear"></i>
+                </span>
+
+                <span>Usuarios</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ENTRENAMIENTO
+             ================================================= -->
+
+        <div class="sidebar-section">
+
+            <span class="sidebar-section-title">
+                ENTRENAMIENTO
+            </span>
+
+
+            <!-- RUTINAS -->
+
+            <a th:href="@{/rutinas}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-clipboard2-pulse"></i>
+                </span>
+
+                <span>Rutinas</span>
+
+            </a>
+
+
+            <!-- EJERCICIOS -->
+
+            <a th:href="@{/ejercicios}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-activity"></i>
+                </span>
+
+                <span>Ejercicios</span>
+
+            </a>
+
+
+            <!-- GRUPOS MUSCULARES -->
+
+            <a th:href="@{/grupos-musculares}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-universal-access"></i>
+                </span>
+
+                <span>Grupos musculares</span>
+
+            </a>
+
+
+            <!-- RUTINA EJERCICIOS -->
+
+            <a th:href="@{/rutina-ejercicios}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-list-check"></i>
+                </span>
+
+                <span>Rutina - ejercicios</span>
+
+            </a>
+
+
+            <!-- ASIGNACIONES DE ENTRENADOR -->
+
+            <a th:href="@{/asignaciones-entrenador}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-person-check"></i>
+                </span>
+
+                <span>Asignaciones</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             MEMBRESÍAS
+             ================================================= -->
+
+        <div class="sidebar-section">
+
+            <span class="sidebar-section-title">
+                MEMBRESÍAS
+            </span>
+
+
+            <!-- MEMBRESÍAS DE CLIENTES -->
+
+            <a th:href="@{/membresias-clientes}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </span>
+
+                <span>Membresías clientes</span>
+
+            </a>
+
+
+            <!-- TIPOS DE MEMBRESÍA -->
+
+            <a th:href="@{/tipos-membresia}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-credit-card-2-front"></i>
+                </span>
+
+                <span>Tipos de membresía</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             SEGUIMIENTO
+             ================================================= -->
+
+        <div class="sidebar-section">
+
+            <span class="sidebar-section-title">
+                SEGUIMIENTO
+            </span>
+
+
+            <!-- EVALUACIONES FÍSICAS -->
+
+            <a th:href="@{/evaluaciones-fisicas}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-heart-pulse"></i>
+                </span>
+
+                <span>Evaluaciones físicas</span>
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <div class="sidebar-footer">
+
+        <div class="sidebar-user">
+
+            <div class="sidebar-user-avatar">
+                AD
+            </div>
+
+
+            <div class="sidebar-user-info">
+
+                <strong>
+                    Administrador
+                </strong>
+
+                <span>
+                    GymSystem
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+</body>
+</html>

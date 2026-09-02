@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle de evaluación física</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/evaluacion-fisica.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="evaluation-breadcrumb">
+
+        <a th:href="@{/evaluaciones-fisicas}">
+            Evaluaciones físicas
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Evaluación #
+            <span th:text="${evaluacionFisica.id}"></span>
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle de evaluación
+            </h1>
+
+            <p class="page-description">
+                Consulta las mediciones físicas y la información
+                registrada durante esta evaluación.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/evaluaciones-fisicas}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/evaluaciones-fisicas/edit/{id}(id=${evaluacionFisica.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar evaluación
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="evaluation-profile">
+
+        <div class="evaluation-profile-main">
+
+            <div class="evaluation-profile-icon">
+                <i class="bi bi-heart-pulse"></i>
+            </div>
+
+
+            <div class="evaluation-profile-identity">
+
+                <span class="evaluation-profile-label">
+                    Evaluación física
+                </span>
+
+
+                <h2 th:text="${evaluacionFisica.cliente.usuario.email}">
+                    cliente@email.com
+                </h2>
+
+
+                <div class="evaluation-profile-meta">
+
+                    <span>
+                        Evaluación #
+                        <strong th:text="${evaluacionFisica.id}"></strong>
+                    </span>
+
+                    <span class="evaluation-meta-dot"></span>
+
+                    <span th:text="${#temporals.format(
+                        evaluacionFisica.fecha,
+                        'dd/MM/yyyy'
+                    )}">
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- IMC -->
+
+        <div class="evaluation-imc-card">
+
+            <div class="evaluation-imc-icon">
+                <i class="bi bi-calculator"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Índice de masa corporal
+                </span>
+
+                <strong th:text="${#numbers.formatDecimal(imc, 1, 2)}">
+                    0.00
+                </strong>
+
+                <small>
+                    IMC calculado
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MÉTRICAS
+         ===================================================== -->
+
+    <div class="evaluation-metrics">
+
+        <!-- PESO -->
+
+        <div class="evaluation-metric-card">
+
+            <div class="evaluation-metric-icon">
+                <i class="bi bi-speedometer"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Peso
+                </span>
+
+                <strong>
+
+                    <span th:text="${evaluacionFisica.peso}">
+                    </span>
+
+                    <small>kg</small>
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ESTATURA -->
+
+        <div class="evaluation-metric-card">
+
+            <div class="evaluation-metric-icon">
+                <i class="bi bi-arrows-vertical"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Estatura
+                </span>
+
+                <strong>
+
+                    <span th:text="${evaluacionFisica.estatura}">
+                    </span>
+
+                    <small>m</small>
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- GRASA -->
+
+        <div class="evaluation-metric-card">
+
+            <div class="evaluation-metric-icon">
+                <i class="bi bi-percent"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Grasa corporal
+                </span>
+
+                <strong th:if="${evaluacionFisica.porcentajeGrasa != null}">
+
+                    <span th:text="${evaluacionFisica.porcentajeGrasa}">
+                    </span>
+
+                    <small>%</small>
+
+                </strong>
+
+
+                <strong th:unless="${evaluacionFisica.porcentajeGrasa != null}"
+                        class="evaluation-muted-value">
+
+                    No registrada
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- FECHA -->
+
+        <div class="evaluation-metric-card">
+
+            <div class="evaluation-metric-icon">
+                <i class="bi bi-calendar3"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Fecha
+                </span>
+
+                <strong th:text="${#temporals.format(
+                    evaluacionFisica.fecha,
+                    'dd/MM/yyyy'
+                )}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMACIÓN
+         ===================================================== -->
+
+    <div class="evaluation-details-layout">
+
+
+        <!-- PARTICIPANTES -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Participantes
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Cliente evaluado y entrenador responsable.
+                    </div>
+
+                </div>
+
+
+                <div class="evaluation-section-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <!-- CLIENTE -->
+
+                <div class="evaluation-person-summary">
+
+                    <div class="evaluation-client-avatar large">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Cliente
+                        </span>
+
+                        <strong th:text="${evaluacionFisica.cliente.usuario.email}">
+                        </strong>
+
+                        <small>
+                            DUI:
+                            <span th:text="${evaluacionFisica.cliente.dui}">
+                            </span>
+                        </small>
+
+                    </div>
+
+
+                    <a th:href="@{/clientes/details/{id}(id=${evaluacionFisica.cliente.id})}"
+                       class="evaluation-person-link">
+
+                        <i class="bi bi-arrow-up-right"></i>
+
+                    </a>
+
+                </div>
+
+
+                <!-- ENTRENADOR -->
+
+                <div class="evaluation-person-summary">
+
+                    <div class="evaluation-trainer-avatar large">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Entrenador
+                        </span>
+
+                        <strong th:text="${evaluacionFisica.entrenador.usuario.email}">
+                        </strong>
+
+                        <small th:text="${evaluacionFisica.entrenador.especialidad}">
+                        </small>
+
+                    </div>
+
+
+                    <a th:href="@{/entrenadores/details/{id}(id=${evaluacionFisica.entrenador.id})}"
+                       class="evaluation-person-link">
+
+                        <i class="bi bi-arrow-up-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- OBSERVACIONES -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Observaciones
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Notas registradas durante la evaluación.
+                    </div>
+
+                </div>
+
+
+                <div class="evaluation-section-icon">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div th:if="${evaluacionFisica.observaciones != null
+                        and !#strings.isEmpty(evaluacionFisica.observaciones)}"
+                     class="evaluation-observation">
+
+                    <i class="bi bi-quote"></i>
+
+                    <p th:text="${evaluacionFisica.observaciones}">
+                    </p>
+
+                </div>
+
+
+                <div th:unless="${evaluacionFisica.observaciones != null
+                        and !#strings.isEmpty(evaluacionFisica.observaciones)}"
+                     class="evaluation-no-observation">
+
+                    <i class="bi bi-journal"></i>
+
+                    <strong>
+                        Sin observaciones
+                    </strong>
+
+                    <span>
+                        No se registraron notas adicionales
+                        para esta evaluación.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/evaluacion-fisica.js}"></script>
+</th:block>
+
+</body>
+</html>

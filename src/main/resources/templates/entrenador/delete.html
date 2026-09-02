@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Eliminar entrenador</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/entrenador.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+
+    <!-- BREADCRUMB -->
+
+    <nav class="trainer-breadcrumb">
+
+        <a th:href="@{/entrenadores}">
+            Entrenadores
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar entrenador
+        </span>
+
+    </nav>
+
+
+    <!-- DELETE -->
+
+    <div class="trainer-delete-container">
+
+        <div class="app-card trainer-delete-card">
+
+            <div class="trainer-delete-icon">
+                <i class="bi bi-trash3"></i>
+            </div>
+
+
+            <span class="trainer-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar entrenador
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar el registro asociado a
+
+                <strong th:text="${entrenador.usuario.email}">
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="trainer-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Si el entrenador posee clientes, rutinas u otros
+                    registros relacionados, el sistema puede impedir
+                    su eliminación.
+                </span>
+
+            </div>
+
+
+            <div class="trainer-delete-summary">
+
+
+                <div>
+
+                    <span>
+                        Entrenador
+                    </span>
+
+                    <strong th:text="${entrenador.usuario.email}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Especialidad
+                    </span>
+
+                    <strong th:text="${entrenador.especialidad}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        DUI
+                    </span>
+
+                    <strong th:text="${entrenador.dui}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Teléfono
+                    </span>
+
+                    <strong th:text="${entrenador.telefono}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/entrenadores/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${entrenador.id}">
+
+
+                <div class="trainer-delete-actions">
+
+                    <a th:href="@{/entrenadores/details/{id}(id=${entrenador.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+
+                        Eliminar entrenador
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/entrenador.js}"></script>
+
+</th:block>
+
+</body>
+</html>

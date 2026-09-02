@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Editar membresía</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/membresia-cliente.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="membership-breadcrumb">
+
+        <a th:href="@{/membresias-clientes}">
+            Membresías
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+
+        <a th:href="@{/membresias-clientes/details/{id}(id=${membresiaCliente.id})}">
+            Membresía
+            <span th:text="|#${membresiaCliente.id}|"></span>
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Editar
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Editar membresía
+            </h1>
+
+            <p class="page-description">
+                Actualiza la asignación y el periodo
+                registrado para esta membresía.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <form th:action="@{/membresias-clientes/save}"
+          th:object="${membresiaCliente}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="membership-form-container">
+
+            <div class="app-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Información de la membresía
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Membresía #
+                            <span th:text="${membresiaCliente.id}">
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="membership-section-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <!-- ASIGNACIÓN -->
+
+                    <section class="membership-form-section">
+
+                        <div class="membership-section-heading">
+
+                            <div class="membership-section-heading-icon">
+                                <i class="bi bi-person-check"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Asignación
+                                </h3>
+
+                                <p>
+                                    Actualiza el cliente o tipo
+                                    de membresía si es necesario.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <!-- CLIENTE -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Cliente
+                                </label>
+
+
+                                <select class="form-select"
+                                        th:field="*{cliente.id}">
+
+                                    <option value="">
+                                        Seleccione un cliente
+                                    </option>
+
+
+                                    <option th:each="cliente : ${clientes}"
+                                            th:value="${cliente.id}"
+                                            th:text="${cliente.usuario.email}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('cliente')}"
+                                     th:errors="*{cliente}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- TIPO -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Tipo de membresía
+                                </label>
+
+
+                                <select class="form-select"
+                                        th:field="*{tipoMembresia.id}">
+
+                                    <option value="">
+                                        Seleccione un tipo
+                                    </option>
+
+
+                                    <option th:each="tipo : ${tiposMembresia}"
+                                            th:value="${tipo.id}"
+                                            th:text="|Tipo de membresía #${tipo.id}|">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('tipoMembresia')}"
+                                     th:errors="*{tipoMembresia}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- FECHAS -->
+
+                    <section class="membership-form-section">
+
+                        <div class="membership-section-heading">
+
+                            <div class="membership-section-heading-icon">
+                                <i class="bi bi-calendar-range"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Periodo de vigencia
+                                </h3>
+
+                                <p>
+                                    Fechas relacionadas con esta membresía.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <!-- INICIO -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Fecha de inicio
+                                </label>
+
+
+                                <input type="date"
+                                       class="form-control"
+                                       th:field="*{fechaInicio}"
+                                       data-membership-start>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('fechaInicio')}"
+                                     th:errors="*{fechaInicio}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- VENCIMIENTO -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Fecha de vencimiento
+                                </label>
+
+
+                                <input type="date"
+                                       class="form-control"
+                                       th:field="*{fechaVencimiento}"
+                                       data-membership-end>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('fechaVencimiento')}"
+                                     th:errors="*{fechaVencimiento}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="membership-period-preview">
+
+                            <div class="membership-period-icon">
+                                <i class="bi bi-calendar2-check"></i>
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Duración seleccionada
+                                </span>
+
+                                <strong id="membershipDuration">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <small id="membershipPeriodMessage">
+                                Periodo registrado.
+                            </small>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <div class="membership-form-footer">
+
+                    <a th:href="@{/membresias-clientes/details/{id}(id=${membresiaCliente.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+                        Guardar cambios
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/membresia-cliente.js}"></script>
+</th:block>
+
+</body>
+</html>
