@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle de asistencia</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/asistencia.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="attendance-breadcrumb">
+
+        <a th:href="@{/asistencias}">
+            Asistencias
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Asistencia #
+            <span th:text="${asistencia.id}">
+            </span>
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle de asistencia
+            </h1>
+
+            <p class="page-description">
+                Consulta el cliente, fecha y resultado
+                asociado con este registro de acceso.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/asistencias}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/asistencias/edit/{id}(id=${asistencia.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar asistencia
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="attendance-profile">
+
+        <div class="attendance-profile-main">
+
+            <div class="attendance-profile-icon">
+                <i class="bi bi-door-open"></i>
+            </div>
+
+
+            <div class="attendance-profile-content">
+
+                <span class="attendance-profile-label">
+                    Registro de asistencia
+                </span>
+
+
+                <h2 th:text="${asistencia.cliente.usuario.email}">
+                    cliente@email.com
+                </h2>
+
+
+                <div class="attendance-profile-meta">
+
+                    <span>
+                        Cliente #
+                        <strong th:text="${asistencia.cliente.id}">
+                        </strong>
+                    </span>
+
+
+                    <span class="attendance-profile-dot"></span>
+
+
+                    <span>
+                        Asistencia #
+                        <strong th:text="${asistencia.id}">
+                        </strong>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULTADO -->
+
+        <div class="attendance-profile-result">
+
+            <div class="attendance-profile-result-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Resultado registrado
+                </span>
+
+                <strong th:text="${asistencia.resultado}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MÉTRICAS
+         ===================================================== -->
+
+    <div class="attendance-metrics">
+
+        <!-- FECHA -->
+
+        <div class="attendance-metric-card">
+
+            <div class="attendance-metric-icon">
+                <i class="bi bi-calendar3"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Fecha
+                </span>
+
+                <strong th:text="${#temporals.format(
+                    asistencia.fechaHora,
+                    'dd/MM/yyyy'
+                )}">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- HORA -->
+
+        <div class="attendance-metric-card">
+
+            <div class="attendance-metric-icon">
+                <i class="bi bi-clock"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Hora
+                </span>
+
+                <strong th:text="${#temporals.format(
+                    asistencia.fechaHora,
+                    'HH:mm:ss'
+                )}">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULTADO -->
+
+        <div class="attendance-metric-card">
+
+            <div class="attendance-metric-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Resultado
+                </span>
+
+                <strong th:text="${asistencia.resultado}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DETAILS
+         ===================================================== -->
+
+    <div class="attendance-details-layout">
+
+        <!-- CLIENTE -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Cliente
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Persona asociada con este registro.
+                    </div>
+
+                </div>
+
+
+                <div class="attendance-section-icon">
+                    <i class="bi bi-person"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="attendance-client-summary">
+
+                    <div class="attendance-client-avatar large">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Correo electrónico
+                        </span>
+
+                        <strong th:text="${asistencia.cliente.usuario.email}">
+                        </strong>
+
+                        <small>
+                            Cliente #
+                            <span th:text="${asistencia.cliente.id}">
+                            </span>
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="attendance-property">
+
+                    <span>
+                        DUI
+                    </span>
+
+                    <strong th:text="${asistencia.cliente.dui}">
+                    </strong>
+
+                </div>
+
+
+                <div class="attendance-property">
+
+                    <span>
+                        Teléfono
+                    </span>
+
+                    <strong th:text="${asistencia.cliente.telefono}">
+                    </strong>
+
+                </div>
+
+
+                <a th:href="@{/clientes/details/{id}(id=${asistencia.cliente.id})}"
+                   class="attendance-client-link">
+
+                    Ver perfil del cliente
+
+                    <i class="bi bi-arrow-up-right"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTROL -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Control de acceso
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Comprobar las condiciones actuales de acceso.
+                    </div>
+
+                </div>
+
+
+                <div class="attendance-section-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="attendance-access-box">
+
+                    <div class="attendance-access-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Validar acceso del registro
+                        </strong>
+
+                        <span>
+                            Ejecuta la validación configurada
+                            en el servicio de asistencias.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <form th:action="@{/asistencias/validar-acceso/{id}(id=${asistencia.id})}"
+                      method="post"
+                      class="attendance-access-form">
+
+                    <button type="submit"
+                            class="btn btn-primary attendance-access-button">
+
+                        <i class="bi bi-shield-check me-1"></i>
+                        Validar acceso
+
+                    </button>
+
+                </form>
+
+
+                <a th:href="@{/asistencias/remove/{id}(id=${asistencia.id})}"
+                   class="attendance-delete-link">
+
+                    <i class="bi bi-trash3"></i>
+                    Eliminar este registro
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/asistencia.js}"></script>
+</th:block>
+
+</body>
+</html>

@@ -169,7 +169,15 @@
 
                             <div class="exercise-list-avatar">
 
-                                <i class="bi bi-activity"></i>
+                                <img th:if="${item.imagenUrl != null
+            and !#strings.isEmpty(item.imagenUrl)}"
+                                     th:src="${item.imagenUrl}"
+                                     th:alt="${item.nombre}">
+
+                                <i th:unless="${item.imagenUrl != null
+            and !#strings.isEmpty(item.imagenUrl)}"
+                                   class="bi bi-activity">
+                                </i>
 
                             </div>
 

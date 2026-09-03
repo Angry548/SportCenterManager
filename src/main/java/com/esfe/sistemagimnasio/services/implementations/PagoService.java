@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,23 +59,89 @@ public class PagoService implements IPagoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public byte[] generarComprobantePDF(Integer id) {
-        Pago pago = obtenerPorId(id).orElseThrow();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Pago pago = obtenerPorId(id)
+                .orElseThrow();
 
-        Document document = new Document();
-        PdfWriter.getInstance(document, outputStream);
+        ByteArrayOutputStream outputStream =
+                new ByteArrayOutputStream();
+
+        Document document =
+                new Document();
+
+        PdfWriter.getInstance(
+                document,
+                outputStream
+        );
 
         document.open();
 
-        document.add(new Paragraph("COMPROBANTE DE PAGO"));
-        document.add(new Paragraph("Número: " + pago.getNumeroComprobante()));
-        document.add(new Paragraph("Fecha: " + pago.getFecha()));
-        document.add(new Paragraph("Monto: $" + pago.getMonto()));
-        document.add(new Paragraph(
-                "Método de pago: " + pago.getMetodoPago().getNombre()
-        ));
+
+        document.add(
+                new Paragraph(
+                        "COMPROBANTE DE PAGO"
+                )
+        );
+
+
+        document.add(
+                new Paragraph(
+                        "Número de comprobante: "
+                                + pago.getNumeroComprobante()
+                )
+        );
+
+
+        document.add(
+                new Paragraph(
+                        "Cliente: "
+                                + pago.getMembresiaCliente()
+                                .getCliente()
+                                .getNombres()
+                                + " "
+                                + pago.getMembresiaCliente()
+                                .getCliente()
+                                .getApellidos()
+                )
+        );
+
+
+        document.add(
+                new Paragraph(
+                        "Membresía: "
+                                + pago.getMembresiaCliente()
+                                .getTipoMembresia()
+                                .getNombre()
+                )
+        );
+
+
+        document.add(
+                new Paragraph(
+                        "Monto: $"
+                                + pago.getMonto()
+                )
+        );
+
+
+        document.add(
+                new Paragraph(
+                        "Método de pago: "
+                                + pago.getMetodoPago()
+                                .getNombre()
+                )
+        );
+
+
+        document.add(
+                new Paragraph(
+                        "Fecha: "
+                                + pago.getFecha()
+                )
+        );
+
 
         document.close();
 

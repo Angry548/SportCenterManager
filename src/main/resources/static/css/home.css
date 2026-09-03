@@ -528,3 +528,79 @@
     }
 
 }
+
+/* =========================================================
+   ESCALA DEL DASHBOARD
+   ========================================================= */
+
+.dashboard-eyebrow {
+    font-size: 0.74rem;
+}
+
+.page-title {
+    font-size: 1.7rem;
+}
+
+.page-description {
+    font-size: 0.9rem;
+}
+
+.dashboard-stat-content span {
+    font-size: 0.84rem;
+}
+
+.dashboard-stat-content strong {
+    font-size: 1.5rem;
+}
+
+.dashboard-stat-content small {
+    font-size: 0.78rem;
+}
+
+.dashboard-module-info strong {
+    font-size: 0.9rem;
+}
+
+.dashboard-module-info span {
+    font-size: 0.78rem;
+}
+
+.dashboard-module-count {
+    font-size: 0.9rem;
+}
+
+.dashboard-quick-action strong {
+    font-size: 0.9rem;
+}
+
+.dashboard-quick-action span {
+    font-size: 0.78rem;
+}
+
+.dashboard-stat-card {
+    padding: 0.9rem;
+}
+
+.dashboard-module-item {
+    padding: 0.8rem;
+}
+
+.dashboard-quick-action {
+    padding: 0.8rem;
+}
+
+.client-qr-container {
+    min-height: 210px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.client-qr-container img,
+.client-qr-container canvas {
+    padding: 10px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: var(--shadow-small);
+}

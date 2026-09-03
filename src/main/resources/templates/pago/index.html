@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Pagos</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/pago.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Pagos
+            </h1>
+
+            <p class="page-description">
+                Consulta los pagos registrados, sus comprobantes
+                y las membresías relacionadas.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/pagos/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Registrar pago
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div th:if="${!pagos.isEmpty()}"
+         class="payment-toolbar">
+
+        <div class="payment-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="search"
+                   id="paymentSearch"
+                   class="form-control"
+                   placeholder="Buscar por cliente, comprobante o método..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="paymentSearchClear"
+                    class="payment-search-clear"
+                    aria-label="Limpiar búsqueda">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="payment-result-count">
+
+            Mostrando
+
+            <strong id="paymentVisibleCount"
+                    th:text="${pagos.numberOfElements}">
+                0
+            </strong>
+
+            de
+
+            <strong th:text="${pagos.totalElements}">
+                0
+            </strong>
+
+            pagos
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LISTADO
+         ===================================================== -->
+
+    <div th:if="${!pagos.isEmpty()}"
+         class="app-card payment-list-card">
+
+        <div class="app-card-header">
+
+            <div>
+
+                <h2 class="app-card-title">
+                    Historial de pagos
+                </h2>
+
+                <div class="app-card-subtitle">
+                    Transacciones registradas en el sistema.
+                </div>
+
+            </div>
+
+
+            <div class="payment-section-icon">
+                <i class="bi bi-receipt"></i>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table payment-table">
+
+                <thead>
+
+                <tr>
+                    <th>Cliente</th>
+                    <th>Comprobante</th>
+                    <th>Membresía</th>
+                    <th>Método</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="item : ${pagos}"
+                    data-payment-row
+                    th:attr="
+                        data-payment-client=${item.membresiaCliente.cliente.usuario.email},
+                        data-payment-receipt=${item.numeroComprobante},
+                        data-payment-method=${item.metodoPago.nombre},
+                        data-payment-membership=${item.membresiaCliente.tipoMembresia.nombre}
+                    ">
+
+                    <!-- CLIENTE -->
+
+                    <td>
+
+                        <div class="payment-client-cell">
+
+                            <div class="payment-client-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+
+                            <div class="payment-client-info">
+
+                                <strong>
+                                    <span th:text="${item.membresiaCliente.cliente.nombres}">
+                                        Nombre
+                                    </span>
+
+                                    <span th:text="${item.membresiaCliente.cliente.apellidos}">
+                                    Apellido
+                                    </span>
+                                </strong>
+
+                                <span th:text="${item.membresiaCliente.cliente.usuario.email}">
+                                    cliente@email.com
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- COMPROBANTE -->
+
+                    <td>
+
+                        <span class="payment-receipt">
+
+                            <i class="bi bi-receipt-cutoff"></i>
+
+                            <span th:text="${item.numeroComprobante}">
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- MEMBRESÍA -->
+
+                    <td>
+
+                        <div class="payment-membership">
+
+                            <strong th:text="${item.membresiaCliente.tipoMembresia.nombre}">
+                            </strong>
+
+                            <span>
+                                Membresía #
+                                <span th:text="${item.membresiaCliente.id}">
+                                </span>
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- MÉTODO -->
+
+                    <td>
+
+                        <span class="payment-method-badge">
+
+                            <i class="bi bi-wallet2"></i>
+
+                            <span th:text="${item.metodoPago.nombre}">
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- MONTO -->
+
+                    <td>
+
+                        <strong class="payment-amount"
+                                th:text="${#numbers.formatDecimal(
+                                    item.monto,
+                                    1,
+                                    2
+                                )}">
+                        </strong>
+
+                    </td>
+
+
+                    <!-- FECHA -->
+
+                    <td>
+
+                        <div class="payment-date">
+
+                            <strong th:text="${#temporals.format(
+                                item.fecha,
+                                'dd/MM/yyyy'
+                            )}">
+                            </strong>
+
+                            <span th:text="${#temporals.format(
+                                item.fecha,
+                                'HH:mm'
+                            )}">
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="payment-actions">
+
+                            <a th:href="@{/pagos/details/{id}(id=${item.id})}"
+                               class="payment-action"
+                               title="Ver pago">
+
+                                <i class="bi bi-eye"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/pagos/pdf/{id}(id=${item.id})}"
+                               class="payment-action payment-action-pdf"
+                               title="Descargar comprobante PDF">
+
+                                <i class="bi bi-file-earmark-pdf"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/pagos/remove/{id}(id=${item.id})}"
+                               class="payment-action payment-action-danger"
+                               title="Eliminar pago">
+
+                                <i class="bi bi-trash3"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN RESULTADOS
+         ===================================================== -->
+
+    <div id="paymentNoSearchResults"
+         class="app-card"
+         hidden>
+
+        <div class="payment-empty-state">
+
+            <div class="payment-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h2>
+                No encontramos coincidencias
+            </h2>
+
+            <p>
+                Prueba buscando por cliente, comprobante,
+                membresía o método de pago.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN PAGOS
+         ===================================================== -->
+
+    <div th:if="${pagos.isEmpty()}"
+         class="app-card">
+
+        <div class="payment-empty-state">
+
+            <div class="payment-empty-icon">
+                <i class="bi bi-receipt"></i>
+            </div>
+
+            <h2>
+                No hay pagos registrados
+            </h2>
+
+            <p>
+                Registra el primer pago para comenzar
+                a llevar el historial de transacciones.
+            </p>
+
+
+            <a th:href="@{/pagos/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Registrar pago
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGINACIÓN
+         ===================================================== -->
+
+    <div th:if="${pagos.totalPages > 1}"
+         class="payment-pagination">
+
+        <div class="payment-pagination-info">
+
+            Página
+
+            <strong th:text="${pagos.number + 1}">
+                1
+            </strong>
+
+            de
+
+            <strong th:text="${pagos.totalPages}">
+                1
+            </strong>
+
+        </div>
+
+
+        <nav aria-label="Paginación de pagos">
+
+            <ul class="pagination">
+
+                <li class="page-item"
+                    th:classappend="${pagos.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/pagos(
+                           page=${pagos.number},
+                           size=${pagos.size}
+                       )}">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+                </li>
+
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == pagos.number + 1}
+                        ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/pagos(
+                           page=${pageNumber},
+                           size=${pagos.size}
+                       )}"
+                       th:text="${pageNumber}">
+                    </a>
+
+                </li>
+
+
+                <li class="page-item"
+                    th:classappend="${pagos.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/pagos(
+                           page=${pagos.number + 2},
+                           size=${pagos.size}
+                       )}">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/pago.js}"></script>
+</th:block>
+
+</body>
+</html>

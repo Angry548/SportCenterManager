@@ -155,7 +155,7 @@
 
                                     <option th:each="rutina : ${rutinas}"
                                             th:value="${rutina.id}"
-                                            th:text="|Rutina #${rutina.id}|">
+                                            th:text="${rutina.nombre}">
                                     </option>
 
                                 </select>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Eliminar método de pago</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/metodo-pago.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="payment-method-breadcrumb">
+
+        <a th:href="@{/metodos-pago}">
+            Métodos de pago
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar método
+        </span>
+
+    </nav>
+
+
+    <div class="payment-method-delete-container">
+
+        <div class="app-card payment-method-delete-card">
+
+            <div class="payment-method-delete-icon">
+                <i class="bi bi-trash3"></i>
+            </div>
+
+
+            <span class="payment-method-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar método de pago
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar
+
+                <strong th:text="${metodoPago.nombre}">
+                    Método
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="payment-method-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Si este método está relacionado con otros registros,
+                    la base de datos puede impedir su eliminación.
+                    Si solo deseas dejar de utilizarlo, puedes desactivarlo.
+                </span>
+
+            </div>
+
+
+            <div class="payment-method-delete-summary">
+
+                <div class="payment-method-delete-summary-icon">
+                    <i class="bi bi-credit-card"></i>
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Método
+                    </span>
+
+                    <strong th:text="${metodoPago.nombre}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Estado
+                    </span>
+
+                    <strong th:text="${metodoPago.activo
+                        ? 'Activo'
+                        : 'Inactivo'}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/metodos-pago/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${metodoPago.id}">
+
+
+                <div class="payment-method-delete-actions">
+
+                    <a th:href="@{/metodos-pago/details/{id}(id=${metodoPago.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+                        Eliminar método
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/metodo-pago.js}"></script>
+</th:block>
+
+</body>
+</html>

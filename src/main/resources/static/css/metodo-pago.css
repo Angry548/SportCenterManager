@@ -1,0 +1,1341 @@
+/* =========================================================
+   METODO DE PAGO MODULE
+   ========================================================= */
+
+
+/* =========================================================
+   SHARED
+   ========================================================= */
+
+.payment-method-section-icon {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+.payment-method-breadcrumb {
+    margin-bottom: 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+.payment-method-breadcrumb a {
+    max-width: 280px;
+
+    overflow: hidden;
+
+    color: var(--text-secondary);
+
+    font-weight: 550;
+
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.payment-method-breadcrumb a:hover {
+    color: var(--color-primary);
+}
+
+
+.payment-method-breadcrumb i {
+    flex-shrink: 0;
+
+    font-size: 7px;
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.payment-method-toolbar {
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+}
+
+
+.payment-method-search {
+    width: 100%;
+    max-width: 450px;
+
+    position: relative;
+}
+
+
+.payment-method-search > i {
+    position: absolute;
+
+    top: 50%;
+    left: 14px;
+
+    z-index: 2;
+
+    transform: translateY(-50%);
+
+    color: var(--text-muted);
+
+    pointer-events: none;
+}
+
+
+.payment-method-search .form-control {
+    padding-left: 40px;
+    padding-right: 42px;
+}
+
+
+.payment-method-search-clear {
+    width: 30px;
+    height: 30px;
+
+    position: absolute;
+
+    top: 50%;
+    right: 7px;
+
+    transform: translateY(-50%);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 8px;
+
+    color: var(--text-muted);
+    background: transparent;
+}
+
+
+.payment-method-search-clear.visible {
+    display: flex;
+}
+
+
+.payment-method-search-clear:hover {
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+}
+
+
+.payment-method-result-count {
+    flex-shrink: 0;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+.payment-method-result-count strong {
+    color: var(--text-primary);
+}
+
+
+/* =========================================================
+   LIST
+   ========================================================= */
+
+.payment-method-list-card {
+    overflow: hidden;
+}
+
+
+.payment-method-cell {
+    min-width: 220px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.payment-method-avatar {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    color: var(--color-primary);
+
+    background:
+            linear-gradient(
+                    135deg,
+                    #fff5ed,
+                    var(--color-primary-soft)
+            );
+
+    font-size: 17px;
+}
+
+
+.payment-method-cell-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.payment-method-cell-info strong {
+    max-width: 250px;
+
+    overflow: hidden;
+
+    font-size: 10px;
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.payment-method-cell-info span {
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.payment-method-id {
+    padding: 5px 9px;
+
+    display: inline-flex;
+
+    border-radius: 999px;
+
+    color: var(--text-secondary);
+    background: #f2f0f3;
+
+    font-size: 8px;
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   STATE BUTTON
+   ========================================================= */
+
+.payment-method-state-button {
+    padding: 6px 10px;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    border-radius: 9px;
+
+    font-size: 8px;
+    font-weight: 650;
+
+    text-decoration: none;
+}
+
+
+.payment-method-state-enable {
+    color: var(--success);
+    background: var(--success-soft, #edf9f4);
+}
+
+
+.payment-method-state-disable {
+    color: var(--text-secondary);
+    background: #f1eff2;
+}
+
+
+.payment-method-state-button:hover {
+    filter: brightness(.97);
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.payment-method-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 4px;
+}
+
+
+.payment-method-action {
+    width: 34px;
+    height: 34px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    color: var(--text-secondary);
+    background: transparent;
+
+    text-decoration: none;
+
+    transition:
+            color .15s ease,
+            background .15s ease,
+            border-color .15s ease;
+}
+
+
+.payment-method-action:hover {
+    color: var(--color-primary);
+
+    border-color: #ffdadd;
+
+    background: var(--color-primary-soft);
+}
+
+
+.payment-method-action-danger:hover {
+    color: var(--danger);
+
+    border-color: #ffd5da;
+
+    background: var(--danger-soft);
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.payment-method-empty-state {
+    padding: 68px 24px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+}
+
+
+.payment-method-empty-icon {
+    width: 62px;
+    height: 62px;
+
+    margin-bottom: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+
+    font-size: 24px;
+}
+
+
+.payment-method-empty-state h2 {
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.payment-method-empty-state p {
+    max-width: 400px;
+
+    margin: 7px 0 19px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.payment-method-pagination {
+    margin-top: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+}
+
+
+.payment-method-pagination-info {
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+.payment-method-pagination-info strong {
+    color: var(--text-primary);
+}
+
+
+.payment-method-pagination .pagination {
+    margin: 0;
+
+    gap: 5px;
+}
+
+
+.payment-method-pagination .page-link {
+    min-width: 35px;
+    height: 35px;
+
+    padding: 0 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border-color);
+    border-radius: 9px !important;
+
+    color: var(--text-secondary);
+    background: white;
+
+    font-size: 9px;
+}
+
+
+.payment-method-pagination .page-link:hover {
+    color: var(--color-primary);
+
+    border-color: #ffdadd;
+
+    background: var(--color-primary-soft);
+}
+
+
+.payment-method-pagination
+.page-item.active
+.page-link {
+    color: white;
+
+    border-color: var(--color-primary);
+
+    background: var(--color-primary);
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.payment-method-form-container {
+    width: 100%;
+    max-width: 780px;
+}
+
+
+.payment-method-form-section {
+    max-width: 620px;
+}
+
+
+.payment-method-section-heading {
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 11px;
+}
+
+
+.payment-method-section-heading-icon {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    color: var(--text-secondary);
+    background: #f4f2f5;
+
+    font-size: 13px;
+}
+
+
+.payment-method-section-heading h3 {
+    margin: 1px 0 0;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.payment-method-section-heading p {
+    margin: 4px 0 0;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+.payment-method-input-wrapper {
+    position: relative;
+}
+
+
+.payment-method-input-wrapper > i {
+    position: absolute;
+
+    top: 50%;
+    left: 13px;
+
+    z-index: 2;
+
+    transform: translateY(-50%);
+
+    color: var(--text-muted);
+
+    pointer-events: none;
+}
+
+
+.payment-method-input-icon {
+    padding-left: 38px;
+}
+
+
+.payment-method-field-footer {
+    margin-top: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.payment-method-field-help {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
+.payment-method-preview {
+    margin-top: 28px;
+    padding: 16px;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 11px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 13px;
+
+    background: #faf9fb;
+}
+
+
+.payment-method-preview-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+
+    font-size: 16px;
+}
+
+
+.payment-method-preview > div:nth-child(2) {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.payment-method-preview span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.payment-method-preview strong {
+    margin-top: 3px;
+
+    overflow-wrap: anywhere;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.payment-method-info-box {
+    margin-top: 20px;
+    padding: 14px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    border-radius: 12px;
+
+    color: var(--text-secondary);
+    background: #f7f5f8;
+}
+
+
+.payment-method-info-box > i {
+    color: var(--color-primary);
+
+    font-size: 15px;
+}
+
+
+.payment-method-info-box > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.payment-method-info-box strong {
+    font-size: 9px;
+}
+
+
+.payment-method-info-box span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+
+    line-height: 1.5;
+}
+
+
+.payment-method-form-footer {
+    padding: 17px 23px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    border-top: 1px solid var(--border-color);
+
+    background: #fcfbfc;
+}
+
+
+/* =========================================================
+   DETAILS HERO
+   ========================================================= */
+
+.payment-method-profile {
+    margin-bottom: 22px;
+
+    overflow: hidden;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+
+    background: white;
+
+    box-shadow: var(--shadow-small);
+}
+
+
+.payment-method-profile-main {
+    min-width: 0;
+
+    padding: 27px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+}
+
+
+.payment-method-profile-icon {
+    width: 64px;
+    height: 64px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    color: white;
+
+    background:
+            linear-gradient(
+                    135deg,
+                    var(--color-accent),
+                    var(--color-primary)
+            );
+
+    font-size: 25px;
+}
+
+
+.payment-method-profile-content {
+    min-width: 0;
+}
+
+
+.payment-method-profile-label {
+    color: var(--text-muted);
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: .7px;
+
+    text-transform: uppercase;
+}
+
+
+.payment-method-profile-content h2 {
+    margin: 4px 0 0;
+
+    font-size: 20px;
+    font-weight: 750;
+}
+
+
+.payment-method-profile-meta {
+    margin-top: 8px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+.payment-method-profile-meta strong {
+    color: var(--text-primary);
+}
+
+
+/* STATUS */
+
+.payment-method-profile-status {
+    min-width: 220px;
+
+    padding: 24px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    border-left: 1px solid var(--border-color);
+}
+
+
+.payment-method-profile-active {
+    background: #f7fcfa;
+}
+
+
+.payment-method-profile-inactive {
+    background: #faf9fb;
+}
+
+
+.payment-method-profile-status-icon {
+    width: 39px;
+    height: 39px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+}
+
+
+.payment-method-profile-active
+.payment-method-profile-status-icon {
+    color: var(--success);
+    background: var(--success-soft, #edf9f4);
+}
+
+
+.payment-method-profile-inactive
+.payment-method-profile-status-icon {
+    color: var(--text-secondary);
+    background: #efedf0;
+}
+
+
+.payment-method-profile-status > div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.payment-method-profile-status span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.payment-method-profile-status strong {
+    margin-top: 3px;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   DETAILS
+   ========================================================= */
+
+.payment-method-details-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.1fr)
+        minmax(300px, .9fr);
+
+    gap: 22px;
+
+    align-items: start;
+}
+
+
+.payment-method-detail-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    column-gap: 24px;
+}
+
+
+.payment-method-detail-item {
+    padding: 15px 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    border-bottom: 1px solid var(--border-color);
+}
+
+
+.payment-method-detail-icon {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    color: var(--text-secondary);
+    background: #f4f2f5;
+
+    font-size: 13px;
+}
+
+
+.payment-method-detail-item > div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.payment-method-detail-item span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.payment-method-detail-item strong {
+    margin-top: 3px;
+
+    font-size: 10px;
+}
+
+
+/* MANAGEMENT */
+
+.payment-method-management-action {
+    width: 100%;
+
+    padding: 13px 0;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 10px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    color: var(--text-primary);
+    background: transparent;
+
+    text-decoration: none;
+}
+
+
+.payment-method-management-action:last-child {
+    border-bottom: none;
+}
+
+
+.payment-method-management-icon {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+}
+
+
+.payment-method-management-action > span:nth-child(2) {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.payment-method-management-action strong {
+    font-size: 9px;
+}
+
+
+.payment-method-management-action small {
+    margin-top: 2px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.payment-method-management-action:hover {
+    color: var(--color-primary);
+}
+
+
+.payment-method-management-danger:hover {
+    color: var(--danger);
+}
+
+
+.payment-method-management-danger
+.payment-method-management-icon {
+    color: var(--danger);
+    background: var(--danger-soft);
+}
+
+
+/* =========================================================
+   DELETE
+   ========================================================= */
+
+.payment-method-delete-container {
+    width: 100%;
+    max-width: 620px;
+
+    margin: 25px auto;
+}
+
+
+.payment-method-delete-card {
+    padding: 34px;
+
+    text-align: center;
+}
+
+
+.payment-method-delete-icon {
+    width: 62px;
+    height: 62px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    color: var(--danger);
+    background: var(--danger-soft);
+
+    font-size: 24px;
+}
+
+
+.payment-method-delete-eyebrow {
+    color: var(--danger);
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: .7px;
+
+    text-transform: uppercase;
+}
+
+
+.payment-method-delete-card h1 {
+    margin: 5px 0 0;
+
+    font-size: 19px;
+    font-weight: 750;
+}
+
+
+.payment-method-delete-card > p {
+    max-width: 470px;
+
+    margin: 9px auto 20px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+
+    line-height: 1.7;
+}
+
+
+.payment-method-delete-warning {
+    margin-bottom: 20px;
+    padding: 13px 15px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    border: 1px solid #f6e2ba;
+    border-radius: 11px;
+
+    color: #9b6b17;
+    background: var(--warning-soft, #fff8e8);
+
+    text-align: left;
+
+    font-size: 9px;
+
+    line-height: 1.55;
+}
+
+
+.payment-method-delete-summary {
+    margin-bottom: 22px;
+    padding: 16px;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 12px;
+
+    border-radius: 13px;
+
+    background: #f8f7f9;
+
+    text-align: left;
+}
+
+
+.payment-method-delete-summary-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+}
+
+
+.payment-method-delete-summary > div:not(
+    .payment-method-delete-summary-icon
+) {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.payment-method-delete-summary span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+.payment-method-delete-summary strong {
+    margin-top: 3px;
+
+    overflow-wrap: anywhere;
+
+    font-size: 10px;
+}
+
+
+.payment-method-delete-actions {
+    display: flex;
+    justify-content: center;
+
+    gap: 9px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+
+    .payment-method-profile {
+        flex-direction: column;
+    }
+
+
+    .payment-method-profile-status {
+        min-width: 0;
+
+        border-top: 1px solid var(--border-color);
+        border-left: none;
+    }
+
+
+    .payment-method-details-layout {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 767.98px) {
+
+    .payment-method-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .payment-method-search {
+        max-width: none;
+    }
+
+
+    .payment-method-detail-list {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 575.98px) {
+
+    .payment-method-pagination {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .payment-method-form-footer {
+        flex-direction: column-reverse;
+    }
+
+
+    .payment-method-form-footer .btn {
+        width: 100%;
+    }
+
+
+    .payment-method-preview {
+        grid-template-columns:
+            auto
+            minmax(0, 1fr);
+    }
+
+
+    .payment-method-preview > .status-badge {
+        grid-column: 2;
+
+        justify-self: start;
+    }
+
+
+    .payment-method-profile-main {
+        padding: 20px;
+
+        align-items: flex-start;
+    }
+
+
+    .payment-method-profile-icon {
+        width: 52px;
+        height: 52px;
+
+        font-size: 20px;
+    }
+
+
+    .payment-method-delete-card {
+        padding: 26px 18px;
+    }
+
+
+    .payment-method-delete-summary {
+        grid-template-columns:
+            auto
+            minmax(0, 1fr);
+    }
+
+
+    .payment-method-delete-summary > div:last-child {
+        grid-column: 2;
+    }
+
+
+    .payment-method-delete-actions {
+        flex-direction: column-reverse;
+    }
+
+
+    .payment-method-delete-actions .btn {
+        width: 100%;
+    }
+
+}

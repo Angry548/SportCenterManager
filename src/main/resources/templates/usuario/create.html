@@ -54,6 +54,10 @@
           th:object="${usuario}"
           method="post">
 
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
         <div class="user-form-container">
 
             <div class="app-card">
@@ -212,20 +216,10 @@
 
                                 </div>
 
-                                <div class="text-danger mt-1"
-                                     th:if="${#fields.hasErrors('passwordHash')}"
-                                     th:errors="*{passwordHash}">
-                                </div>
-
                                 <div class="user-field-help">
-
                                     <i class="bi bi-info-circle"></i>
-
-                                    El modelo actual requiere exactamente
-                                    60 caracteres.
-
+                                    La contraseña debe tener entre 6 y 72 caracteres.
                                 </div>
-
 
                                 <div class="text-danger mt-1"
                                      th:if="${#fields.hasErrors('passwordHash')}"

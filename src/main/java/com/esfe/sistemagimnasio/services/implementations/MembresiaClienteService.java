@@ -63,4 +63,18 @@ public class MembresiaClienteService implements IMembresiaClienteService {
         return (int) Math.max(dias, 0);
     }
 
+    @Override
+    public Optional<MembresiaCliente> obtenerMembresiaVigenteCliente(
+            Integer clienteId) {
+
+        LocalDate hoy = LocalDate.now();
+
+        return membresiaClienteRepository
+                .findFirstByCliente_IdAndFechaInicioLessThanEqualAndFechaVencimientoGreaterThanEqualOrderByFechaVencimientoDesc(
+                        clienteId,
+                        hoy,
+                        hoy
+                );
+    }
+
 }

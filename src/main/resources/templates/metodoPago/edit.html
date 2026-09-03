@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Editar método de pago</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/metodo-pago.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         BREADCRUMB
+         ===================================================== -->
+
+    <nav class="payment-method-breadcrumb">
+
+        <a th:href="@{/metodos-pago}">
+            Métodos de pago
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+
+        <a th:href="@{/metodos-pago/details/{id}(id=${metodoPago.id})}"
+           th:text="${metodoPago.nombre}">
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Editar
+        </span>
+
+    </nav>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Editar método de pago
+            </h1>
+
+            <p class="page-description">
+                Actualiza el nombre utilizado
+                para identificar esta forma de pago.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM
+         ===================================================== -->
+
+    <form th:action="@{/metodos-pago/save}"
+          th:object="${metodoPago}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+        <input type="hidden"
+               th:field="*{activo}">
+
+
+        <div class="payment-method-form-container">
+
+            <div class="app-card">
+
+                <!-- HEADER CARD -->
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title"
+                            th:text="${metodoPago.nombre}">
+                            Método de pago
+                        </h2>
+
+
+                        <div class="app-card-subtitle">
+
+                            Método #
+
+                            <span th:text="${metodoPago.id}">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-method-section-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <section class="payment-method-form-section">
+
+                        <div class="payment-method-section-heading">
+
+                            <div class="payment-method-section-heading-icon">
+                                <i class="bi bi-credit-card"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Identificación
+                                </h3>
+
+                                <p>
+                                    Modifica el nombre de esta
+                                    forma de pago.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <label for="nombre"
+                               class="form-label">
+
+                            Nombre
+
+                        </label>
+
+
+                        <div class="payment-method-input-wrapper">
+
+                            <i class="bi bi-tag"></i>
+
+                            <input type="text"
+                                   id="nombre"
+                                   class="form-control payment-method-input-icon"
+                                   th:field="*{nombre}"
+                                   maxlength="40"
+                                   autocomplete="off"
+                                   data-payment-method-name>
+
+                        </div>
+
+
+                        <div class="payment-method-field-footer">
+
+                            <div class="payment-method-field-help">
+
+                                <i class="bi bi-info-circle"></i>
+
+                                Máximo 40 caracteres.
+
+                            </div>
+
+
+                            <div>
+
+                                <span id="paymentMethodCharacterCount">
+                                    0
+                                </span>
+
+                                / 40
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="text-danger mt-1"
+                             th:if="${#fields.hasErrors('nombre')}"
+                             th:errors="*{nombre}">
+                        </div>
+
+                    </section>
+
+
+                    <!-- PREVIEW -->
+
+                    <div class="payment-method-preview">
+
+                        <div class="payment-method-preview-icon">
+                            <i class="bi bi-credit-card-2-front"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Vista previa
+                            </span>
+
+                            <strong id="paymentMethodNamePreview"
+                                    th:text="${metodoPago.nombre}">
+                            </strong>
+
+                        </div>
+
+
+                        <span th:if="${metodoPago.activo}"
+                              class="status-badge status-active">
+
+                            Activo
+
+                        </span>
+
+
+                        <span th:unless="${metodoPago.activo}"
+                              class="status-badge status-inactive">
+
+                            Inactivo
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- INFO -->
+
+                    <div class="payment-method-info-box">
+
+                        <i th:class="${metodoPago.activo}
+                            ? 'bi bi-toggle-on'
+                            : 'bi bi-toggle-off'">
+                        </i>
+
+
+                        <div>
+
+                            <strong>
+                                Estado actual
+                            </strong>
+
+                            <span th:text="${metodoPago.activo}
+                                ? 'Este método está activo. El estado se administra desde el listado o detalle.'
+                                : 'Este método está inactivo. El estado se administra desde el listado o detalle.'">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="payment-method-form-footer">
+
+                    <a th:href="@{/metodos-pago/details/{id}(id=${metodoPago.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+                        Guardar cambios
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/metodo-pago.js}"></script>
+</th:block>
+
+</body>
+</html>

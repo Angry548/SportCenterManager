@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <body>
 
@@ -14,11 +15,8 @@
 
     <div class="sidebar-header">
 
-        <!--
-            Todavía no existe Dashboard.
-            Por eso el logo dirige temporalmente a Clientes.
-        -->
-        <a th:href="@{/home}" class="sidebar-brand">
+        <a th:href="@{/home}"
+           class="sidebar-brand">
 
             <span class="sidebar-brand-icon">
                 <i class="bi bi-lightning-charge-fill"></i>
@@ -31,8 +29,6 @@
 
         </a>
 
-
-        <!-- Cerrar sidebar en móvil -->
 
         <button type="button"
                 class="sidebar-close"
@@ -52,16 +48,22 @@
 
     <nav class="sidebar-nav">
 
+
+        <!-- =================================================
+             DASHBOARD
+             TODOS LOS USUARIOS AUTENTICADOS
+             ================================================= -->
+
         <div class="sidebar-section">
 
             <a th:href="@{/home}"
                class="sidebar-link">
 
-                <i class="bi bi-grid-1x2-fill"></i>
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                </span>
 
-                <span>
-            Dashboard
-        </span>
+                <span>Dashboard</span>
 
             </a>
 
@@ -70,9 +72,11 @@
 
         <!-- =================================================
              GESTIÓN
+             SOLO ADMIN
              ================================================= -->
 
-        <div class="sidebar-section">
+        <div class="sidebar-section"
+             sec:authorize="hasAuthority('ADMIN')">
 
             <span class="sidebar-section-title">
                 GESTIÓN
@@ -125,9 +129,11 @@
 
         <!-- =================================================
              ENTRENAMIENTO
+             ADMIN Y ENTRENADOR
              ================================================= -->
 
-        <div class="sidebar-section">
+        <div class="sidebar-section"
+             sec:authorize="hasAnyAuthority('ADMIN', 'ENTRENADOR')">
 
             <span class="sidebar-section-title">
                 ENTRENAMIENTO
@@ -176,7 +182,7 @@
             </a>
 
 
-            <!-- RUTINA EJERCICIOS -->
+            <!-- RUTINA - EJERCICIOS -->
 
             <a th:href="@{/rutina-ejercicios}"
                class="sidebar-link">
@@ -190,10 +196,12 @@
             </a>
 
 
-            <!-- ASIGNACIONES DE ENTRENADOR -->
+            <!-- ASIGNACIONES
+                 SOLO ADMIN -->
 
             <a th:href="@{/asignaciones-entrenador}"
-               class="sidebar-link">
+               class="sidebar-link"
+               sec:authorize="hasAuthority('ADMIN')">
 
                 <span class="sidebar-link-icon">
                     <i class="bi bi-person-check"></i>
@@ -207,10 +215,12 @@
 
 
         <!-- =================================================
-             MEMBRESÍAS
+             MEMBRESÍAS Y PAGOS
+             SOLO ADMIN
              ================================================= -->
 
-        <div class="sidebar-section">
+        <div class="sidebar-section"
+             sec:authorize="hasAuthority('ADMIN')">
 
             <span class="sidebar-section-title">
                 MEMBRESÍAS
@@ -244,14 +254,44 @@
 
             </a>
 
+
+            <!-- PAGOS -->
+
+            <a th:href="@{/pagos}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-receipt"></i>
+                </span>
+
+                <span>Pagos</span>
+
+            </a>
+
+
+            <!-- MÉTODOS DE PAGO -->
+
+            <a th:href="@{/metodos-pago}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-wallet2"></i>
+                </span>
+
+                <span>Métodos de pago</span>
+
+            </a>
+
         </div>
 
 
         <!-- =================================================
              SEGUIMIENTO
+             ADMIN Y ENTRENADOR
              ================================================= -->
 
-        <div class="sidebar-section">
+        <div class="sidebar-section"
+             sec:authorize="hasAnyAuthority('ADMIN', 'ENTRENADOR')">
 
             <span class="sidebar-section-title">
                 SEGUIMIENTO
@@ -271,13 +311,27 @@
 
             </a>
 
+
+            <!-- ASISTENCIAS -->
+
+            <a th:href="@{/asistencias}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-door-open"></i>
+                </span>
+
+                <span>Asistencias</span>
+
+            </a>
+
         </div>
 
     </nav>
 
 
     <!-- =====================================================
-         FOOTER
+         FOOTER / USUARIO AUTENTICADO
          ===================================================== -->
 
     <div class="sidebar-footer">
@@ -285,18 +339,43 @@
         <div class="sidebar-user">
 
             <div class="sidebar-user-avatar">
-                AD
+
+                <span sec:authorize="hasAuthority('ADMIN')">
+                    AD
+                </span>
+
+                <span sec:authorize="hasAuthority('ENTRENADOR')">
+                    EN
+                </span>
+
+                <span sec:authorize="hasAuthority('CLIENTE')">
+                    CL
+                </span>
+
             </div>
 
 
             <div class="sidebar-user-info">
 
-                <strong>
+                <!-- ROL -->
+
+                <strong sec:authorize="hasAuthority('ADMIN')">
                     Administrador
                 </strong>
 
-                <span>
-                    GymSystem
+                <strong sec:authorize="hasAuthority('ENTRENADOR')">
+                    Entrenador
+                </strong>
+
+                <strong sec:authorize="hasAuthority('CLIENTE')">
+                    Cliente
+                </strong>
+
+
+                <!-- EMAIL DEL USUARIO AUTENTICADO -->
+
+                <span sec:authentication="name">
+                    usuario@email.com
                 </span>
 
             </div>
@@ -304,6 +383,34 @@
         </div>
 
     </div>
+
+
+    <!-- =====================================================
+         CERRAR SESIÓN
+         ===================================================== -->
+
+    <form th:action="@{/logout}"
+          method="post"
+          class="sidebar-logout-form">
+
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
+        <button type="submit"
+                class="sidebar-link sidebar-logout-button">
+
+            <span class="sidebar-link-icon">
+                <i class="bi bi-box-arrow-right"></i>
+            </span>
+
+            <span>
+                Cerrar sesión
+            </span>
+
+        </button>
+
+    </form>
 
 </aside>
 

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Asistencias</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/asistencia.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Control de asistencias
+            </h1>
+
+            <p class="page-description">
+                Consulta los registros de ingreso de los clientes
+                y valida su acceso al gimnasio.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/asistencias/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Nueva asistencia
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div th:if="${!asistencias.isEmpty()}"
+         class="attendance-toolbar">
+
+        <div class="attendance-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="search"
+                   id="attendanceSearch"
+                   class="form-control"
+                   placeholder="Buscar por cliente, resultado o fecha..."
+                   autocomplete="off">
+
+            <button type="button"
+                    id="attendanceSearchClear"
+                    class="attendance-search-clear"
+                    aria-label="Limpiar búsqueda">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="attendance-result-count">
+
+            Mostrando
+
+            <strong id="attendanceVisibleCount"
+                    th:text="${asistencias.numberOfElements}">
+                0
+            </strong>
+
+            de
+
+            <strong th:text="${asistencias.totalElements}">
+                0
+            </strong>
+
+            registros
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TABLA
+         ===================================================== -->
+
+    <div th:if="${!asistencias.isEmpty()}"
+         class="app-card attendance-list-card">
+
+        <div class="app-card-header">
+
+            <div>
+
+                <h2 class="app-card-title">
+                    Historial de accesos
+                </h2>
+
+                <div class="app-card-subtitle">
+                    Registros de asistencia almacenados en el sistema.
+                </div>
+
+            </div>
+
+
+            <div class="attendance-section-icon">
+                <i class="bi bi-door-open"></i>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table attendance-table">
+
+                <thead>
+
+                <tr>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Resultado</th>
+                    <th>Validación</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="item : ${asistencias}"
+                    data-attendance-row
+                    th:attr="
+                        data-attendance-client=${item.cliente.usuario.email},
+                        data-attendance-result=${item.resultado},
+                        data-attendance-date=${#temporals.format(item.fechaHora, 'dd/MM/yyyy')}
+                    ">
+
+                    <!-- CLIENTE -->
+
+                    <td>
+
+                        <div class="attendance-client-cell">
+
+                            <div class="attendance-client-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+
+                            <div class="attendance-client-info">
+
+                                <strong th:text="${item.cliente.usuario.email}">
+                                    cliente@email.com
+                                </strong>
+
+                                <span>
+                                    Cliente #
+                                    <span th:text="${item.cliente.id}">
+                                    </span>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- FECHA -->
+
+                    <td>
+
+                        <span class="attendance-date">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            <span th:text="${#temporals.format(
+                                item.fechaHora,
+                                'dd/MM/yyyy'
+                            )}">
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- HORA -->
+
+                    <td>
+
+                        <span class="attendance-time">
+
+                            <i class="bi bi-clock"></i>
+
+                            <span th:text="${#temporals.format(
+                                item.fechaHora,
+                                'HH:mm'
+                            )}">
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- RESULTADO -->
+
+                    <td>
+
+                        <span class="attendance-result-badge"
+                              th:text="${item.resultado}">
+                        </span>
+
+                    </td>
+
+
+                    <!-- VALIDAR -->
+
+                    <td>
+
+                        <form th:action="@{/asistencias/validar-acceso/{id}(id=${item.id})}"
+                              method="post"
+                              class="attendance-access-form">
+
+                            <button type="submit"
+                                    class="attendance-validate-button">
+
+                                <i class="bi bi-shield-check"></i>
+                                Validar acceso
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="attendance-actions">
+
+                            <a th:href="@{/asistencias/details/{id}(id=${item.id})}"
+                               class="attendance-action"
+                               title="Ver asistencia">
+
+                                <i class="bi bi-eye"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/asistencias/edit/{id}(id=${item.id})}"
+                               class="attendance-action"
+                               title="Editar asistencia">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+
+
+                            <a th:href="@{/asistencias/remove/{id}(id=${item.id})}"
+                               class="attendance-action attendance-action-danger"
+                               title="Eliminar asistencia">
+
+                                <i class="bi bi-trash3"></i>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BÚSQUEDA VACÍA
+         ===================================================== -->
+
+    <div id="attendanceNoSearchResults"
+         class="app-card"
+         hidden>
+
+        <div class="attendance-empty-state">
+
+            <div class="attendance-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h2>
+                No encontramos coincidencias
+            </h2>
+
+            <p>
+                Prueba buscando por correo del cliente,
+                resultado o fecha de asistencia.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIN REGISTROS
+         ===================================================== -->
+
+    <div th:if="${asistencias.isEmpty()}"
+         class="app-card">
+
+        <div class="attendance-empty-state">
+
+            <div class="attendance-empty-icon">
+                <i class="bi bi-door-open"></i>
+            </div>
+
+            <h2>
+                No hay asistencias registradas
+            </h2>
+
+            <p>
+                Registra la primera asistencia para comenzar
+                a llevar el control de acceso al gimnasio.
+            </p>
+
+
+            <a th:href="@{/asistencias/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Registrar asistencia
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGINACIÓN
+         ===================================================== -->
+
+    <div th:if="${asistencias.totalPages > 1}"
+         class="attendance-pagination">
+
+        <div class="attendance-pagination-info">
+
+            Página
+
+            <strong th:text="${asistencias.number + 1}">
+                1
+            </strong>
+
+            de
+
+            <strong th:text="${asistencias.totalPages}">
+                1
+            </strong>
+
+        </div>
+
+
+        <nav aria-label="Paginación de asistencias">
+
+            <ul class="pagination">
+
+                <!-- ANTERIOR -->
+
+                <li class="page-item"
+                    th:classappend="${asistencias.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/asistencias(
+                           page=${asistencias.number},
+                           size=${asistencias.size}
+                       )}">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+                </li>
+
+
+                <!-- PÁGINAS -->
+
+                <li class="page-item"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == asistencias.number + 1}
+                        ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/asistencias(
+                           page=${pageNumber},
+                           size=${asistencias.size}
+                       )}"
+                       th:text="${pageNumber}">
+                    </a>
+
+                </li>
+
+
+                <!-- SIGUIENTE -->
+
+                <li class="page-item"
+                    th:classappend="${asistencias.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/asistencias(
+                           page=${asistencias.number + 2},
+                           size=${asistencias.size}
+                       )}">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/asistencia.js}"></script>
+</th:block>
+
+</body>
+</html>

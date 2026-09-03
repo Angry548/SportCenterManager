@@ -41,6 +41,7 @@ public class PagoController {
     @Autowired
     private IMetodoPagoService metodoPagoService;
 
+
     @GetMapping
     public String index(
             Model model,
@@ -51,109 +52,215 @@ public class PagoController {
         int pageSize = size.orElse(5);
 
         Pageable pageable = PageRequest.of(currentPage, pageSize);
-        Page<Pago> pagos = pagoService.obtenerTodosPaginados(pageable);
 
-        model.addAttribute("pagos", pagos);
+        Page<Pago> pagos =
+                pagoService.obtenerTodosPaginados(pageable);
+
+        model.addAttribute(
+                "pagos",
+                pagos
+        );
 
         int totalPages = pagos.getTotalPages();
+
         if (totalPages > 0) {
             List<Integer> pageNumbers = IntStream
                     .rangeClosed(1, totalPages)
                     .boxed()
                     .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
+
+            model.addAttribute(
+                    "pageNumbers",
+                    pageNumbers
+            );
         }
 
         return "pago/index";
     }
 
     @GetMapping("/create")
-    public String create(@ModelAttribute("pago") Pago pago, Model model) {
-        pago.setNumeroComprobante(pagoService.generarNumeroComprobante());
+    public String create(
+            Pago pago,
+            Model model) {
+
+        pago.setNumeroComprobante(
+                pagoService.generarNumeroComprobante()
+        );
+
         cargarCatalogos(model);
+
         return "pago/create";
     }
 
     @PostMapping("/save")
     public String save(
-            @Valid @ModelAttribute("pago") Pago pago,
+            @Valid Pago pago,
             BindingResult result,
             Model model,
             RedirectAttributes attributes) {
 
         if (result.hasErrors()) {
+
             cargarCatalogos(model);
-            model.addAttribute("error", "Por favor revise los campos requeridos.");
+
+            model.addAttribute(
+                    "pago",
+                    pago
+            );
+
+            attributes.addFlashAttribute(
+                    "error",
+                    "No se pudo guardar debido a un error."
+            );
+
             return "pago/create";
         }
 
-        // Asigna metadatos automáticos en caso de ser un nuevo pago
         if (pago.getId() == null) {
-            pago.setFecha(LocalDateTime.now());
-            if (pago.getNumeroComprobante() == null || pago.getNumeroComprobante().isBlank()) {
-                pago.setNumeroComprobante(pagoService.generarNumeroComprobante());
+
+            pago.setFecha(
+                    LocalDateTime.now()
+            );
+
+            if (pago.getNumeroComprobante() == null ||
+                    pago.getNumeroComprobante().isBlank()) {
+
+                pago.setNumeroComprobante(
+                        pagoService.generarNumeroComprobante()
+                );
             }
         }
 
         pagoService.guardar(pago);
-        attributes.addFlashAttribute("msg", "Pago registrado correctamente");
+
+        attributes.addFlashAttribute(
+                "msg",
+                "Pago registrado correctamente"
+        );
 
         return "redirect:/pagos";
     }
 
     @GetMapping("/details/{id}")
-    public String details(@PathVariable("id") Integer id, Model model, RedirectAttributes attributes) {
-        Optional<Pago> pagoOpt = pagoService.obtenerPorId(id);
+    public String details(
+            @PathVariable("id") Integer id,
+            Model model) {
 
-        if (pagoOpt.isEmpty()) {
-            attributes.addFlashAttribute("error", "El pago solicitado no existe.");
-            return "redirect:/pagos";
-        }
+        Pago pago =
+                pagoService
+                        .obtenerPorId(id)
+                        .orElseThrow();
 
-        model.addAttribute("pago", pagoOpt.get());
+        model.addAttribute(
+                "pago",
+                pago
+        );
+
         return "pago/details";
     }
 
+    @GetMapping("/comprobante/{id}")
+    public ResponseEntity<byte[]> comprobante(
+            @PathVariable("id") Integer id) {
+
+        Pago pago =
+                pagoService
+                        .obtenerPorId(id)
+                        .orElseThrow();
+
+
+        byte[] pdf =
+                pagoService
+                        .generarComprobantePDF(id);
+
+
+        return ResponseEntity
+                .ok()
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"comprobante-"
+                                + pago.getNumeroComprobante()
+                                + ".pdf\""
+                )
+                .contentType(
+                        MediaType.APPLICATION_PDF
+                )
+                .body(pdf);
+    }
+
     @GetMapping("/remove/{id}")
-    public String remove(@PathVariable("id") Integer id, Model model, RedirectAttributes attributes) {
-        Optional<Pago> pagoOpt = pagoService.obtenerPorId(id);
+    public String remove(
+            @PathVariable("id") Integer id,
+            Model model) {
 
-        if (pagoOpt.isEmpty()) {
-            attributes.addFlashAttribute("error", "El pago solicitado no existe.");
-            return "redirect:/pagos";
-        }
+        Pago pago =
+                pagoService
+                        .obtenerPorId(id)
+                        .orElseThrow();
 
-        model.addAttribute("pago", pagoOpt.get());
+        model.addAttribute(
+                "pago",
+                pago
+        );
+
         return "pago/delete";
     }
 
     @PostMapping("/delete")
-    public String delete(@ModelAttribute Pago pago, RedirectAttributes attributes) {
-        pagoService.eliminar(pago.getId());
-        attributes.addFlashAttribute("msg", "Pago eliminado correctamente");
+    public String delete(
+            Pago pago,
+            RedirectAttributes attributes) {
+
+        pagoService.eliminar(
+                pago.getId()
+        );
+
+        attributes.addFlashAttribute(
+                "msg",
+                "Pago eliminado correctamente"
+        );
+
         return "redirect:/pagos";
     }
 
     @GetMapping("/pdf/{id}")
-    public ResponseEntity<byte[]> descargarComprobantePDF(@PathVariable("id") Integer id) {
-        Optional<Pago> pagoOpt = pagoService.obtenerPorId(id);
+    public ResponseEntity<byte[]> descargarComprobantePDF(
+            @PathVariable("id") Integer id) {
 
-        if (pagoOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        Pago pago =
+                pagoService
+                        .obtenerPorId(id)
+                        .orElseThrow();
 
-        byte[] pdfBytes = pagoService.generarComprobantePDF(id);
+        byte[] pdfBytes =
+                pagoService.generarComprobantePDF(id);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=comprobante_" + pagoOpt.get().getNumeroComprobante() + ".pdf")
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=comprobante_"
+                                + pago.getNumeroComprobante()
+                                + ".pdf"
+                )
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfBytes);
     }
 
-
     private void cargarCatalogos(Model model) {
-        model.addAttribute("clientes", clienteService.obtenerTodos());
-        model.addAttribute("membresiasClientes", membresiaClienteService.obtenerTodos());
-        model.addAttribute("metodosPago", metodoPagoService.obtenerTodos());
+
+        model.addAttribute(
+                "clientes",
+                clienteService.obtenerTodos()
+        );
+
+        model.addAttribute(
+                "membresiasClientes",
+                membresiaClienteService.obtenerTodos()
+        );
+
+        model.addAttribute(
+                "metodosPago",
+                metodoPagoService.obtenerTodos()
+        );
     }
 }

@@ -83,6 +83,40 @@ public class UsuarioController {
             Model model,
             RedirectAttributes attributes) {
 
+        // ==========================================
+        // VALIDAR CONTRASEÑA SOLO AL CREAR
+        // ==========================================
+
+        if (usuario.getId() == null) {
+
+            String password =
+                    usuario.getPasswordHash();
+
+            if (password == null ||
+                    password.isBlank()) {
+
+                result.rejectValue(
+                        "passwordHash",
+                        "passwordHash.required",
+                        "La contraseña es obligatoria"
+                );
+
+            } else if (password.length() < 6 ||
+                    password.length() > 72) {
+
+                result.rejectValue(
+                        "passwordHash",
+                        "passwordHash.size",
+                        "La contraseña debe tener entre 6 y 72 caracteres"
+                );
+            }
+        }
+
+
+        // ==========================================
+        // ERRORES DE VALIDACIÓN
+        // ==========================================
+
         if (result.hasErrors()) {
 
             model.addAttribute(
@@ -96,6 +130,11 @@ public class UsuarioController {
 
             return "usuario/create";
         }
+
+
+        // ==========================================
+        // GUARDAR
+        // ==========================================
 
         usuarioService.guardar(usuario);
 

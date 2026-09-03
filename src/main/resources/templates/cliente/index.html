@@ -21,7 +21,10 @@
 
 <div layout:fragment="content">
 
-    <!-- HEADER -->
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
     <div class="page-header">
 
@@ -54,7 +57,9 @@
     </div>
 
 
-    <!-- TOOLBAR -->
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
 
     <div th:if="${!clientes.isEmpty()}"
          class="client-toolbar">
@@ -66,7 +71,7 @@
             <input type="search"
                    id="clientSearch"
                    class="form-control"
-                   placeholder="Buscar por correo, DUI o teléfono..."
+                   placeholder="Buscar por nombre, correo, DUI o teléfono..."
                    autocomplete="off">
 
             <button type="button"
@@ -103,7 +108,9 @@
     </div>
 
 
-    <!-- LISTADO -->
+    <!-- =====================================================
+         LISTADO
+         ===================================================== -->
 
     <div th:if="${!clientes.isEmpty()}"
          class="app-card client-list-card">
@@ -139,13 +146,35 @@
                 <thead>
 
                 <tr>
-                    <th>Cliente</th>
-                    <th>DUI</th>
-                    <th>Teléfono</th>
-                    <th>Sexo</th>
-                    <th>Nacimiento</th>
-                    <th>Estado</th>
-                    <th class="text-end">Acciones</th>
+
+                    <th>
+                        Cliente
+                    </th>
+
+                    <th>
+                        DUI
+                    </th>
+
+                    <th>
+                        Teléfono
+                    </th>
+
+                    <th>
+                        Sexo
+                    </th>
+
+                    <th>
+                        Nacimiento
+                    </th>
+
+                    <th>
+                        Estado
+                    </th>
+
+                    <th class="text-end">
+                        Acciones
+                    </th>
+
                 </tr>
 
                 </thead>
@@ -156,12 +185,16 @@
                 <tr th:each="item : ${clientes}"
                     data-client-row
                     th:attr="
+                        data-client-name=${(item.nombres != null ? item.nombres : '') + ' ' + (item.apellidos != null ? item.apellidos : '')},
                         data-client-email=${item.usuario.email},
                         data-client-dui=${item.dui},
                         data-client-phone=${item.telefono}
                     ">
 
-                    <!-- CLIENTE -->
+
+                    <!-- =================================================
+                         CLIENTE
+                         ================================================= -->
 
                     <td>
 
@@ -176,13 +209,38 @@
 
                             <div class="client-cell-info">
 
-                                <strong th:text="${item.usuario.email}">
-                                    cliente@email.com
+
+                                <!-- NOMBRE COMPLETO -->
+
+                                <strong th:if="${item.nombres != null
+                                        or item.apellidos != null}">
+
+                                    <span th:text="${item.nombres}">
+                                        Nombre
+                                    </span>
+
+                                    <span th:text="${item.apellidos}">
+                                        Apellido
+                                    </span>
+
                                 </strong>
 
-                                <span>
-                                    Cliente #
-                                    <span th:text="${item.id}"></span>
+
+                                <!-- FALLBACK PARA CLIENTES ANTIGUOS -->
+
+                                <strong th:unless="${item.nombres != null
+                                        or item.apellidos != null}"
+                                        th:text="${item.usuario.email}">
+
+                                    cliente@email.com
+
+                                </strong>
+
+
+                                <!-- CORREO -->
+
+                                <span th:text="${item.usuario.email}">
+                                    cliente@email.com
                                 </span>
 
                             </div>
@@ -192,40 +250,51 @@
                     </td>
 
 
-                    <!-- DUI -->
+                    <!-- =================================================
+                         DUI
+                         ================================================= -->
 
                     <td>
 
                         <span class="client-data-value"
                               th:text="${item.dui}">
+                            00000000-0
                         </span>
 
                     </td>
 
 
-                    <!-- TELÉFONO -->
+                    <!-- =================================================
+                         TELÉFONO
+                         ================================================= -->
 
                     <td>
 
                         <span class="client-data-value"
                               th:text="${item.telefono}">
+                            0000-0000
                         </span>
 
                     </td>
 
 
-                    <!-- SEXO -->
+                    <!-- =================================================
+                         SEXO
+                         ================================================= -->
 
                     <td>
 
                         <span class="client-neutral-badge"
                               th:text="${item.sexo}">
+                            SEXO
                         </span>
 
                     </td>
 
 
-                    <!-- NACIMIENTO -->
+                    <!-- =================================================
+                         FECHA NACIMIENTO
+                         ================================================= -->
 
                     <td>
 
@@ -234,33 +303,46 @@
                                   item.fechaNacimiento,
                                   'dd/MM/yyyy'
                               )}">
+                            01/01/2000
                         </span>
 
                     </td>
 
 
-                    <!-- ESTADO -->
+                    <!-- =================================================
+                         ESTADO
+                         ================================================= -->
 
                     <td>
 
                         <span th:if="${item.usuario.activo}"
                               class="status-badge status-active">
+
                             Activo
+
                         </span>
+
 
                         <span th:unless="${item.usuario.activo}"
                               class="status-badge status-inactive">
+
                             Inactivo
+
                         </span>
 
                     </td>
 
 
-                    <!-- ACCIONES -->
+                    <!-- =================================================
+                         ACCIONES
+                         ================================================= -->
 
                     <td>
 
                         <div class="client-actions">
+
+
+                            <!-- VER -->
 
                             <a th:href="@{/clientes/details/{id}(id=${item.id})}"
                                class="client-action"
@@ -271,6 +353,8 @@
                             </a>
 
 
+                            <!-- EDITAR -->
+
                             <a th:href="@{/clientes/edit/{id}(id=${item.id})}"
                                class="client-action"
                                title="Editar cliente">
@@ -279,6 +363,8 @@
 
                             </a>
 
+
+                            <!-- ELIMINAR -->
 
                             <a th:href="@{/clientes/remove/{id}(id=${item.id})}"
                                class="client-action client-action-danger"
@@ -303,7 +389,9 @@
     </div>
 
 
-    <!-- SIN RESULTADOS -->
+    <!-- =====================================================
+         SIN RESULTADOS DE BÚSQUEDA
+         ===================================================== -->
 
     <div id="clientNoSearchResults"
          class="app-card"
@@ -312,16 +400,20 @@
         <div class="client-empty-state">
 
             <div class="client-empty-icon">
+
                 <i class="bi bi-search"></i>
+
             </div>
+
 
             <h2>
                 No encontramos coincidencias
             </h2>
 
+
             <p>
-                Intenta buscar utilizando otro correo,
-                DUI o número de teléfono.
+                Intenta buscar utilizando otro nombre,
+                correo, DUI o número de teléfono.
             </p>
 
         </div>
@@ -329,7 +421,9 @@
     </div>
 
 
-    <!-- SIN CLIENTES -->
+    <!-- =====================================================
+         SIN CLIENTES
+         ===================================================== -->
 
     <div th:if="${clientes.isEmpty()}"
          class="app-card">
@@ -337,17 +431,22 @@
         <div class="client-empty-state">
 
             <div class="client-empty-icon">
+
                 <i class="bi bi-people"></i>
+
             </div>
+
 
             <h2>
                 No hay clientes registrados
             </h2>
 
+
             <p>
                 Registra el primer cliente para comenzar
                 a administrar su información.
             </p>
+
 
             <a th:href="@{/clientes/create}"
                class="btn btn-primary">
@@ -362,7 +461,9 @@
     </div>
 
 
-    <!-- PAGINACIÓN -->
+    <!-- =====================================================
+         PAGINACIÓN
+         ===================================================== -->
 
     <div th:if="${clientes.totalPages > 1}"
          class="client-pagination">
@@ -387,6 +488,7 @@
         <nav aria-label="Paginación de clientes">
 
             <ul class="pagination">
+
 
                 <!-- ANTERIOR -->
 
@@ -449,6 +551,10 @@
 
 </div>
 
+
+<!-- =====================================================
+     SCRIPTS
+     ===================================================== -->
 
 <th:block layout:fragment="scripts">
 

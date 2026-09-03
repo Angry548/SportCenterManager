@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Eliminar asistencia</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/asistencia.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="attendance-breadcrumb">
+
+        <a th:href="@{/asistencias}">
+            Asistencias
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar asistencia
+        </span>
+
+    </nav>
+
+
+    <div class="attendance-delete-container">
+
+        <div class="app-card attendance-delete-card">
+
+            <div class="attendance-delete-icon">
+                <i class="bi bi-trash3"></i>
+            </div>
+
+
+            <span class="attendance-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar asistencia
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar el registro de asistencia de
+
+                <strong th:text="${asistencia.cliente.usuario.email}">
+                </strong>.
+
+                Confirma la operación antes de continuar.
+
+            </p>
+
+
+            <div class="attendance-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Se eliminará este registro del historial
+                    de asistencias del cliente.
+                </span>
+
+            </div>
+
+
+            <div class="attendance-delete-summary">
+
+                <div>
+
+                    <span>
+                        Cliente
+                    </span>
+
+                    <strong th:text="${asistencia.cliente.usuario.email}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resultado
+                    </span>
+
+                    <strong th:text="${asistencia.resultado}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Fecha
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        asistencia.fechaHora,
+                        'dd/MM/yyyy'
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Hora
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        asistencia.fechaHora,
+                        'HH:mm:ss'
+                    )}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/asistencias/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${asistencia.id}">
+
+
+                <div class="attendance-delete-actions">
+
+                    <a th:href="@{/asistencias/details/{id}(id=${asistencia.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+                        Eliminar asistencia
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/asistencia.js}"></script>
+</th:block>
+
+</body>
+</html>

@@ -21,4 +21,14 @@ public interface IAsistenciaService {
 
     boolean validarAcceso(Integer id);
 
+    List<Asistencia> obtenerUltimasPorCliente(
+            Integer clienteId
+    );
+
+    long contarPorCliente(
+            Integer clienteId
+    );
+
+    Asistencia registrarAccesoPorQr(String codigoQr);
+
 }

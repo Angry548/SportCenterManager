@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <body>
 
@@ -10,7 +11,7 @@
 
     <div class="topbar-left">
 
-        <!-- Botón móvil -->
+        <!-- BOTÓN MÓVIL -->
 
         <button type="button"
                 class="topbar-menu-button"
@@ -21,6 +22,8 @@
 
         </button>
 
+
+        <!-- CONTEXTO DEL SISTEMA -->
 
         <div class="topbar-brand-context">
 
@@ -40,6 +43,8 @@
     <div class="topbar-right">
 
 
+        <!-- NOTIFICACIONES -->
+
         <button type="button"
                 class="topbar-icon-button"
                 aria-label="Notificaciones">
@@ -52,21 +57,64 @@
         <div class="topbar-separator"></div>
 
 
+        <!-- USUARIO AUTENTICADO -->
+
         <div class="topbar-user">
 
+
+            <!-- =============================================
+                 AVATAR SEGÚN ROL
+                 ============================================= -->
+
             <div class="topbar-user-avatar">
-                AD
+
+                <span sec:authorize="hasAuthority('ADMIN')">
+                    AD
+                </span>
+
+                <span sec:authorize="hasAuthority('ENTRENADOR')">
+                    EN
+                </span>
+
+                <span sec:authorize="hasAuthority('CLIENTE')">
+                    CL
+                </span>
+
             </div>
 
 
+            <!-- =============================================
+                 INFORMACIÓN SEGÚN ROL
+                 ============================================= -->
+
             <div class="topbar-user-info">
 
-                <strong>
+
+                <!-- ADMIN -->
+
+                <strong sec:authorize="hasAuthority('ADMIN')">
                     Administrador
                 </strong>
 
-                <span>
-                    Administración
+
+                <!-- ENTRENADOR -->
+
+                <strong sec:authorize="hasAuthority('ENTRENADOR')">
+                    Entrenador
+                </strong>
+
+
+                <!-- CLIENTE -->
+
+                <strong sec:authorize="hasAuthority('CLIENTE')">
+                    Cliente
+                </strong>
+
+
+                <!-- EMAIL DEL USUARIO AUTENTICADO -->
+
+                <span sec:authentication="name">
+                    usuario@email.com
                 </span>
 
             </div>

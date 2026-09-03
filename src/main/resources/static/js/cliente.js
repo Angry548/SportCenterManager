@@ -61,6 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         clientRows.forEach(row => {
 
+            const name =
+                normalizeText(
+                    row.dataset.clientName
+                );
+
             const email =
                 normalizeText(
                     row.dataset.clientEmail
@@ -78,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             const matches =
+                name.includes(query) ||
                 email.includes(query) ||
                 dui.includes(query) ||
                 phone.includes(query);
@@ -94,7 +100,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
 
-        /* Actualizar contador */
+        /* =================================================
+           ACTUALIZAR CONTADOR
+           ================================================= */
 
         if (visibleCount) {
 
@@ -104,7 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* Mostrar / ocultar limpiar */
+        /* =================================================
+           MOSTRAR / OCULTAR BOTÓN LIMPIAR
+           ================================================= */
 
         if (clearButton) {
 
@@ -116,7 +126,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* Mostrar empty state */
+        /* =================================================
+           MOSTRAR ESTADO SIN RESULTADOS
+           ================================================= */
 
         if (noResults) {
 
@@ -130,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       EVENTS
+       EVENTOS
        ===================================================== */
 
     searchInput?.addEventListener(

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Nuevo método de pago</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/metodo-pago.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         BREADCRUMB
+         ===================================================== -->
+
+    <nav class="payment-method-breadcrumb">
+
+        <a th:href="@{/metodos-pago}">
+            Métodos de pago
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Nuevo método
+        </span>
+
+    </nav>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Nuevo método de pago
+            </h1>
+
+            <p class="page-description">
+                Registra una nueva forma de pago
+                disponible dentro del sistema.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM
+         ===================================================== -->
+
+    <form th:action="@{/metodos-pago/save}"
+          th:object="${metodoPago}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{activo}">
+
+
+        <div class="payment-method-form-container">
+
+            <div class="app-card">
+
+                <!-- HEADER CARD -->
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Información del método
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Define cómo se identificará
+                            esta forma de pago.
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-method-section-icon">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <section class="payment-method-form-section">
+
+                        <div class="payment-method-section-heading">
+
+                            <div class="payment-method-section-heading-icon">
+                                <i class="bi bi-credit-card"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Identificación
+                                </h3>
+
+                                <p>
+                                    El nombre debe permitir reconocer
+                                    fácilmente la forma de pago.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <label for="nombre"
+                               class="form-label">
+
+                            Nombre
+
+                        </label>
+
+
+                        <div class="payment-method-input-wrapper">
+
+                            <i class="bi bi-tag"></i>
+
+                            <input type="text"
+                                   id="nombre"
+                                   class="form-control payment-method-input-icon"
+                                   th:field="*{nombre}"
+                                   maxlength="40"
+                                   placeholder="Ej. Efectivo"
+                                   autocomplete="off"
+                                   data-payment-method-name>
+
+                        </div>
+
+
+                        <div class="payment-method-field-footer">
+
+                            <div class="payment-method-field-help">
+
+                                <i class="bi bi-info-circle"></i>
+
+                                El nombre debe ser único.
+
+                            </div>
+
+
+                            <div>
+
+                                <span id="paymentMethodCharacterCount">
+                                    0
+                                </span>
+
+                                / 40
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="text-danger mt-1"
+                             th:if="${#fields.hasErrors('nombre')}"
+                             th:errors="*{nombre}">
+                        </div>
+
+                    </section>
+
+
+                    <!-- PREVIEW -->
+
+                    <div class="payment-method-preview">
+
+                        <div class="payment-method-preview-icon">
+                            <i class="bi bi-credit-card-2-front"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Vista previa
+                            </span>
+
+                            <strong id="paymentMethodNamePreview">
+                                Nombre del método
+                            </strong>
+
+                        </div>
+
+
+                        <span class="status-badge status-active">
+                            Activo
+                        </span>
+
+                    </div>
+
+
+                    <!-- INFO -->
+
+                    <div class="payment-method-info-box">
+
+                        <i class="bi bi-toggle-on"></i>
+
+                        <div>
+
+                            <strong>
+                                Estado inicial
+                            </strong>
+
+                            <span>
+                                El método se creará con el estado
+                                definido por el modelo y posteriormente
+                                podrás activarlo o desactivarlo desde el listado.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="payment-method-form-footer">
+
+                    <a th:href="@{/metodos-pago}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+                        Guardar método
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/metodo-pago.js}"></script>
+</th:block>
+
+</body>
+</html>

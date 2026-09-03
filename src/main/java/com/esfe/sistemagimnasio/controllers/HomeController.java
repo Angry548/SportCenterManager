@@ -2,11 +2,18 @@ package com.esfe.sistemagimnasio.controllers;
 
 import com.esfe.sistemagimnasio.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import com.esfe.sistemagimnasio.models.Cliente;
+import com.esfe.sistemagimnasio.models.MembresiaCliente;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Controller
 public class HomeController {
@@ -44,6 +51,9 @@ public class HomeController {
     @Autowired
     private IEvaluacionFisicaService evaluacionFisicaService;
 
+    @Autowired
+    private IAsistenciaService asistenciaService;
+
 
     /*
      * Entrada principal de la aplicación.
@@ -53,112 +63,276 @@ public class HomeController {
         return "redirect:/home";
     }
 
+    @GetMapping("/acceso-denegado")
+    public String accesoDenegado() {
+        return "error/403";
+    }
+
 
     /*
      * Dashboard principal.
      */
     @GetMapping("/home")
-    public String home(Model model) {
+    public String home(
+            Model model,
+            Authentication authentication) {
 
         Pageable contador =
                 PageRequest.of(0, 1);
 
-
-        // ==========================================
-        // GESTIÓN
-        // ==========================================
-
-        model.addAttribute(
-                "totalClientes",
-                clienteService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
-
-        model.addAttribute(
-                "totalEntrenadores",
-                entrenadorService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
-
-        model.addAttribute(
-                "totalUsuarios",
-                usuarioService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
+        boolean esAdmin =
+                authentication
+                        .getAuthorities()
+                        .stream()
+                        .anyMatch(authority ->
+                                authority
+                                        .getAuthority()
+                                        .equals("ADMIN")
+                        );
 
 
-        // ==========================================
-        // ENTRENAMIENTO
-        // ==========================================
+        // =====================================================
+        // ADMIN
+        // =====================================================
 
-        model.addAttribute(
-                "totalRutinas",
-                rutinaService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
+        if (esAdmin) {
 
-        model.addAttribute(
-                "totalEjercicios",
-                ejercicioService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
+            model.addAttribute(
+                    "totalClientes",
+                    clienteService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
 
-        model.addAttribute(
-                "totalGruposMusculares",
-                grupoMuscularService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
+            model.addAttribute(
+                    "totalEntrenadores",
+                    entrenadorService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
 
-        model.addAttribute(
-                "totalRutinaEjercicios",
-                rutinaEjercicioService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
+            model.addAttribute(
+                    "totalUsuarios",
+                    usuarioService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
 
-        model.addAttribute(
-                "totalAsignaciones",
-                asignacionEntrenadorService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
+            model.addAttribute(
+                    "totalRutinas",
+                    rutinaService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+
+            model.addAttribute(
+                    "totalEjercicios",
+                    ejercicioService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+
+            model.addAttribute(
+                    "totalGruposMusculares",
+                    grupoMuscularService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+
+            model.addAttribute(
+                    "totalRutinaEjercicios",
+                    rutinaEjercicioService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+
+            model.addAttribute(
+                    "totalAsignaciones",
+                    asignacionEntrenadorService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+
+            model.addAttribute(
+                    "totalMembresias",
+                    membresiaClienteService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+
+            model.addAttribute(
+                    "totalTiposMembresia",
+                    tipoMembresiaService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+
+            model.addAttribute(
+                    "totalEvaluaciones",
+                    evaluacionFisicaService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+        }
 
 
-        // ==========================================
-        // MEMBRESÍAS
-        // ==========================================
+        // =====================================================
+        // ENTRENADOR
+        // =====================================================
 
-        model.addAttribute(
-                "totalMembresias",
-                membresiaClienteService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
+        else if (authentication
+                .getAuthorities()
+                .stream()
+                .anyMatch(authority ->
+                        authority
+                                .getAuthority()
+                                .equals("ENTRENADOR")
+                )) {
 
-        model.addAttribute(
-                "totalTiposMembresia",
-                tipoMembresiaService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
+            String email =
+                    authentication.getName();
 
 
-        // ==========================================
-        // SEGUIMIENTO
-        // ==========================================
+            // SOLO SUS RUTINAS
 
-        model.addAttribute(
-                "totalEvaluaciones",
-                evaluacionFisicaService
-                        .obtenerTodosPaginados(contador)
-                        .getTotalElements()
-        );
+            model.addAttribute(
+                    "totalRutinas",
+                    rutinaService
+                            .obtenerPorEntrenadorEmail(
+                                    email,
+                                    contador
+                            )
+                            .getTotalElements()
+            );
+
+
+            // SOLO SUS EVALUACIONES
+
+            model.addAttribute(
+                    "totalEvaluaciones",
+                    evaluacionFisicaService
+                            .obtenerPorEntrenadorEmail(
+                                    email,
+                                    contador
+                            )
+                            .getTotalElements()
+            );
+
+
+            /*
+             * Estos son catálogos generales,
+             * así que no necesitan filtrarse.
+             */
+
+            model.addAttribute(
+                    "totalEjercicios",
+                    ejercicioService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+
+            model.addAttribute(
+                    "totalGruposMusculares",
+                    grupoMuscularService
+                            .obtenerTodosPaginados(contador)
+                            .getTotalElements()
+            );
+        }
+
+        // =====================================================
+// CLIENTE
+// =====================================================
+
+        else if (authentication
+                .getAuthorities()
+                .stream()
+                .anyMatch(authority ->
+                        authority
+                                .getAuthority()
+                                .equals("CLIENTE")
+                )) {
+
+            String email =
+                    authentication.getName();
+
+
+            // ==========================================
+            // PERFIL DEL CLIENTE AUTENTICADO
+            // ==========================================
+
+            Cliente cliente =
+                    clienteService
+                            .obtenerPorUsuarioEmail(email)
+                            .orElseThrow();
+
+
+            model.addAttribute(
+                    "clienteActual",
+                    cliente
+            );
+
+
+            // ==========================================
+            // MEMBRESÍA VIGENTE
+            // ==========================================
+
+            Optional<MembresiaCliente> membresia =
+                    membresiaClienteService
+                            .obtenerMembresiaVigenteCliente(
+                                    cliente.getId()
+                            );
+
+
+            model.addAttribute(
+                    "membresiaActual",
+                    membresia.orElse(null)
+            );
+
+
+            model.addAttribute(
+                    "tieneMembresia",
+                    membresia.isPresent()
+            );
+
+
+            if (membresia.isPresent()) {
+
+                long diasRestantes =
+                        ChronoUnit.DAYS.between(
+                                LocalDate.now(),
+                                membresia
+                                        .get()
+                                        .getFechaVencimiento()
+                        );
+
+                model.addAttribute(
+                        "diasRestantes",
+                        Math.max(diasRestantes, 0)
+                );
+            }
+
+
+            // ==========================================
+            // ASISTENCIAS DEL CLIENTE
+            // ==========================================
+
+            model.addAttribute(
+                    "ultimasAsistencias",
+                    asistenciaService
+                            .obtenerUltimasPorCliente(
+                                    cliente.getId()
+                            )
+            );
+
+
+            model.addAttribute(
+                    "totalAsistenciasCliente",
+                    asistenciaService
+                            .contarPorCliente(
+                                    cliente.getId()
+                            )
+            );
+        }
 
 
         return "home/index";

@@ -51,4 +51,9 @@ public class EntrenadorService implements IEntrenadorService {
     public List<Cliente> obtenerClientesActivos(Integer id) {
         return asignacionEntrenadorRepository.obtenerClientesActivos(id);
     }
+
+    @Override
+    public boolean existePorUsuario(Integer usuarioId) {
+        return entrenadorRepository.existsByUsuario_Id(usuarioId);
+    }
 }

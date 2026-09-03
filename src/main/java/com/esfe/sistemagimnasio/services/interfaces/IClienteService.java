@@ -24,5 +24,13 @@ public interface IClienteService {
     boolean tieneMembresiaVigente(Integer id);
 
     boolean tieneEntrenadorActivo(Integer id);
+
+    boolean existePorUsuario(Integer usuarioId);
+
+    boolean existePorDui(String dui);
+
+    Optional<Cliente> obtenerPorUsuarioEmail(String email);
+
+    Optional<Cliente> obtenerPorCodigoQr(String codigoQr);
 }
 

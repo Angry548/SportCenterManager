@@ -100,24 +100,21 @@ body {
 }
 
 
+html {
+    font-size: 18px;
+}
+
+
 body {
+    font-family: 'Inter', sans-serif;
 
-    font-family:
-            "Inter",
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
+    color: var(--text-primary);
 
-    color:
-            var(--text-primary);
+    background: var(--app-background);
 
-    background:
-            var(--app-background);
+    -webkit-font-smoothing: antialiased;
 
-    -webkit-font-smoothing:
-            antialiased;
-
+    font-size: 1rem;
 }
 
 
@@ -1351,4 +1348,181 @@ body {
 
     }
 
+}
+
+.sidebar-logout-form {
+    margin: 0;
+    width: 100%;
+}
+
+.sidebar-logout-button {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   ERROR - REGISTRO RELACIONADO
+   ========================================================= */
+
+.relation-error-page {
+    min-height: calc(100vh - var(--topbar-height) - 3rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.relation-error-card {
+    width: 100%;
+    max-width: 650px;
+    text-align: center;
+}
+
+.relation-error-card .app-card-body {
+    padding: 3rem;
+}
+
+.relation-error-icon {
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 1.5rem;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--danger-soft);
+    color: var(--danger);
+    font-size: 2.3rem;
+}
+
+.relation-error-code {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--danger);
+}
+
+.relation-error-card h1 {
+    margin-bottom: 0.75rem;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.relation-error-message {
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.relation-error-info {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    text-align: left;
+    background: var(--surface);
+}
+
+.relation-error-info-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-size: 1.1rem;
+}
+
+.relation-error-info strong,
+.relation-error-info span {
+    display: block;
+}
+
+.relation-error-info strong {
+    margin-bottom: 0.3rem;
+    color: var(--text-primary);
+}
+
+.relation-error-info span {
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.relation-error-warning {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 1.15rem;
+    border-radius: 14px;
+    background: var(--color-primary-soft);
+    color: var(--text-secondary);
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.relation-error-warning i {
+    color: var(--color-primary);
+    font-size: 1.1rem;
+}
+
+.relation-error-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 576px) {
+
+    .relation-error-card .app-card-body {
+        padding: 2rem 1.25rem;
+    }
+
+    .relation-error-actions {
+        flex-direction: column-reverse;
+    }
+
+    .relation-error-actions .btn {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   ESCALA DE TABLAS
+   ========================================================= */
+
+.table {
+    font-size: 0.65rem;
+}
+
+.table > :not(caption) > * > * {
+    font-size: 0.65rem;
+    vertical-align: middle;
+}
+
+.table th {
+    font-weight: 650;
+}
+
+.table td small,
+.table td span {
+    font-size: 0.65rem;
+}
+
+.table .btn {
+    font-size: 0.65rem;
 }

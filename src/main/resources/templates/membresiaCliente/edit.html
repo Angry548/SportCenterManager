@@ -183,7 +183,7 @@
 
                                     <option th:each="tipo : ${tiposMembresia}"
                                             th:value="${tipo.id}"
-                                            th:text="|Tipo de membresía #${tipo.id}|">
+                                            th:text="${tipo.nombre}">
                                     </option>
 
                                 </select>

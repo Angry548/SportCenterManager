@@ -21,4 +21,8 @@ public interface IMembresiaClienteService {
     boolean estaVigente(Integer id);
 
     int diasRestantes(Integer id);
+
+    Optional<MembresiaCliente> obtenerMembresiaVigenteCliente(
+            Integer clienteId
+    );
 }

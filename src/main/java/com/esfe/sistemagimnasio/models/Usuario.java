@@ -23,8 +23,7 @@ public class Usuario {
     @Column (name = "email", nullable = false, length = 100,unique = true)
     private String email;
 
-    @NotBlank(message = "El password es obligatorio")
-    @Size(min = 60, max = 60, message = "El hash de password debe tener 60 caracteres")
+
     @Column(name = "password_hash", nullable = false, length = 60)
     private String passwordHash;
 

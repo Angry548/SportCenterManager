@@ -74,4 +74,29 @@ public class RutinaService implements IRutinaService {
     public List<RutinaEjercicio> listarEjercicios(Integer rutinaId) {
         return rutinaEjercicioRepository.findByRutinaId(rutinaId);
     }
+
+    @Override
+    public Page<Rutina> obtenerPorEntrenadorEmail(
+            String email,
+            Pageable pageable) {
+
+        return rutinaRepository
+                .findByEntrenador_Usuario_Email(
+                        email,
+                        pageable
+                );
+    }
+
+
+    @Override
+    public Optional<Rutina> obtenerPorIdYEntrenadorEmail(
+            Integer id,
+            String email) {
+
+        return rutinaRepository
+                .findByIdAndEntrenador_Usuario_Email(
+                        id,
+                        email
+                );
+    }
 }

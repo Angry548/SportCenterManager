@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Acceso por QR</title>
+
+    <th:block layout:fragment="styles">
+
+        <style>
+
+            .qr-access-layout {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) 360px;
+                gap: 1.5rem;
+            }
+
+            .qr-reader-container {
+                max-width: 620px;
+                margin: 0 auto;
+                padding: 1rem;
+            }
+
+            #qr-reader {
+                width: 100%;
+                overflow: hidden;
+                border-radius: var(--radius-lg);
+            }
+
+            .qr-access-icon {
+                width: 60px;
+                height: 60px;
+                margin: 0 auto 1rem;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--color-primary-soft);
+                color: var(--color-primary);
+                font-size: 1.6rem;
+            }
+
+            .qr-manual-form {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            @media (max-width: 900px) {
+
+                .qr-access-layout {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+        </style>
+
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <span class="dashboard-eyebrow">
+                CONTROL DE ACCESO
+            </span>
+
+            <h1 class="page-title">
+                Escanear código QR
+            </h1>
+
+            <p class="page-description">
+                Escanea el código del cliente para validar
+                su membresía y registrar automáticamente
+                su ingreso al gimnasio.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="qr-access-layout">
+
+
+        <!-- =================================================
+             CÁMARA
+             ================================================= -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Escáner
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Coloca el código QR frente a la cámara.
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card-icon">
+                    <i class="bi bi-qr-code-scan"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="qr-reader-container">
+
+                    <div id="qr-reader"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             REGISTRO MANUAL / INFORMACIÓN
+             ================================================= -->
+
+        <aside class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Código de acceso
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        También puedes ingresar el código manualmente.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="qr-access-icon">
+                    <i class="bi bi-qr-code"></i>
+                </div>
+
+
+                <form th:action="@{/asistencias/qr/registrar}"
+                      method="post"
+                      id="qrAccessForm"
+                      class="qr-manual-form">
+
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+
+
+                    <div>
+
+                        <label for="codigoQr"
+                               class="form-label">
+
+                            Código QR
+
+                        </label>
+
+
+                        <input type="text"
+                               id="codigoQr"
+                               name="codigoQr"
+                               class="form-control"
+                               placeholder="Código del cliente"
+                               required>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-door-open me-1"></i>
+                        Validar acceso
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script src="https://unpkg.com/html5-qrcode"
+            type="text/javascript">
+    </script>
+
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const input =
+                    document.getElementById("codigoQr");
+
+                const form =
+                    document.getElementById("qrAccessForm");
+
+                let procesando = false;
+
+
+                function onScanSuccess(decodedText) {
+
+                    if (procesando) {
+                        return;
+                    }
+
+                    procesando = true;
+
+                    input.value =
+                        decodedText;
+
+                    form.submit();
+                }
+
+
+                const scanner =
+                    new Html5QrcodeScanner(
+                        "qr-reader",
+                        {
+                            fps: 10,
+                            qrbox: {
+                                width: 250,
+                                height: 250
+                            }
+                        },
+                        false
+                    );
+
+
+                scanner.render(
+                    onScanSuccess
+                );
+            }
+        );
+
+    </script>
+
+</th:block>
+
+</body>
+</html>
