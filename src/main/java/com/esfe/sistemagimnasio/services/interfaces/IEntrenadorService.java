@@ -21,4 +21,6 @@ public interface IEntrenadorService {
     Page<Entrenador> obtenerTodosPaginados(Pageable pageable);
 
     List<Cliente> obtenerClientesActivos(Integer id);
+
+    boolean existePorUsuario(Integer usuarioId);
 }

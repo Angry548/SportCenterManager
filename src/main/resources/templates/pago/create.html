@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Registrar pago</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/pago.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         BREADCRUMB
+         ===================================================== -->
+
+    <nav class="payment-breadcrumb">
+
+        <a th:href="@{/pagos}">
+            Pagos
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Registrar pago
+        </span>
+
+    </nav>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Registrar pago
+            </h1>
+
+            <p class="page-description">
+                Registra el pago de una membresía
+                y genera su comprobante correspondiente.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORMULARIO
+         ===================================================== -->
+
+    <form th:action="@{/pagos/save}"
+          th:object="${pago}"
+          method="post">
+
+        <div class="payment-form-layout">
+
+            <!-- =================================================
+                 FORMULARIO PRINCIPAL
+                 ================================================= -->
+
+            <div class="app-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Información del pago
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Selecciona la membresía, método
+                            y monto de la transacción.
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-section-icon">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <!-- =================================================
+                         MEMBRESÍA
+                         ================================================= -->
+
+                    <section class="payment-form-section">
+
+                        <div class="payment-section-heading">
+
+                            <div class="payment-section-heading-icon">
+                                <i class="bi bi-credit-card-2-front"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Membresía
+                                </h3>
+
+                                <p>
+                                    Selecciona la membresía
+                                    a la que corresponde este pago.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <label for="membresiaCliente"
+                               class="form-label">
+
+                            Membresía del cliente
+
+                        </label>
+
+
+                        <select id="membresiaCliente"
+                                class="form-select"
+                                th:field="*{membresiaCliente.id}"
+                                data-payment-membership>
+
+                            <option value="">
+                                Seleccione una membresía
+                            </option>
+
+
+                            <option th:each="membresia : ${membresiasClientes}"
+                                    th:value="${membresia.id}"
+                                    th:text="|${membresia.cliente.usuario.email} · ${membresia.tipoMembresia.nombre}|"
+                                    th:attr="
+                                        data-client=${membresia.cliente.usuario.email},
+                                        data-type=${membresia.tipoMembresia.nombre},
+                                        data-price=${membresia.tipoMembresia.precio},
+                                        data-expiration=${membresia.fechaVencimiento}
+                                    ">
+                            </option>
+
+                        </select>
+
+
+                        <div class="payment-field-help">
+
+                            <i class="bi bi-info-circle"></i>
+
+                            La membresía seleccionada determina
+                            el cliente asociado al pago.
+
+                        </div>
+
+
+                        <div class="text-danger mt-1"
+                             th:if="${#fields.hasErrors('membresiaCliente')}"
+                             th:errors="*{membresiaCliente}">
+                        </div>
+
+
+                        <!-- PREVIEW MEMBRESÍA -->
+
+                        <div class="payment-membership-preview"
+                             id="paymentMembershipPreview">
+
+                            <div class="payment-membership-preview-icon">
+                                <i class="bi bi-person-vcard"></i>
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Cliente
+                                </span>
+
+                                <strong id="paymentClientPreview">
+                                    Selecciona una membresía
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Tipo
+                                </span>
+
+                                <strong id="paymentTypePreview">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Precio del plan
+                                </span>
+
+                                <strong id="paymentPlanPricePreview">
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         PAGO
+                         ================================================= -->
+
+                    <section class="payment-form-section">
+
+                        <div class="payment-section-heading">
+
+                            <div class="payment-section-heading-icon">
+                                <i class="bi bi-wallet2"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Datos de pago
+                                </h3>
+
+                                <p>
+                                    Define el método utilizado
+                                    y el monto recibido.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <!-- MÉTODO -->
+
+                            <div class="col-md-6">
+
+                                <label for="metodoPago"
+                                       class="form-label">
+
+                                    Método de pago
+
+                                </label>
+
+
+                                <select id="metodoPago"
+                                        class="form-select"
+                                        th:field="*{metodoPago.id}"
+                                        data-payment-method>
+
+                                    <option value="">
+                                        Seleccione un método
+                                    </option>
+
+
+                                    <option th:each="metodo : ${metodosPago}"
+                                            th:value="${metodo.id}"
+                                            th:text="${metodo.nombre}"
+                                            th:attr="
+                                                data-name=${metodo.nombre},
+                                                data-active=${metodo.activo}
+                                            ">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="payment-field-help">
+
+                                    <i class="bi bi-wallet2"></i>
+                                    Forma utilizada para realizar el pago.
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('metodoPago')}"
+                                     th:errors="*{metodoPago}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- MONTO -->
+
+                            <div class="col-md-6">
+
+                                <label for="monto"
+                                       class="form-label">
+
+                                    Monto
+
+                                </label>
+
+
+                                <div class="payment-amount-input">
+
+                                    <i class="bi bi-cash"></i>
+
+                                    <input type="number"
+                                           id="monto"
+                                           class="form-control"
+                                           th:field="*{monto}"
+                                           min="0.01"
+                                           step="0.01"
+                                           placeholder="0.00"
+                                           data-payment-amount>
+
+                                </div>
+
+
+                                <div class="payment-field-help">
+
+                                    <i class="bi bi-info-circle"></i>
+                                    Debe ser mayor que cero y admite dos decimales.
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('monto')}"
+                                     th:errors="*{monto}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         COMPROBANTE
+                         ================================================= -->
+
+                    <section class="payment-form-section">
+
+                        <div class="payment-section-heading">
+
+                            <div class="payment-section-heading-icon">
+                                <i class="bi bi-receipt"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Comprobante
+                                </h3>
+
+                                <p>
+                                    El número fue generado automáticamente
+                                    por el sistema.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <label for="numeroComprobante"
+                               class="form-label">
+
+                            Número de comprobante
+
+                        </label>
+
+
+                        <div class="payment-receipt-input">
+
+                            <i class="bi bi-receipt-cutoff"></i>
+
+                            <input type="text"
+                                   id="numeroComprobante"
+                                   class="form-control"
+                                   th:field="*{numeroComprobante}"
+                                   maxlength="20"
+                                   readonly>
+
+                            <span>
+                                Automático
+                            </span>
+
+                        </div>
+
+
+                        <div class="text-danger mt-1"
+                             th:if="${#fields.hasErrors('numeroComprobante')}"
+                             th:errors="*{numeroComprobante}">
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="payment-form-footer">
+
+                    <a th:href="@{/pagos}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+                        Registrar pago
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RESUMEN
+                 ================================================= -->
+
+            <aside class="app-card payment-summary-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Resumen
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Vista previa de la transacción.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <div class="payment-summary-receipt">
+
+                        <div class="payment-summary-logo">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+
+
+                        <span>
+                            Comprobante
+                        </span>
+
+                        <strong th:text="${pago.numeroComprobante}">
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-summary-list">
+
+                        <div>
+
+                            <span>
+                                Cliente
+                            </span>
+
+                            <strong id="paymentSummaryClient">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Membresía
+                            </span>
+
+                            <strong id="paymentSummaryMembership">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Método
+                            </span>
+
+                            <strong id="paymentSummaryMethod">
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-summary-total">
+
+                        <span>
+                            Total registrado
+                        </span>
+
+                        <strong id="paymentSummaryAmount">
+                            0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-summary-note">
+
+                        <i class="bi bi-clock"></i>
+
+                        <span>
+                            La fecha y hora se registrarán
+                            automáticamente al guardar.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/pago.js}"></script>
+</th:block>
+
+</body>
+</html>

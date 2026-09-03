@@ -20,6 +20,12 @@ public class Cliente {
     @JoinColumn(name = "usuario_id", nullable = false, unique = true, foreignKey = @ForeignKey(name = "FK_cliente_usuario"))
     private Usuario usuario;
 
+    @Column(name = "nombres", length = 80)
+    private String nombres;
+
+    @Column(name = "apellidos", length = 80)
+    private String apellidos;
+
     @NotBlank(message = "El DUI es obligatorio")
     @Pattern(regexp = "\\d{8}-\\d{1}", message = "El DUI debe tener el formato 00000000-0")
     @Column(name = "dui", nullable = false, length = 10, unique = true)
@@ -44,6 +50,9 @@ public class Cliente {
     @Size(max = 200, message = "La direccion no puede exceder 200 caracteres")
     @Column(name = "direccion", nullable = false, length = 200)
     private String direccion;
+
+    @Column(name = "codigo_qr", nullable = false, unique = true, length = 36)
+    private String codigoQr;
 
     //Encapsulamiento
     public Integer getId() {
@@ -102,7 +111,29 @@ public class Cliente {
         this.direccion = direccion;
     }
 
+    public String getNombres() {
+        return nombres;
+    }
 
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getCodigoQr() {
+        return codigoQr;
+    }
+
+    public void setCodigoQr(String codigoQr) {
+        this.codigoQr = codigoQr;
+    }
 }
 
 

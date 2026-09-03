@@ -7,5 +7,11 @@ import java.util.Optional;
 
 public interface IClienteRepository extends JpaRepository<Cliente, Integer> {
 
+    boolean existsByUsuario_Id(Integer usuarioId);
 
+    boolean existsByDui(String dui);
+
+    Optional<Cliente> findByUsuario_Email(String email);
+
+    Optional<Cliente> findByCodigoQr(String codigoQr);
 }

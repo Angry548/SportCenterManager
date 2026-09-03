@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle de asignación</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/asignacion-entrenador.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="assignment-breadcrumb">
+
+        <a th:href="@{/asignaciones-entrenador}">
+            Asignaciones
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Asignación #
+            <span th:text="${asignacionEntrenador.id}"></span>
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle de asignación
+            </h1>
+
+            <p class="page-description">
+                Consulta la relación actual entre cliente
+                y entrenador, junto con su periodo de vigencia.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/asignaciones-entrenador}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/asignaciones-entrenador/edit/{id}(id=${asignacionEntrenador.id})}"
+               class="btn btn-light">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar
+
+            </a>
+
+
+            <a th:if="${activa}"
+               th:href="@{/asignaciones-entrenador/finalizar/{id}(id=${asignacionEntrenador.id})}"
+               class="btn btn-primary"
+               data-finalize-assignment>
+
+                <i class="bi bi-check2-circle me-1"></i>
+                Finalizar asignación
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="assignment-profile">
+
+        <div class="assignment-profile-main">
+
+            <!-- CLIENTE -->
+
+            <div class="assignment-profile-person">
+
+                <div class="assignment-profile-client-avatar">
+                    <i class="bi bi-person"></i>
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Cliente
+                    </span>
+
+                    <h2 th:text="${asignacionEntrenador.cliente.usuario.email}">
+                        cliente@email.com
+                    </h2>
+
+                    <small>
+                        Cliente #
+                        <span th:text="${asignacionEntrenador.cliente.id}">
+                        </span>
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONECTOR -->
+
+            <div class="assignment-connection">
+
+                <span class="assignment-connection-line"></span>
+
+                <div class="assignment-connection-icon">
+                    <i class="bi bi-arrow-left-right"></i>
+                </div>
+
+                <span class="assignment-connection-line"></span>
+
+            </div>
+
+
+            <!-- ENTRENADOR -->
+
+            <div class="assignment-profile-person">
+
+                <div class="assignment-profile-trainer-avatar">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Entrenador
+                    </span>
+
+                    <h2 th:text="${asignacionEntrenador.entrenador.usuario.email}">
+                        entrenador@email.com
+                    </h2>
+
+                    <small th:text="${asignacionEntrenador.entrenador.especialidad}">
+                        Especialidad
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ESTADO -->
+
+        <div class="assignment-profile-status"
+             th:classappend="${activa}
+                 ? 'assignment-profile-status-active'
+                 : 'assignment-profile-status-finished'">
+
+            <div class="assignment-profile-status-icon">
+
+                <i th:class="${activa}
+                    ? 'bi bi-check-circle'
+                    : 'bi bi-archive'">
+                </i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Estado
+                </span>
+
+                <strong th:text="${activa
+                    ? 'Asignación activa'
+                    : 'Asignación finalizada'}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DETALLES
+         ===================================================== -->
+
+    <div class="assignment-details-layout">
+
+
+        <!-- VIGENCIA -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Vigencia
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Periodo registrado para esta asignación.
+                    </div>
+
+                </div>
+
+
+                <div class="assignment-section-icon">
+                    <i class="bi bi-calendar-range"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="assignment-timeline">
+
+
+                    <!-- INICIO -->
+
+                    <div class="assignment-timeline-item">
+
+                        <div class="assignment-timeline-marker active">
+                            <i class="bi bi-check"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Fecha de asignación
+                            </span>
+
+                            <strong th:text="${#temporals.format(
+                                asignacionEntrenador.fechaAsignacion,
+                                'dd/MM/yyyy'
+                            )}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="assignment-timeline-line"></div>
+
+
+                    <!-- FIN -->
+
+                    <div class="assignment-timeline-item">
+
+                        <div class="assignment-timeline-marker"
+                             th:classappend="${!activa} ? 'active'">
+
+                            <i th:class="${activa}
+                                ? 'bi bi-clock'
+                                : 'bi bi-check'">
+                            </i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Fecha de finalización
+                            </span>
+
+                            <strong th:text="${asignacionEntrenador.fechaFin != null
+                                ? #temporals.format(
+                                    asignacionEntrenador.fechaFin,
+                                    'dd/MM/yyyy'
+                                  )
+                                : 'Pendiente'}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RESUMEN -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Resumen
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Información general de la relación.
+                    </div>
+
+                </div>
+
+
+                <div class="assignment-section-icon">
+                    <i class="bi bi-info-circle"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="assignment-property">
+
+                    <span>
+                        ID
+                    </span>
+
+                    <strong th:text="${asignacionEntrenador.id}">
+                    </strong>
+
+                </div>
+
+
+                <div class="assignment-property">
+
+                    <span>
+                        Estado
+                    </span>
+
+                    <span th:if="${activa}"
+                          class="status-badge status-active">
+
+                        Activa
+
+                    </span>
+
+
+                    <span th:unless="${activa}"
+                          class="status-badge status-inactive">
+
+                        Finalizada
+
+                    </span>
+
+                </div>
+
+
+                <div class="assignment-property">
+
+                    <span>
+                        Especialidad
+                    </span>
+
+                    <strong th:text="${asignacionEntrenador.entrenador.especialidad}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- =====================================================
+         PERSONAS
+         ===================================================== -->
+
+    <div class="assignment-persons-grid">
+
+
+        <!-- CLIENTE -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Cliente
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Persona que recibe el acompañamiento.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="assignment-person-summary">
+
+                    <div class="assignment-client-avatar large">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Correo electrónico
+                        </span>
+
+                        <strong th:text="${asignacionEntrenador.cliente.usuario.email}">
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="assignment-property">
+
+                    <span>DUI</span>
+
+                    <strong th:text="${asignacionEntrenador.cliente.dui}">
+                    </strong>
+
+                </div>
+
+
+                <div class="assignment-property">
+
+                    <span>Teléfono</span>
+
+                    <strong th:text="${asignacionEntrenador.cliente.telefono}">
+                    </strong>
+
+                </div>
+
+
+                <a th:href="@{/clientes/details/{id}(id=${asignacionEntrenador.cliente.id})}"
+                   class="assignment-profile-link">
+
+                    Ver perfil del cliente
+
+                    <i class="bi bi-arrow-up-right"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- ENTRENADOR -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Entrenador
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Profesional responsable del seguimiento.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="assignment-person-summary">
+
+                    <div class="assignment-trainer-avatar large">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Correo electrónico
+                        </span>
+
+                        <strong th:text="${asignacionEntrenador.entrenador.usuario.email}">
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="assignment-property">
+
+                    <span>Especialidad</span>
+
+                    <strong th:text="${asignacionEntrenador.entrenador.especialidad}">
+                    </strong>
+
+                </div>
+
+
+                <div class="assignment-property">
+
+                    <span>Teléfono</span>
+
+                    <strong th:text="${asignacionEntrenador.entrenador.telefono}">
+                    </strong>
+
+                </div>
+
+
+                <a th:href="@{/entrenadores/details/{id}(id=${asignacionEntrenador.entrenador.id})}"
+                   class="assignment-profile-link">
+
+                    Ver perfil del entrenador
+
+                    <i class="bi bi-arrow-up-right"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+
+    <script th:src="@{/js/asignacion-entrenador.js}"></script>
+
+</th:block>
+
+</body>
+</html>

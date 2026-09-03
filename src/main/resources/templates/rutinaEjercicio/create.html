@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title th:text="${rutinaEjercicio.id != null}
+        ? 'Corregir ejercicio de rutina'
+        : 'Agregar ejercicio a rutina'">
+        Agregar ejercicio a rutina
+    </title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/rutina-ejercicio.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="routine-exercise-breadcrumb">
+
+        <a th:href="@{/rutina-ejercicios}">
+            Rutina - ejercicios
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span th:text="${rutinaEjercicio.id != null}
+            ? 'Corregir configuración'
+            : 'Nueva asignación'">
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title"
+                th:text="${rutinaEjercicio.id != null}
+                    ? 'Corregir configuración'
+                    : 'Agregar ejercicio a rutina'">
+            </h1>
+
+            <p class="page-description">
+                Selecciona una rutina y configura cómo deberá
+                ejecutarse el ejercicio dentro del entrenamiento.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <form th:action="@{/rutina-ejercicios/save}"
+          th:object="${rutinaEjercicio}"
+          method="post">
+
+        <!-- Conserva el ID si esta vista viene de un error de edición -->
+        <input th:if="${rutinaEjercicio.id != null}"
+               type="hidden"
+               th:field="*{id}">
+
+
+        <div class="routine-exercise-form-container">
+
+            <div class="app-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Configuración del ejercicio
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Define la relación y los parámetros
+                            que tendrá dentro de la rutina.
+                        </div>
+
+                    </div>
+
+
+                    <div class="routine-exercise-section-icon">
+                        <i class="bi bi-sliders2"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <!-- =================================================
+                         ASIGNACIÓN
+                         ================================================= -->
+
+                    <section class="routine-exercise-form-section">
+
+                        <div class="routine-exercise-section-heading">
+
+                            <div class="routine-exercise-section-heading-icon">
+                                <i class="bi bi-link-45deg"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Asignación
+                                </h3>
+
+                                <p>
+                                    Selecciona la rutina y el ejercicio
+                                    que deseas configurar.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <!-- RUTINA -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label"
+                                       for="rutina">
+
+                                    Rutina
+
+                                </label>
+
+
+                                <select id="rutina"
+                                        class="form-select"
+                                        th:field="*{rutina.id}">
+
+                                    <option value="">
+                                        Seleccione una rutina
+                                    </option>
+
+
+                                    <option th:each="rutina : ${rutinas}"
+                                            th:value="${rutina.id}"
+                                            th:text="${rutina.nombre}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="routine-exercise-field-help">
+
+                                    <i class="bi bi-journal-check"></i>
+                                    Plan donde será utilizado el ejercicio.
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('rutina')}"
+                                     th:errors="*{rutina}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- EJERCICIO -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label"
+                                       for="ejercicio">
+
+                                    Ejercicio
+
+                                </label>
+
+
+                                <select id="ejercicio"
+                                        class="form-select"
+                                        th:field="*{ejercicio.id}">
+
+                                    <option value="">
+                                        Seleccione un ejercicio
+                                    </option>
+
+
+                                    <option th:each="ejercicio : ${ejercicios}"
+                                            th:value="${ejercicio.id}"
+                                            th:text="${ejercicio.nombre
+                                                + ' · '
+                                                + ejercicio.grupoMuscular.nombre}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="routine-exercise-field-help">
+
+                                    <i class="bi bi-activity"></i>
+                                    Movimiento que formará parte de la rutina.
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('ejercicio')}"
+                                     th:errors="*{ejercicio}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         CONFIGURACIÓN
+                         ================================================= -->
+
+                    <section class="routine-exercise-form-section">
+
+                        <div class="routine-exercise-section-heading">
+
+                            <div class="routine-exercise-section-heading-icon">
+                                <i class="bi bi-bar-chart-steps"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Parámetros de entrenamiento
+                                </h3>
+
+                                <p>
+                                    Define el volumen de trabajo y
+                                    el descanso entre series.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <!-- SERIES -->
+
+                            <div class="col-md-4">
+
+                                <label class="form-label"
+                                       for="series">
+
+                                    Series
+
+                                </label>
+
+
+                                <div class="routine-exercise-number-input">
+
+                                    <input type="number"
+                                           id="series"
+                                           class="form-control"
+                                           th:field="*{series}"
+                                           min="1"
+                                           placeholder="3"
+                                           data-routine-series>
+
+                                    <span>
+                                        series
+                                    </span>
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('series')}"
+                                     th:errors="*{series}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- REPETICIONES -->
+
+                            <div class="col-md-4">
+
+                                <label class="form-label"
+                                       for="repeticiones">
+
+                                    Repeticiones
+
+                                </label>
+
+
+                                <div class="routine-exercise-number-input">
+
+                                    <input type="number"
+                                           id="repeticiones"
+                                           class="form-control"
+                                           th:field="*{repeticiones}"
+                                           min="1"
+                                           placeholder="12"
+                                           data-routine-repetitions>
+
+                                    <span>
+                                        reps
+                                    </span>
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('repeticiones')}"
+                                     th:errors="*{repeticiones}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- DESCANSO -->
+
+                            <div class="col-md-4">
+
+                                <label class="form-label"
+                                       for="descansoSegundos">
+
+                                    Descanso
+
+                                </label>
+
+
+                                <div class="routine-exercise-number-input">
+
+                                    <input type="number"
+                                           id="descansoSegundos"
+                                           class="form-control"
+                                           th:field="*{descansoSegundos}"
+                                           min="0"
+                                           placeholder="60"
+                                           data-routine-rest>
+
+                                    <span>
+                                        seg
+                                    </span>
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('descansoSegundos')}"
+                                     th:errors="*{descansoSegundos}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PREVIEW -->
+
+                        <div class="routine-exercise-workout-preview">
+
+                            <div class="routine-exercise-workout-preview-icon">
+                                <i class="bi bi-lightning-charge"></i>
+                            </div>
+
+
+                            <div class="routine-exercise-workout-stat">
+
+                                <span>
+                                    Volumen
+                                </span>
+
+                                <strong id="routineTotalRepetitions">
+                                    —
+                                </strong>
+
+                                <small>
+                                    repeticiones totales
+                                </small>
+
+                            </div>
+
+
+                            <div class="routine-exercise-preview-divider"></div>
+
+
+                            <div class="routine-exercise-workout-stat">
+
+                                <span>
+                                    Descanso
+                                </span>
+
+                                <strong id="routineRestPreview">
+                                    —
+                                </strong>
+
+                                <small>
+                                    entre series
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         OBSERVACIONES
+                         ================================================= -->
+
+                    <section class="routine-exercise-form-section">
+
+                        <div class="routine-exercise-section-heading">
+
+                            <div class="routine-exercise-section-heading-icon">
+                                <i class="bi bi-journal-text"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Observaciones
+                                </h3>
+
+                                <p>
+                                    Agrega indicaciones específicas
+                                    para realizar el ejercicio.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="routine-exercise-textarea-wrapper">
+
+                            <textarea id="observaciones"
+                                      class="form-control"
+                                      th:field="*{observaciones}"
+                                      rows="5"
+                                      maxlength="300"
+                                      placeholder="Ej. Mantener la espalda recta durante todo el movimiento..."
+                                      data-routine-observations>
+                            </textarea>
+
+
+                            <span class="routine-exercise-character-counter">
+
+                                <span id="routineObservationCount">
+                                    0
+                                </span>
+
+                                / 300
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="routine-exercise-field-help">
+
+                            <i class="bi bi-info-circle"></i>
+                            Campo opcional.
+
+                        </div>
+
+
+                        <div class="text-danger mt-1"
+                             th:if="${#fields.hasErrors('observaciones')}"
+                             th:errors="*{observaciones}">
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="routine-exercise-form-footer">
+
+                    <a th:if="${rutinaEjercicio.id == null}"
+                       th:href="@{/rutina-ejercicios}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <a th:if="${rutinaEjercicio.id != null}"
+                       th:href="@{/rutina-ejercicios/details/{id}(id=${rutinaEjercicio.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+
+                        <span th:text="${rutinaEjercicio.id != null}
+                            ? 'Guardar cambios'
+                            : 'Guardar asignación'">
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/rutina-ejercicio.js}"></script>
+</th:block>
+
+</body>
+</html>

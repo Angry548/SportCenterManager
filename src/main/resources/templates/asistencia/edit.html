@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Editar asistencia</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/asistencia.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         BREADCRUMB
+         ===================================================== -->
+
+    <nav class="attendance-breadcrumb">
+
+        <a th:href="@{/asistencias}">
+            Asistencias
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+
+        <a th:href="@{/asistencias/details/{id}(id=${asistencia.id})}">
+
+            Asistencia
+            <span th:text="|#${asistencia.id}|"></span>
+
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Editar
+        </span>
+
+    </nav>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Editar asistencia
+            </h1>
+
+            <p class="page-description">
+                Actualiza el cliente o resultado
+                relacionado con este registro de asistencia.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORMULARIO
+         ===================================================== -->
+
+    <form th:action="@{/asistencias/save}"
+          th:object="${asistencia}"
+          method="post">
+
+        <!-- ID DEL REGISTRO -->
+
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="attendance-form-container">
+
+            <div class="app-card">
+
+                <!-- =================================================
+                     HEADER CARD
+                     ================================================= -->
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Información del acceso
+                        </h2>
+
+
+                        <div class="app-card-subtitle">
+
+                            Asistencia #
+
+                            <span th:text="${asistencia.id}">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="attendance-section-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <!-- =================================================
+                         CLIENTE Y RESULTADO
+                         ================================================= -->
+
+                    <section class="attendance-form-section">
+
+                        <div class="attendance-section-heading">
+
+                            <div class="attendance-section-heading-icon">
+                                <i class="bi bi-person-check"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Información de asistencia
+                                </h3>
+
+                                <p>
+                                    Modifica el cliente o resultado
+                                    asociado al registro si es necesario.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <!-- =========================================
+                                 CLIENTE
+                                 ========================================= -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label"
+                                       for="cliente">
+
+                                    Cliente
+
+                                </label>
+
+
+                                <div class="attendance-input-wrapper">
+
+                                    <i class="bi bi-person"></i>
+
+                                    <select id="cliente"
+                                            class="form-select attendance-input-icon"
+                                            th:field="*{cliente.id}">
+
+                                        <option value="">
+                                            Seleccione un cliente
+                                        </option>
+
+
+                                        <option th:each="cliente : ${clientes}"
+                                                th:value="${cliente.id}"
+                                                th:text="${cliente.usuario.email}">
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="attendance-field-help">
+
+                                    <i class="bi bi-info-circle"></i>
+
+                                    Cliente asociado con este registro.
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('cliente')}"
+                                     th:errors="*{cliente}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- =========================================
+                                 RESULTADO
+                                 ========================================= -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label"
+                                       for="resultado">
+
+                                    Resultado
+
+                                </label>
+
+
+                                <select id="resultado"
+                                        class="form-select"
+                                        th:field="*{resultado}">
+
+                                    <option value="">
+                                        Seleccione un resultado
+                                    </option>
+
+
+                                    <option th:each="resultadoItem :
+                                                ${T(com.esfe.sistemagimnasio.enums.Resultado).values()}"
+                                            th:value="${resultadoItem}"
+                                            th:text="${resultadoItem}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="attendance-field-help">
+
+                                    <i class="bi bi-shield-check"></i>
+
+                                    Resultado almacenado para esta asistencia.
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('resultado')}"
+                                     th:errors="*{resultado}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         FECHA ORIGINAL
+                         ================================================= -->
+
+                    <section class="attendance-form-section">
+
+                        <div class="attendance-section-heading">
+
+                            <div class="attendance-section-heading-icon">
+                                <i class="bi bi-clock-history"></i>
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Registro original
+                                </h3>
+
+                                <p>
+                                    La fecha y hora de esta asistencia
+                                    se mantienen sin modificaciones.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="attendance-original-date">
+
+                            <!-- FECHA -->
+
+                            <div>
+
+                                <span>
+                                    Fecha
+                                </span>
+
+                                <strong th:text="${#temporals.format(
+                                    asistencia.fechaHora,
+                                    'dd/MM/yyyy'
+                                )}">
+                                </strong>
+
+                            </div>
+
+
+                            <!-- HORA -->
+
+                            <div>
+
+                                <span>
+                                    Hora
+                                </span>
+
+                                <strong th:text="${#temporals.format(
+                                    asistencia.fechaHora,
+                                    'HH:mm:ss'
+                                )}">
+                                </strong>
+
+                            </div>
+
+
+                            <!-- LOCK -->
+
+                            <div class="attendance-original-lock">
+
+                                <i class="bi bi-lock"></i>
+
+                                <span>
+                                    No editable
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- =================================================
+                     FOOTER
+                     ================================================= -->
+
+                <div class="attendance-form-footer">
+
+                    <a th:href="@{/asistencias/details/{id}(id=${asistencia.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+                        Guardar cambios
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/asistencia.js}"></script>
+</th:block>
+
+</body>
+</html>

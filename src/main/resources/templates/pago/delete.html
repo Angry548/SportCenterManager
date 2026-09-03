@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Eliminar pago</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/pago.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <nav class="payment-breadcrumb">
+
+        <a th:href="@{/pagos}">
+            Pagos
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Eliminar pago
+        </span>
+
+    </nav>
+
+
+    <div class="payment-delete-container">
+
+        <div class="app-card payment-delete-card">
+
+            <div class="payment-delete-icon">
+                <i class="bi bi-trash3"></i>
+            </div>
+
+
+            <span class="payment-delete-eyebrow">
+                Confirmación requerida
+            </span>
+
+
+            <h1>
+                Eliminar pago
+            </h1>
+
+
+            <p>
+
+                Estás a punto de eliminar el pago
+
+                <strong th:text="${pago.numeroComprobante}">
+                </strong>
+
+                correspondiente a
+
+                <strong th:text="${pago.membresiaCliente.cliente.usuario.email}">
+                </strong>.
+
+            </p>
+
+
+            <div class="payment-delete-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    Esta acción eliminará el registro del historial
+                    de pagos. Confirma que realmente deseas continuar.
+                </span>
+
+            </div>
+
+
+            <div class="payment-delete-summary">
+
+                <!-- COMPROBANTE -->
+
+                <div>
+
+                    <span>
+                        Comprobante
+                    </span>
+
+                    <strong th:text="${pago.numeroComprobante}">
+                    </strong>
+
+                </div>
+
+
+                <!-- CLIENTE -->
+
+                <div>
+
+                    <span>
+                        Cliente
+                    </span>
+
+                    <strong th:text="${pago.membresiaCliente.cliente.usuario.email}">
+                    </strong>
+
+                </div>
+
+
+                <!-- MÉTODO -->
+
+                <div>
+
+                    <span>
+                        Método
+                    </span>
+
+                    <strong th:text="${pago.metodoPago.nombre}">
+                    </strong>
+
+                </div>
+
+
+                <!-- MONTO -->
+
+                <div>
+
+                    <span>
+                        Monto
+                    </span>
+
+                    <strong th:text="${#numbers.formatDecimal(
+                        pago.monto,
+                        1,
+                        2
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <!-- FECHA -->
+
+                <div>
+
+                    <span>
+                        Fecha
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        pago.fecha,
+                        'dd/MM/yyyy HH:mm'
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <!-- MEMBRESÍA -->
+
+                <div>
+
+                    <span>
+                        Membresía
+                    </span>
+
+                    <strong th:text="${pago.membresiaCliente.tipoMembresia.nombre}">
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/pagos/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${pago.id}">
+
+
+                <div class="payment-delete-actions">
+
+                    <a th:href="@{/pagos/details/{id}(id=${pago.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-trash3 me-1"></i>
+                        Eliminar pago
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/pago.js}"></script>
+</th:block>
+
+</body>
+</html>

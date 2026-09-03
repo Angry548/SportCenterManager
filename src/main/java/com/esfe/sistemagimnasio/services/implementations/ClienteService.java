@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ClienteService implements IClienteService {
@@ -39,6 +40,38 @@ public class ClienteService implements IClienteService {
 
     @Override
     public Cliente guardar(Cliente cliente) {
+
+        // NUEVO CLIENTE
+        if (cliente.getId() == null) {
+
+            if (cliente.getCodigoQr() == null ||
+                    cliente.getCodigoQr().isBlank()) {
+
+                cliente.setCodigoQr(
+                        UUID.randomUUID().toString()
+                );
+            }
+
+            return clienteRepository.save(cliente);
+        }
+
+
+        // CLIENTE EXISTENTE
+        Cliente clienteExistente =
+                clienteRepository
+                        .findById(cliente.getId())
+                        .orElseThrow();
+
+
+        /*
+         * El código QR nunca debe cambiar
+         * simplemente por editar el cliente.
+         */
+        cliente.setCodigoQr(
+                clienteExistente.getCodigoQr()
+        );
+
+
         return clienteRepository.save(cliente);
     }
 
@@ -76,5 +109,28 @@ public class ClienteService implements IClienteService {
     public boolean tieneEntrenadorActivo(Integer id) {
         return asignacionEntrenadorRepository
                 .existsByClienteIdAndFechaFinIsNull(id);
+    }
+
+    @Override
+    public boolean existePorUsuario(Integer usuarioId) {
+        return clienteRepository.existsByUsuario_Id(usuarioId);
+    }
+
+    @Override
+    public boolean existePorDui(String dui) {
+        return clienteRepository.existsByDui(dui);
+    }
+
+    @Override
+    public Optional<Cliente> obtenerPorUsuarioEmail(String email) {
+        return clienteRepository.findByUsuario_Email(email);
+    }
+
+    @Override
+    public Optional<Cliente> obtenerPorCodigoQr(
+            String codigoQr) {
+
+        return clienteRepository
+                .findByCodigoQr(codigoQr);
     }
 }

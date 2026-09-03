@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Operación no permitida</title>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <div class="relation-error-page">
+
+        <div class="app-card relation-error-card">
+
+            <div class="app-card-body">
+
+                <!-- ICONO -->
+
+                <div class="relation-error-icon">
+                    <i class="bi bi-shield-exclamation"></i>
+                </div>
+
+
+                <!-- CÓDIGO -->
+
+                <span class="relation-error-code">
+                    OPERACIÓN BLOQUEADA
+                </span>
+
+
+                <!-- TÍTULO -->
+
+                <h1 th:text="${titulo}">
+                    No se puede eliminar el registro
+                </h1>
+
+
+                <!-- MENSAJE -->
+
+                <p class="relation-error-message"
+                   th:text="${mensaje}">
+
+                    Este registro está relacionado
+                    con otros datos del sistema.
+
+                </p>
+
+
+                <!-- INFORMACIÓN -->
+
+                <div class="relation-error-info">
+
+                    <div class="relation-error-info-icon">
+
+                        <i class="bi bi-info-circle"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            ¿Qué debes hacer?
+                        </strong>
+
+                        <span th:text="${detalle}">
+                            Elimina o reasigna primero los
+                            registros relacionados.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOTA -->
+
+                <div class="relation-error-warning">
+
+                    <i class="bi bi-database-lock"></i>
+
+                    <span>
+                        El sistema bloqueó la eliminación
+                        para evitar pérdida accidental de información.
+                    </span>
+
+                </div>
+
+
+                <!-- ACCIONES -->
+
+                <div class="relation-error-actions">
+
+                    <button type="button"
+                            class="btn btn-light"
+                            onclick="history.back()">
+
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Regresar
+
+                    </button>
+
+
+                    <a th:href="@{/home}"
+                       class="btn btn-primary">
+
+                        <i class="bi bi-house me-1"></i>
+                        Ir al dashboard
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle del método de pago</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/metodo-pago.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- =====================================================
+         BREADCRUMB
+         ===================================================== -->
+
+    <nav class="payment-method-breadcrumb">
+
+        <a th:href="@{/metodos-pago}">
+            Métodos de pago
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span th:text="${metodoPago.nombre}">
+        </span>
+
+    </nav>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle del método de pago
+            </h1>
+
+            <p class="page-description">
+                Consulta la información y disponibilidad
+                de esta forma de pago.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/metodos-pago}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/metodos-pago/edit/{id}(id=${metodoPago.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil me-1"></i>
+                Editar método
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="payment-method-profile">
+
+        <div class="payment-method-profile-main">
+
+            <div class="payment-method-profile-icon">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+
+
+            <div class="payment-method-profile-content">
+
+                <span class="payment-method-profile-label">
+                    Método de pago
+                </span>
+
+
+                <h2 th:text="${metodoPago.nombre}">
+                    Efectivo
+                </h2>
+
+
+                <div class="payment-method-profile-meta">
+
+                    <span>
+                        Identificador
+                    </span>
+
+                    <strong>
+                        #
+                        <span th:text="${metodoPago.id}">
+                        </span>
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ESTADO -->
+
+        <div class="payment-method-profile-status"
+             th:classappend="${metodoPago.activo}
+                ? 'payment-method-profile-active'
+                : 'payment-method-profile-inactive'">
+
+            <div class="payment-method-profile-status-icon">
+
+                <i th:class="${metodoPago.activo}
+                    ? 'bi bi-check-circle'
+                    : 'bi bi-pause-circle'">
+                </i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Estado
+                </span>
+
+                <strong th:text="${metodoPago.activo
+                    ? 'Método activo'
+                    : 'Método inactivo'}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTENT
+         ===================================================== -->
+
+    <div class="payment-method-details-layout">
+
+        <!-- INFORMACIÓN -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Información general
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Datos registrados para este método.
+                    </div>
+
+                </div>
+
+
+                <div class="payment-method-section-icon">
+                    <i class="bi bi-info-circle"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="payment-method-detail-list">
+
+                    <!-- NOMBRE -->
+
+                    <div class="payment-method-detail-item">
+
+                        <div class="payment-method-detail-icon">
+                            <i class="bi bi-tag"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Nombre
+                            </span>
+
+                            <strong th:text="${metodoPago.nombre}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ID -->
+
+                    <div class="payment-method-detail-item">
+
+                        <div class="payment-method-detail-icon">
+                            <i class="bi bi-hash"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Identificador
+                            </span>
+
+                            <strong th:text="${metodoPago.id}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ESTADO -->
+
+                    <div class="payment-method-detail-item">
+
+                        <div class="payment-method-detail-icon">
+                            <i class="bi bi-toggle-on"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Estado
+                            </span>
+
+                            <strong th:text="${metodoPago.activo
+                                ? 'Activo'
+                                : 'Inactivo'}">
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ADMINISTRACIÓN -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Administración
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Acciones disponibles para el método.
+                    </div>
+
+                </div>
+
+
+                <div class="payment-method-section-icon">
+                    <i class="bi bi-sliders"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <!-- ACTIVAR / DESACTIVAR -->
+
+                <a th:if="${metodoPago.activo}"
+                   th:href="@{/metodos-pago/desactivar/{id}(id=${metodoPago.id})}"
+                   class="payment-method-management-action"
+                   data-payment-method-state="deactivate">
+
+                    <span class="payment-method-management-icon">
+                        <i class="bi bi-toggle-on"></i>
+                    </span>
+
+
+                    <span>
+
+                        <strong>
+                            Desactivar método
+                        </strong>
+
+                        <small>
+                            Marcar esta forma de pago como inactiva.
+                        </small>
+
+                    </span>
+
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <a th:unless="${metodoPago.activo}"
+                   th:href="@{/metodos-pago/activar/{id}(id=${metodoPago.id})}"
+                   class="payment-method-management-action"
+                   data-payment-method-state="activate">
+
+                    <span class="payment-method-management-icon">
+                        <i class="bi bi-toggle-off"></i>
+                    </span>
+
+
+                    <span>
+
+                        <strong>
+                            Activar método
+                        </strong>
+
+                        <small>
+                            Habilitar nuevamente esta forma de pago.
+                        </small>
+
+                    </span>
+
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- EDITAR -->
+
+                <a th:href="@{/metodos-pago/edit/{id}(id=${metodoPago.id})}"
+                   class="payment-method-management-action">
+
+                    <span class="payment-method-management-icon">
+                        <i class="bi bi-pencil"></i>
+                    </span>
+
+
+                    <span>
+
+                        <strong>
+                            Editar método
+                        </strong>
+
+                        <small>
+                            Modificar el nombre del registro.
+                        </small>
+
+                    </span>
+
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- ELIMINAR -->
+
+                <a th:href="@{/metodos-pago/remove/{id}(id=${metodoPago.id})}"
+                   class="payment-method-management-action payment-method-management-danger">
+
+                    <span class="payment-method-management-icon">
+                        <i class="bi bi-trash3"></i>
+                    </span>
+
+
+                    <span>
+
+                        <strong>
+                            Eliminar método
+                        </strong>
+
+                        <small>
+                            Ir a la confirmación de eliminación.
+                        </small>
+
+                    </span>
+
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/metodo-pago.js}"></script>
+</th:block>
+
+</body>
+</html>

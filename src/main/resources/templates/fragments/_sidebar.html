@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+
+<aside class="app-sidebar"
+       id="appSidebar"
+       th:fragment="sidebar">
+
+    <!-- =====================================================
+         HEADER / BRAND
+         ===================================================== -->
+
+    <div class="sidebar-header">
+
+        <a th:href="@{/home}"
+           class="sidebar-brand">
+
+            <span class="sidebar-brand-icon">
+                <i class="bi bi-lightning-charge-fill"></i>
+            </span>
+
+            <span class="sidebar-brand-text">
+                <strong>GYM</strong>
+                <span>SYSTEM</span>
+            </span>
+
+        </a>
+
+
+        <button type="button"
+                class="sidebar-close"
+                id="sidebarClose"
+                aria-label="Cerrar menú">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         NAVEGACIÓN
+         ===================================================== -->
+
+    <nav class="sidebar-nav">
+
+
+        <!-- =================================================
+             DASHBOARD
+             TODOS LOS USUARIOS AUTENTICADOS
+             ================================================= -->
+
+        <div class="sidebar-section">
+
+            <a th:href="@{/home}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                </span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             GESTIÓN
+             SOLO ADMIN
+             ================================================= -->
+
+        <div class="sidebar-section"
+             sec:authorize="hasAuthority('ADMIN')">
+
+            <span class="sidebar-section-title">
+                GESTIÓN
+            </span>
+
+
+            <!-- CLIENTES -->
+
+            <a th:href="@{/clientes}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-people"></i>
+                </span>
+
+                <span>Clientes</span>
+
+            </a>
+
+
+            <!-- ENTRENADORES -->
+
+            <a th:href="@{/entrenadores}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-person-badge"></i>
+                </span>
+
+                <span>Entrenadores</span>
+
+            </a>
+
+
+            <!-- USUARIOS -->
+
+            <a th:href="@{/usuarios}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-person-gear"></i>
+                </span>
+
+                <span>Usuarios</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ENTRENAMIENTO
+             ADMIN Y ENTRENADOR
+             ================================================= -->
+
+        <div class="sidebar-section"
+             sec:authorize="hasAnyAuthority('ADMIN', 'ENTRENADOR')">
+
+            <span class="sidebar-section-title">
+                ENTRENAMIENTO
+            </span>
+
+
+            <!-- RUTINAS -->
+
+            <a th:href="@{/rutinas}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-clipboard2-pulse"></i>
+                </span>
+
+                <span>Rutinas</span>
+
+            </a>
+
+
+            <!-- EJERCICIOS -->
+
+            <a th:href="@{/ejercicios}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-activity"></i>
+                </span>
+
+                <span>Ejercicios</span>
+
+            </a>
+
+
+            <!-- GRUPOS MUSCULARES -->
+
+            <a th:href="@{/grupos-musculares}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-universal-access"></i>
+                </span>
+
+                <span>Grupos musculares</span>
+
+            </a>
+
+
+            <!-- RUTINA - EJERCICIOS -->
+
+            <a th:href="@{/rutina-ejercicios}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-list-check"></i>
+                </span>
+
+                <span>Rutina - ejercicios</span>
+
+            </a>
+
+
+            <!-- ASIGNACIONES
+                 SOLO ADMIN -->
+
+            <a th:href="@{/asignaciones-entrenador}"
+               class="sidebar-link"
+               sec:authorize="hasAuthority('ADMIN')">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-person-check"></i>
+                </span>
+
+                <span>Asignaciones</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             MEMBRESÍAS Y PAGOS
+             SOLO ADMIN
+             ================================================= -->
+
+        <div class="sidebar-section"
+             sec:authorize="hasAuthority('ADMIN')">
+
+            <span class="sidebar-section-title">
+                MEMBRESÍAS
+            </span>
+
+
+            <!-- MEMBRESÍAS DE CLIENTES -->
+
+            <a th:href="@{/membresias-clientes}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </span>
+
+                <span>Membresías clientes</span>
+
+            </a>
+
+
+            <!-- TIPOS DE MEMBRESÍA -->
+
+            <a th:href="@{/tipos-membresia}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-credit-card-2-front"></i>
+                </span>
+
+                <span>Tipos de membresía</span>
+
+            </a>
+
+
+            <!-- PAGOS -->
+
+            <a th:href="@{/pagos}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-receipt"></i>
+                </span>
+
+                <span>Pagos</span>
+
+            </a>
+
+
+            <!-- MÉTODOS DE PAGO -->
+
+            <a th:href="@{/metodos-pago}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-wallet2"></i>
+                </span>
+
+                <span>Métodos de pago</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             SEGUIMIENTO
+             ADMIN Y ENTRENADOR
+             ================================================= -->
+
+        <div class="sidebar-section"
+             sec:authorize="hasAnyAuthority('ADMIN', 'ENTRENADOR')">
+
+            <span class="sidebar-section-title">
+                SEGUIMIENTO
+            </span>
+
+
+            <!-- EVALUACIONES FÍSICAS -->
+
+            <a th:href="@{/evaluaciones-fisicas}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-heart-pulse"></i>
+                </span>
+
+                <span>Evaluaciones físicas</span>
+
+            </a>
+
+
+            <!-- ASISTENCIAS -->
+
+            <a th:href="@{/asistencias}"
+               class="sidebar-link">
+
+                <span class="sidebar-link-icon">
+                    <i class="bi bi-door-open"></i>
+                </span>
+
+                <span>Asistencias</span>
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         FOOTER / USUARIO AUTENTICADO
+         ===================================================== -->
+
+    <div class="sidebar-footer">
+
+        <div class="sidebar-user">
+
+            <div class="sidebar-user-avatar">
+
+                <span sec:authorize="hasAuthority('ADMIN')">
+                    AD
+                </span>
+
+                <span sec:authorize="hasAuthority('ENTRENADOR')">
+                    EN
+                </span>
+
+                <span sec:authorize="hasAuthority('CLIENTE')">
+                    CL
+                </span>
+
+            </div>
+
+
+            <div class="sidebar-user-info">
+
+                <!-- ROL -->
+
+                <strong sec:authorize="hasAuthority('ADMIN')">
+                    Administrador
+                </strong>
+
+                <strong sec:authorize="hasAuthority('ENTRENADOR')">
+                    Entrenador
+                </strong>
+
+                <strong sec:authorize="hasAuthority('CLIENTE')">
+                    Cliente
+                </strong>
+
+
+                <!-- EMAIL DEL USUARIO AUTENTICADO -->
+
+                <span sec:authentication="name">
+                    usuario@email.com
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CERRAR SESIÓN
+         ===================================================== -->
+
+    <form th:action="@{/logout}"
+          method="post"
+          class="sidebar-logout-form">
+
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
+        <button type="submit"
+                class="sidebar-link sidebar-logout-button">
+
+            <span class="sidebar-link-icon">
+                <i class="bi bi-box-arrow-right"></i>
+            </span>
+
+            <span>
+                Cerrar sesión
+            </span>
+
+        </button>
+
+    </form>
+
+</aside>
+
+</body>
+</html>

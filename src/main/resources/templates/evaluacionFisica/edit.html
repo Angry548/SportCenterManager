@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Editar evaluación física</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/evaluacion-fisica.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="evaluation-breadcrumb">
+
+        <a th:href="@{/evaluaciones-fisicas}">
+            Evaluaciones físicas
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+
+        <a th:href="@{/evaluaciones-fisicas/details/{id}(id=${evaluacionFisica.id})}">
+            Evaluación
+            <span th:text="|#${evaluacionFisica.id}|"></span>
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span>
+            Editar
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Editar evaluación
+            </h1>
+
+            <p class="page-description">
+                Actualiza las mediciones o información
+                registrada durante esta evaluación física.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <form th:action="@{/evaluaciones-fisicas/save}"
+          th:object="${evaluacionFisica}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="evaluation-form-container">
+
+            <div class="app-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Información de la evaluación
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Evaluación #
+                            <span th:text="${evaluacionFisica.id}"></span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="evaluation-section-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+                    <!-- PARTICIPANTES -->
+
+                    <section class="evaluation-form-section">
+
+                        <div class="evaluation-section-heading">
+
+                            <div class="evaluation-section-heading-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Participantes
+                                </h3>
+
+                                <p>
+                                    Personas relacionadas con la evaluación.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Cliente
+                                </label>
+
+
+                                <select class="form-select"
+                                        th:field="*{cliente.id}">
+
+                                    <option value="">
+                                        Seleccione un cliente
+                                    </option>
+
+
+                                    <option th:each="cliente : ${clientes}"
+                                            th:value="${cliente.id}"
+                                            th:text="${cliente.usuario.email}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('cliente')}"
+                                     th:errors="*{cliente}">
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Entrenador
+                                </label>
+
+
+                                <select class="form-select"
+                                        th:field="*{entrenador.id}">
+
+                                    <option value="">
+                                        Seleccione un entrenador
+                                    </option>
+
+
+                                    <option th:each="entrenador : ${entrenadores}"
+                                            th:value="${entrenador.id}"
+                                            th:text="${entrenador.usuario.email
+                                                + ' - '
+                                                + entrenador.especialidad}">
+                                    </option>
+
+                                </select>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('entrenador')}"
+                                     th:errors="*{entrenador}">
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Fecha
+                                </label>
+
+
+                                <input type="date"
+                                       class="form-control"
+                                       th:field="*{fecha}"
+                                       data-evaluation-date>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('fecha')}"
+                                     th:errors="*{fecha}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- MEDICIONES -->
+
+                    <section class="evaluation-form-section">
+
+                        <div class="evaluation-section-heading">
+
+                            <div class="evaluation-section-heading-icon">
+                                <i class="bi bi-rulers"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Mediciones corporales
+                                </h3>
+
+                                <p>
+                                    Actualiza los valores físicos registrados.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <!-- PESO -->
+
+                            <div class="col-md-4">
+
+                                <label class="form-label">
+                                    Peso
+                                </label>
+
+
+                                <div class="evaluation-unit-input">
+
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{peso}"
+                                           step="0.01"
+                                           min="1"
+                                           data-evaluation-weight>
+
+                                    <span>kg</span>
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('peso')}"
+                                     th:errors="*{peso}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- ESTATURA -->
+
+                            <div class="col-md-4">
+
+                                <label class="form-label">
+                                    Estatura
+                                </label>
+
+
+                                <div class="evaluation-unit-input">
+
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{estatura}"
+                                           step="0.01"
+                                           min="0.5"
+                                           data-evaluation-height>
+
+                                    <span>m</span>
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('estatura')}"
+                                     th:errors="*{estatura}">
+                                </div>
+
+                            </div>
+
+
+                            <!-- GRASA -->
+
+                            <div class="col-md-4">
+
+                                <label class="form-label">
+                                    Grasa corporal
+                                </label>
+
+
+                                <div class="evaluation-unit-input">
+
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{porcentajeGrasa}"
+                                           step="0.01"
+                                           min="0"
+                                           max="100">
+
+                                    <span>%</span>
+
+                                </div>
+
+
+                                <div class="text-danger mt-1"
+                                     th:if="${#fields.hasErrors('porcentajeGrasa')}"
+                                     th:errors="*{porcentajeGrasa}">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="evaluation-imc-preview"
+                             id="evaluationImcPreview">
+
+                            <div class="evaluation-imc-preview-icon">
+                                <i class="bi bi-calculator"></i>
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    IMC estimado
+                                </span>
+
+                                <strong id="evaluationImcValue">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <small>
+                                Vista previa calculada con peso y estatura.
+                            </small>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- OBSERVACIONES -->
+
+                    <section class="evaluation-form-section">
+
+                        <div class="evaluation-section-heading">
+
+                            <div class="evaluation-section-heading-icon">
+                                <i class="bi bi-journal-text"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Observaciones
+                                </h3>
+
+                                <p>
+                                    Información adicional de la evaluación.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="evaluation-textarea-wrapper">
+
+                            <textarea class="form-control"
+                                      th:field="*{observaciones}"
+                                      rows="5"
+                                      maxlength="500"
+                                      data-evaluation-observations>
+                            </textarea>
+
+
+                            <span class="evaluation-character-counter">
+
+                                <span id="evaluationObservationCount">
+                                    0
+                                </span>
+
+                                / 500
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="text-danger mt-1"
+                             th:if="${#fields.hasErrors('observaciones')}"
+                             th:errors="*{observaciones}">
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <div class="evaluation-form-footer">
+
+                    <a th:href="@{/evaluaciones-fisicas/details/{id}(id=${evaluacionFisica.id})}"
+                       class="btn btn-light">
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+
+                        Guardar cambios
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/evaluacion-fisica.js}"></script>
+</th:block>
+
+</body>
+</html>

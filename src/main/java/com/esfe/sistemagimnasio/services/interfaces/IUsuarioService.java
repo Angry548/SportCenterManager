@@ -13,7 +13,7 @@ public interface IUsuarioService {
 
     Optional<Usuario> obtenerPorId(Integer id);
 
-    Usuario guardar (Usuario usuario);
+    Usuario guardar(Usuario usuario);
 
     void eliminar(Integer id);
 
@@ -26,6 +26,10 @@ public interface IUsuarioService {
     void activar(Integer id);
 
     void desactivar(Integer id);
+
+    List<Usuario> obtenerUsuariosDisponiblesCliente();
+
+    List<Usuario> obtenerUsuariosDisponiblesEntrenador();
+
+    boolean existePorEmail(String email);
 }
-
-

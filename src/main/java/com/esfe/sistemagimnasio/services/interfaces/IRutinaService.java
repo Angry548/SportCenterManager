@@ -25,4 +25,14 @@ public interface IRutinaService {
     void quitarEjercicio(Integer rutinaId, Integer rutinaEjercicioId);
 
     List<RutinaEjercicio> listarEjercicios(Integer rutinaId);
+
+    Page<Rutina> obtenerPorEntrenadorEmail(
+            String email,
+            Pageable pageable
+    );
+
+    Optional<Rutina> obtenerPorIdYEntrenadorEmail(
+            Integer id,
+            String email
+    );
 }

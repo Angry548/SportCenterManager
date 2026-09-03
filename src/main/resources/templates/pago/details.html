@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+
+<head>
+
+    <title>Detalle de pago</title>
+
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/pago.css}">
+    </th:block>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="payment-breadcrumb">
+
+        <a th:href="@{/pagos}">
+            Pagos
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span th:text="${pago.numeroComprobante}">
+        </span>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Detalle de pago
+            </h1>
+
+            <p class="page-description">
+                Consulta la transacción registrada
+                y descarga su comprobante.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a th:href="@{/pagos}"
+               class="btn btn-light">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+
+            <a th:href="@{/pagos/pdf/{id}(id=${pago.id})}"
+               class="btn btn-primary">
+
+                <i class="bi bi-file-earmark-pdf me-1"></i>
+                Descargar PDF
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="payment-profile">
+
+        <div class="payment-profile-main">
+
+            <div class="payment-profile-icon">
+                <i class="bi bi-receipt-cutoff"></i>
+            </div>
+
+
+            <div class="payment-profile-content">
+
+                <span class="payment-profile-label">
+                    Comprobante de pago
+                </span>
+
+
+                <h2 th:text="${pago.numeroComprobante}">
+                </h2>
+
+
+                <div class="payment-profile-meta">
+
+                    <span>
+                        Pago #
+                        <strong th:text="${pago.id}">
+                        </strong>
+                    </span>
+
+
+                    <span class="payment-profile-dot"></span>
+
+
+                    <span th:text="${#temporals.format(
+                        pago.fecha,
+                        'dd/MM/yyyy HH:mm'
+                    )}">
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MONTO -->
+
+        <div class="payment-profile-total">
+
+            <span>
+                Total pagado
+            </span>
+
+            <strong th:text="${#numbers.formatDecimal(
+                pago.monto,
+                1,
+                2
+            )}">
+            </strong>
+
+            <small th:text="${pago.metodoPago.nombre}">
+            </small>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MÉTRICAS
+         ===================================================== -->
+
+    <div class="payment-metrics">
+
+        <div class="payment-metric-card">
+
+            <div class="payment-metric-icon">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Monto
+                </span>
+
+                <strong th:text="${#numbers.formatDecimal(
+                    pago.monto,
+                    1,
+                    2
+                )}">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="payment-metric-card">
+
+            <div class="payment-metric-icon">
+                <i class="bi bi-wallet2"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Método
+                </span>
+
+                <strong th:text="${pago.metodoPago.nombre}">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="payment-metric-card">
+
+            <div class="payment-metric-icon">
+                <i class="bi bi-calendar3"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Fecha
+                </span>
+
+                <strong th:text="${#temporals.format(
+                    pago.fecha,
+                    'dd/MM/yyyy'
+                )}">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="payment-metric-card">
+
+            <div class="payment-metric-icon">
+                <i class="bi bi-clock"></i>
+            </div>
+
+
+            <div>
+
+                <span>
+                    Hora
+                </span>
+
+                <strong th:text="${#temporals.format(
+                    pago.fecha,
+                    'HH:mm:ss'
+                )}">
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMACIÓN
+         ===================================================== -->
+
+    <div class="payment-details-layout">
+
+        <!-- CLIENTE / MEMBRESÍA -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Membresía asociada
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Cliente y plan relacionado con el pago.
+                    </div>
+
+                </div>
+
+
+                <div class="payment-section-icon">
+                    <i class="bi bi-credit-card-2-front"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <!-- CLIENTE -->
+
+                <div class="payment-client-summary">
+
+                    <div class="payment-client-avatar large">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Cliente
+                        </span>
+
+                        <strong th:text="${pago.membresiaCliente.cliente.usuario.email}">
+                        </strong>
+
+                        <small>
+                            Cliente #
+                            <span th:text="${pago.membresiaCliente.cliente.id}">
+                            </span>
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DETALLES -->
+
+                <div class="payment-detail-row">
+
+                    <span>
+                        Tipo de membresía
+                    </span>
+
+                    <strong th:text="${pago.membresiaCliente.tipoMembresia.nombre}">
+                    </strong>
+
+                </div>
+
+
+                <div class="payment-detail-row">
+
+                    <span>
+                        Precio configurado
+                    </span>
+
+                    <strong th:text="${#numbers.formatDecimal(
+                        pago.membresiaCliente.tipoMembresia.precio,
+                        1,
+                        2
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <div class="payment-detail-row">
+
+                    <span>
+                        Inicio
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        pago.membresiaCliente.fechaInicio,
+                        'dd/MM/yyyy'
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <div class="payment-detail-row">
+
+                    <span>
+                        Vencimiento
+                    </span>
+
+                    <strong th:text="${#temporals.format(
+                        pago.membresiaCliente.fechaVencimiento,
+                        'dd/MM/yyyy'
+                    )}">
+                    </strong>
+
+                </div>
+
+
+                <a th:href="@{/membresias-clientes/details/{id}(id=${pago.membresiaCliente.id})}"
+                   class="payment-related-link">
+
+                    Ver membresía
+
+                    <i class="bi bi-arrow-up-right"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- COMPROBANTE -->
+
+        <section class="app-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Comprobante
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Documento asociado a la transacción.
+                    </div>
+
+                </div>
+
+
+                <div class="payment-section-icon">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="payment-document">
+
+                    <div class="payment-document-icon">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Número de comprobante
+                        </span>
+
+                        <strong th:text="${pago.numeroComprobante}">
+                        </strong>
+
+                        <small>
+                            Documento PDF disponible
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <a th:href="@{/pagos/pdf/{id}(id=${pago.id})}"
+                   class="btn btn-primary payment-document-button">
+
+                    <i class="bi bi-download me-1"></i>
+                    Descargar comprobante PDF
+
+                </a>
+
+
+                <a th:href="@{/pagos/remove/{id}(id=${pago.id})}"
+                   class="payment-delete-link">
+
+                    <i class="bi bi-trash3"></i>
+                    Eliminar este pago
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/pago.js}"></script>
+</th:block>
+
+</body>
+</html>

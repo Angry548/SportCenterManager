@@ -1,100 +1,2001 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/_mainLayout}">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gimnasio</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+    <title>Dashboard</title>
 
-        .container {
-            background: white;
-            border-radius: 12px;
-            padding: 50px 60px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 500px;
-            border: 1px solid #e8eaed;
-        }
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet"
+              th:href="@{/css/home.css}">
+    </th:block>
 
-        .icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #1a1a2e;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        .status {
-            display: inline-block;
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 8px 24px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            border: 1px solid #a5d6a7;
-        }
-
-        .status .dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #4caf50;
-            border-radius: 50%;
-            margin-right: 8px;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 13px;
-            color: #aaa;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-        }
-    </style>
 </head>
+
 <body>
-<div class="container">
-    <h1>¡Ejecución Exitosa!</h1>
-    <p class="subtitle">Sistema de Gestión de Gimnasio</p>
-    <div class="status">
-        <span class="dot"></span>
-        Aplicación iniciada correctamente
+
+<div layout:fragment="content">
+
+
+    <!-- =====================================================
+         HEADER - ADMIN
+         ===================================================== -->
+
+    <div class="dashboard-header"
+         sec:authorize="hasAuthority('ADMIN')">
+
+        <div>
+
+            <span class="dashboard-eyebrow">
+                SISTEMA DE GESTIÓN
+            </span>
+
+            <h1 class="page-title">
+                Panel general
+            </h1>
+
+            <p class="page-description">
+                Resumen del gimnasio y acceso rápido
+                a los principales módulos del sistema.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-header-actions">
+
+            <a th:href="@{/clientes/create}"
+               class="btn btn-light">
+
+                <i class="bi bi-person-plus me-1"></i>
+                Nuevo cliente
+
+            </a>
+
+
+            <a th:href="@{/membresias-clientes/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-credit-card me-1"></i>
+                Nueva membresía
+
+            </a>
+
+        </div>
+
     </div>
-    <div class="footer">
-        v1.0.0 • Spring Boot 3.3.5
+
+
+    <!-- =====================================================
+         HEADER - ENTRENADOR
+         ===================================================== -->
+
+    <div class="dashboard-header"
+         sec:authorize="hasAuthority('ENTRENADOR')">
+
+        <div>
+
+            <span class="dashboard-eyebrow">
+                ÁREA DE ENTRENAMIENTO
+            </span>
+
+            <h1 class="page-title">
+                Panel de entrenamiento
+            </h1>
+
+            <p class="page-description">
+                Gestiona tus rutinas y el seguimiento
+                físico de los clientes.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-header-actions">
+
+            <a th:href="@{/rutinas/create}"
+               class="btn btn-light">
+
+                <i class="bi bi-journal-plus me-1"></i>
+                Nueva rutina
+
+            </a>
+
+
+            <a th:href="@{/evaluaciones-fisicas/create}"
+               class="btn btn-primary">
+
+                <i class="bi bi-heart-pulse me-1"></i>
+                Nueva evaluación
+
+            </a>
+
+        </div>
+
     </div>
+
+
+    <!-- =====================================================
+         HEADER - CLIENTE
+         ===================================================== -->
+
+    <div class="dashboard-header"
+         sec:authorize="hasAuthority('CLIENTE')">
+
+        <div>
+
+            <span class="dashboard-eyebrow">
+                MI ESPACIO
+            </span>
+
+            <h1 class="page-title">
+
+                Bienvenido,
+
+                <span th:text="${clienteActual.nombres}">
+                    Cliente
+                </span>
+
+            </h1>
+
+            <p class="page-description">
+                Consulta el estado de tu membresía
+                y tus accesos recientes al gimnasio.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         INDICADORES - ADMIN
+         ===================================================== -->
+
+    <section class="dashboard-main-stats"
+             sec:authorize="hasAuthority('ADMIN')">
+
+
+        <!-- CLIENTES -->
+
+        <a th:href="@{/clientes}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-primary">
+                <i class="bi bi-people"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Clientes registrados
+                </span>
+
+                <strong th:text="${totalClientes}">
+                    0
+                </strong>
+
+                <small>
+                    Gestionar clientes
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- ENTRENADORES -->
+
+        <a th:href="@{/entrenadores}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-purple">
+                <i class="bi bi-person-badge"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Entrenadores
+                </span>
+
+                <strong th:text="${totalEntrenadores}">
+                    0
+                </strong>
+
+                <small>
+                    Gestionar entrenadores
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- MEMBRESÍAS -->
+
+        <a th:href="@{/membresias-clientes}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-orange">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Membresías
+                </span>
+
+                <strong th:text="${totalMembresias}">
+                    0
+                </strong>
+
+                <small>
+                    Gestionar membresías
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- RUTINAS -->
+
+        <a th:href="@{/rutinas}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-dark">
+                <i class="bi bi-journal-check"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Rutinas
+                </span>
+
+                <strong th:text="${totalRutinas}">
+                    0
+                </strong>
+
+                <small>
+                    Gestionar rutinas
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         INDICADORES - ENTRENADOR
+         ===================================================== -->
+
+    <section class="dashboard-main-stats"
+             sec:authorize="hasAuthority('ENTRENADOR')">
+
+
+        <!-- MIS RUTINAS -->
+
+        <a th:href="@{/rutinas}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-primary">
+                <i class="bi bi-journal-check"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Mis rutinas
+                </span>
+
+                <strong th:text="${totalRutinas}">
+                    0
+                </strong>
+
+                <small>
+                    Gestionar rutinas
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- EJERCICIOS -->
+
+        <a th:href="@{/ejercicios}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-purple">
+                <i class="bi bi-activity"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Ejercicios
+                </span>
+
+                <strong th:text="${totalEjercicios}">
+                    0
+                </strong>
+
+                <small>
+                    Ver catálogo
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- GRUPOS MUSCULARES -->
+
+        <a th:href="@{/grupos-musculares}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-orange">
+                <i class="bi bi-universal-access"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Grupos musculares
+                </span>
+
+                <strong th:text="${totalGruposMusculares}">
+                    0
+                </strong>
+
+                <small>
+                    Ver clasificación
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- MIS EVALUACIONES -->
+
+        <a th:href="@{/evaluaciones-fisicas}"
+           class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-dark">
+                <i class="bi bi-heart-pulse"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Mis evaluaciones
+                </span>
+
+                <strong th:text="${totalEvaluaciones}">
+                    0
+                </strong>
+
+                <small>
+                    Ver evaluaciones
+                    <i class="bi bi-arrow-right"></i>
+                </small>
+
+            </div>
+
+        </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         INDICADORES - CLIENTE
+         ===================================================== -->
+
+    <section class="dashboard-main-stats"
+             sec:authorize="hasAuthority('CLIENTE')">
+
+
+        <!-- MI MEMBRESÍA -->
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-primary">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Mi membresía
+                </span>
+
+
+                <strong th:if="${tieneMembresia}"
+                        th:text="${membresiaActual.tipoMembresia.nombre}">
+                    Membresía
+                </strong>
+
+
+                <strong th:unless="${tieneMembresia}">
+                    Sin membresía
+                </strong>
+
+
+                <small th:if="${tieneMembresia}">
+                    Membresía activa
+                </small>
+
+
+                <small th:unless="${tieneMembresia}">
+                    No tienes una membresía vigente
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- VENCIMIENTO -->
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-orange">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Vencimiento
+                </span>
+
+
+                <strong th:if="${tieneMembresia}"
+                        th:text="${membresiaActual.fechaVencimiento}">
+                    2026-09-30
+                </strong>
+
+
+                <strong th:unless="${tieneMembresia}">
+                    —
+                </strong>
+
+
+                <small th:if="${tieneMembresia}">
+
+                    <span th:text="${diasRestantes}">
+                        0
+                    </span>
+
+                    días restantes
+
+                </small>
+
+
+                <small th:unless="${tieneMembresia}">
+                    Sin fecha de vencimiento
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- ASISTENCIAS -->
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-purple">
+                <i class="bi bi-door-open"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Mis asistencias
+                </span>
+
+                <strong th:text="${totalAsistenciasCliente}">
+                    0
+                </strong>
+
+                <small>
+                    Registros de acceso
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- ESTADO -->
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon dashboard-stat-dark">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Estado
+                </span>
+
+
+                <strong th:if="${tieneMembresia}">
+                    ACTIVA
+                </strong>
+
+
+                <strong th:unless="${tieneMembresia}">
+                    SIN MEMBRESÍA
+                </strong>
+
+
+                <small th:if="${tieneMembresia}">
+                    Acceso disponible
+                </small>
+
+
+                <small th:unless="${tieneMembresia}">
+                    Membresía requerida
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DASHBOARD - ADMIN
+         ===================================================== -->
+
+    <div class="dashboard-layout"
+         sec:authorize="hasAuthority('ADMIN')">
+
+
+        <!-- MÓDULOS -->
+
+        <section class="app-card dashboard-modules-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Módulos del sistema
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Accede rápidamente a cada área de administración.
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card-icon">
+                    <i class="bi bi-grid"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="dashboard-module-grid">
+
+
+                    <!-- CLIENTES -->
+
+                    <a th:href="@{/clientes}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Clientes
+                            </strong>
+
+                            <span>
+                                Registro y administración
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalClientes}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- ENTRENADORES -->
+
+                    <a th:href="@{/entrenadores}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Entrenadores
+                            </strong>
+
+                            <span>
+                                Personal de entrenamiento
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalEntrenadores}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- USUARIOS -->
+
+                    <a th:href="@{/usuarios}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-person-gear"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Usuarios
+                            </strong>
+
+                            <span>
+                                Acceso y roles
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalUsuarios}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- RUTINAS -->
+
+                    <a th:href="@{/rutinas}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-journal-check"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Rutinas
+                            </strong>
+
+                            <span>
+                                Planes de entrenamiento
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalRutinas}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- EJERCICIOS -->
+
+                    <a th:href="@{/ejercicios}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-activity"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Ejercicios
+                            </strong>
+
+                            <span>
+                                Catálogo de movimientos
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalEjercicios}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- GRUPOS -->
+
+                    <a th:href="@{/grupos-musculares}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-universal-access"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Grupos musculares
+                            </strong>
+
+                            <span>
+                                Clasificación de ejercicios
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalGruposMusculares}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- RUTINA EJERCICIOS -->
+
+                    <a th:href="@{/rutina-ejercicios}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-list-check"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Rutina - ejercicios
+                            </strong>
+
+                            <span>
+                                Series y repeticiones
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalRutinaEjercicios}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- ASIGNACIONES -->
+
+                    <a th:href="@{/asignaciones-entrenador}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Asignaciones
+                            </strong>
+
+                            <span>
+                                Cliente y entrenador
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalAsignaciones}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- MEMBRESÍAS -->
+
+                    <a th:href="@{/membresias-clientes}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-credit-card-2-front"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Membresías
+                            </strong>
+
+                            <span>
+                                Membresías de clientes
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalMembresias}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- TIPOS MEMBRESÍA -->
+
+                    <a th:href="@{/tipos-membresia}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-card-checklist"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Tipos de membresía
+                            </strong>
+
+                            <span>
+                                Planes y precios
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalTiposMembresia}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- EVALUACIONES -->
+
+                    <a th:href="@{/evaluaciones-fisicas}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-heart-pulse"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Evaluaciones físicas
+                            </strong>
+
+                            <span>
+                                Seguimiento corporal
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalEvaluaciones}">
+                            0
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ACCIONES RÁPIDAS -->
+
+        <aside class="app-card dashboard-quick-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Acciones rápidas
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Operaciones frecuentes.
+                    </div>
+
+                </div>
+
+                <div class="dashboard-card-icon">
+                    <i class="bi bi-lightning-charge"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+
+                <a th:href="@{/clientes/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Registrar cliente
+                        </strong>
+
+                        <span>
+                            Crear un nuevo cliente
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <a th:href="@{/membresias-clientes/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Asignar membresía
+                        </strong>
+
+                        <span>
+                            Crear membresía de cliente
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <a th:href="@{/asignaciones-entrenador/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Asignar entrenador
+                        </strong>
+
+                        <span>
+                            Vincular cliente y entrenador
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <a th:href="@{/evaluaciones-fisicas/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-heart-pulse"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Nueva evaluación
+                        </strong>
+
+                        <span>
+                            Registrar medidas físicas
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <a th:href="@{/rutinas/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-journal-plus"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Crear rutina
+                        </strong>
+
+                        <span>
+                            Registrar plan de entrenamiento
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+    <!-- =====================================================
+         DASHBOARD - ENTRENADOR
+         ===================================================== -->
+
+    <div class="dashboard-layout"
+         sec:authorize="hasAuthority('ENTRENADOR')">
+
+
+        <!-- MÓDULOS -->
+
+        <section class="app-card dashboard-modules-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Herramientas de entrenamiento
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Accede a los módulos disponibles para
+                        la gestión de entrenamiento y seguimiento.
+                    </div>
+
+                </div>
+
+                <div class="dashboard-card-icon">
+                    <i class="bi bi-activity"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+                <div class="dashboard-module-grid">
+
+
+                    <!-- RUTINAS -->
+
+                    <a th:href="@{/rutinas}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-journal-check"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Mis rutinas
+                            </strong>
+
+                            <span>
+                                Planes de entrenamiento
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalRutinas}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- EJERCICIOS -->
+
+                    <a th:href="@{/ejercicios}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-activity"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Ejercicios
+                            </strong>
+
+                            <span>
+                                Catálogo de movimientos
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalEjercicios}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- GRUPOS -->
+
+                    <a th:href="@{/grupos-musculares}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-universal-access"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Grupos musculares
+                            </strong>
+
+                            <span>
+                                Clasificación de ejercicios
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalGruposMusculares}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- RUTINA EJERCICIOS -->
+
+                    <a th:href="@{/rutina-ejercicios}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-list-check"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Rutina - ejercicios
+                            </strong>
+
+                            <span>
+                                Series y repeticiones
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count">
+                            <i class="bi bi-arrow-right"></i>
+                        </div>
+
+                    </a>
+
+
+                    <!-- EVALUACIONES -->
+
+                    <a th:href="@{/evaluaciones-fisicas}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-heart-pulse"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Mis evaluaciones
+                            </strong>
+
+                            <span>
+                                Seguimiento corporal
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count"
+                             th:text="${totalEvaluaciones}">
+                            0
+                        </div>
+
+                    </a>
+
+
+                    <!-- ASISTENCIAS -->
+
+                    <a th:href="@{/asistencias}"
+                       class="dashboard-module-item">
+
+                        <div class="dashboard-module-icon">
+                            <i class="bi bi-door-open"></i>
+                        </div>
+
+                        <div class="dashboard-module-info">
+
+                            <strong>
+                                Asistencias
+                            </strong>
+
+                            <span>
+                                Control de acceso
+                            </span>
+
+                        </div>
+
+                        <div class="dashboard-module-count">
+                            <i class="bi bi-arrow-right"></i>
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ACCIONES RÁPIDAS -->
+
+        <aside class="app-card dashboard-quick-card">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <h2 class="app-card-title">
+                        Acciones rápidas
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Operaciones de entrenamiento.
+                    </div>
+
+                </div>
+
+                <div class="dashboard-card-icon">
+                    <i class="bi bi-lightning-charge"></i>
+                </div>
+
+            </div>
+
+
+            <div class="app-card-body">
+
+
+                <a th:href="@{/rutinas/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-journal-plus"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Crear rutina
+                        </strong>
+
+                        <span>
+                            Registrar plan de entrenamiento
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <a th:href="@{/ejercicios/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-plus-circle"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Registrar ejercicio
+                        </strong>
+
+                        <span>
+                            Agregar ejercicio al catálogo
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <a th:href="@{/rutina-ejercicios/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-list-check"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Agregar ejercicio a rutina
+                        </strong>
+
+                        <span>
+                            Configurar series y repeticiones
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <a th:href="@{/evaluaciones-fisicas/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-heart-pulse"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Nueva evaluación
+                        </strong>
+
+                        <span>
+                            Registrar seguimiento físico
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <a th:href="@{/asistencias/create}"
+                   class="dashboard-quick-action">
+
+                    <div class="dashboard-quick-icon">
+                        <i class="bi bi-door-open"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Registrar asistencia
+                        </strong>
+
+                        <span>
+                            Registrar acceso de cliente
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+    <!-- =====================================================
+         DASHBOARD - CLIENTE
+         ===================================================== -->
+
+    <div sec:authorize="hasAuthority('CLIENTE')">
+
+
+        <!-- =================================================
+             MEMBRESÍA + INFORMACIÓN
+             ================================================= -->
+
+        <div class="dashboard-layout">
+
+
+            <!-- =============================================
+                 MI MEMBRESÍA
+                 ============================================= -->
+
+            <section class="app-card dashboard-modules-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Mi membresía
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Información de tu plan actual.
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-card-icon">
+                        <i class="bi bi-credit-card-2-front"></i>
+                    </div>
+
+                </div>
+
+
+                <!-- MEMBRESÍA VIGENTE -->
+
+                <div class="app-card-body"
+                     th:if="${tieneMembresia}">
+
+                    <div class="dashboard-module-grid">
+
+
+                        <!-- PLAN -->
+
+                        <div class="dashboard-module-item">
+
+                            <div class="dashboard-module-icon">
+                                <i class="bi bi-card-checklist"></i>
+                            </div>
+
+                            <div class="dashboard-module-info">
+
+                                <strong>
+                                    Plan
+                                </strong>
+
+                                <span th:text="${membresiaActual.tipoMembresia.nombre}">
+                                    Membresía
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- INICIO -->
+
+                        <div class="dashboard-module-item">
+
+                            <div class="dashboard-module-icon">
+                                <i class="bi bi-calendar-plus"></i>
+                            </div>
+
+                            <div class="dashboard-module-info">
+
+                                <strong>
+                                    Fecha de inicio
+                                </strong>
+
+                                <span th:text="${membresiaActual.fechaInicio}">
+                                    2026-09-01
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- VENCIMIENTO -->
+
+                        <div class="dashboard-module-item">
+
+                            <div class="dashboard-module-icon">
+                                <i class="bi bi-calendar-x"></i>
+                            </div>
+
+                            <div class="dashboard-module-info">
+
+                                <strong>
+                                    Fecha de vencimiento
+                                </strong>
+
+                                <span th:text="${membresiaActual.fechaVencimiento}">
+                                    2026-10-01
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DÍAS RESTANTES -->
+
+                        <div class="dashboard-module-item">
+
+                            <div class="dashboard-module-icon">
+                                <i class="bi bi-hourglass-split"></i>
+                            </div>
+
+                            <div class="dashboard-module-info">
+
+                                <strong>
+                                    Días restantes
+                                </strong>
+
+                                <span>
+
+                                    <span th:text="${diasRestantes}">
+                                        0
+                                    </span>
+
+                                    días
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SIN MEMBRESÍA -->
+
+                <div class="app-card-body"
+                     th:unless="${tieneMembresia}">
+
+                    <div class="text-center py-4">
+
+                        <div class="dashboard-card-icon mx-auto mb-3">
+                            <i class="bi bi-credit-card"></i>
+                        </div>
+
+                        <h3 class="app-card-title">
+                            Sin membresía activa
+                        </h3>
+
+                        <p class="page-description mb-0">
+                            Actualmente no cuentas con una
+                            membresía vigente.
+                        </p>
+
+                        <a th:href="@{/mi-membresia/planes}"
+                           class="btn btn-primary mt-3">
+
+                            <i class="bi bi-credit-card me-1"></i>
+                            Adquirir membresía
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 MI INFORMACIÓN
+                 ============================================= -->
+
+            <aside class="app-card dashboard-quick-card">
+
+                <div class="app-card-header">
+
+                    <div>
+
+                        <h2 class="app-card-title">
+                            Mi información
+                        </h2>
+
+                        <div class="app-card-subtitle">
+                            Datos asociados a tu cuenta.
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-card-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="app-card-body">
+
+
+                    <!-- NOMBRE -->
+
+                    <div class="dashboard-quick-action">
+
+                        <div class="dashboard-quick-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Nombre
+                            </strong>
+
+                            <span>
+
+                                <span th:text="${clienteActual.nombres}">
+                                    Nombres
+                                </span>
+
+                                <span th:text="${clienteActual.apellidos}">
+                                    Apellidos
+                                </span>
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CORREO -->
+
+                    <div class="dashboard-quick-action">
+
+                        <div class="dashboard-quick-icon">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Correo
+                            </strong>
+
+                            <span th:text="${clienteActual.usuario.email}">
+                                correo@email.com
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DUI -->
+
+                    <div class="dashboard-quick-action">
+
+                        <div class="dashboard-quick-icon">
+                            <i class="bi bi-person-vcard"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                DUI
+                            </strong>
+
+                            <span th:text="${clienteActual.dui}">
+                                00000000-0
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TELÉFONO -->
+
+                    <div class="dashboard-quick-action">
+
+                        <div class="dashboard-quick-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Teléfono
+                            </strong>
+
+                            <span th:text="${clienteActual.telefono}">
+                                0000-0000
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+
+        <!-- =================================================
+             HISTORIAL DE ASISTENCIAS
+             ================================================= -->
+
+        <section class="app-card mt-4">
+
+            <div class="app-card-header">
+
+                <div>
+
+                    <!-- =================================================
+     MI CÓDIGO QR
+     ================================================= -->
+
+                    <section class="app-card mt-4"
+                             sec:authorize="hasAuthority('CLIENTE')">
+
+                        <div class="app-card-header">
+
+                            <div>
+
+                                <h2 class="app-card-title">
+                                    Mi código QR
+                                </h2>
+
+                                <div class="app-card-subtitle">
+                                    Presenta este código al ingresar al gimnasio.
+                                </div>
+
+                            </div>
+
+
+                            <div class="dashboard-card-icon">
+                                <i class="bi bi-qr-code"></i>
+                            </div>
+
+                        </div>
+
+
+                        <div class="app-card-body">
+
+                            <div class="text-center py-4">
+
+                                <div id="clienteQr"
+                                     th:attr="data-codigo=${clienteActual.codigoQr}"
+                                     class="client-qr-container">
+                                </div>
+
+
+                                <strong>
+                                    Código personal de acceso
+                                </strong>
+
+
+                                <p class="page-description mt-2 mb-0">
+                                    Este código identifica tu cuenta.
+                                    Muéstralo al personal al ingresar al gimnasio.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <h2 class="app-card-title">
+                        Últimas asistencias
+                    </h2>
+
+                    <div class="app-card-subtitle">
+                        Tus accesos recientes al gimnasio.
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card-icon">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+
+            </div>
+
+
+            <!-- HAY ASISTENCIAS -->
+
+            <div class="table-responsive"
+                 th:if="${!ultimasAsistencias.isEmpty()}">
+
+                <table class="table">
+
+                    <thead>
+
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Resultado</th>
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    <tr th:each="asistencia : ${ultimasAsistencias}">
+
+
+                        <!-- FECHA -->
+
+                        <td th:text="${asistencia.fechaHora.toLocalDate()}">
+                            2026-09-03
+                        </td>
+
+
+                        <!-- HORA -->
+
+                        <td th:text="${asistencia.fechaHora.toLocalTime()}">
+                            18:30
+                        </td>
+
+
+                        <!-- RESULTADO -->
+
+                        <td>
+
+                            <span th:text="${asistencia.resultado}"
+                                  th:classappend="${asistencia.resultado.name() == 'PERMITIDO'}
+                                        ? ' status-badge status-active'
+                                        : ' status-badge status-inactive'">
+                                PERMITIDO
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- SIN ASISTENCIAS -->
+
+            <div class="app-card-body"
+                 th:if="${ultimasAsistencias.isEmpty()}">
+
+                <div class="text-center py-4">
+
+                    <div class="dashboard-card-icon mx-auto mb-3">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+
+
+                    <h3 class="app-card-title">
+                        Sin asistencias registradas
+                    </h3>
+
+
+                    <p class="page-description mb-0">
+                        Cuando registres tu ingreso al gimnasio,
+                        tus accesos aparecerán aquí.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
 </div>
+
+<th:block layout:fragment="scripts">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const qrContainer =
+                    document.getElementById("clienteQr");
+
+                if (!qrContainer) {
+                    return;
+                }
+
+                const codigo =
+                    qrContainer.dataset.codigo;
+
+                if (!codigo) {
+
+                    qrContainer.innerHTML =
+                        "<p class='text-muted'>No se encontró un código QR para este cliente.</p>";
+
+                    return;
+                }
+
+                new QRCode(
+                    qrContainer,
+                    {
+                        text: codigo,
+                        width: 190,
+                        height: 190
+                    }
+                );
+            }
+        );
+
+    </script>
+
+</th:block>
 </body>
 </html>
