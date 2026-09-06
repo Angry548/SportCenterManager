@@ -325,6 +325,18 @@
 
             </a>
 
+            <a th:href="@{/asistencias/qr}"
+               class="sidebar-link"
+               sec:authorize="hasAnyAuthority('ADMIN','ENTRENADOR')">
+
+                <i class="bi bi-qr-code-scan"></i>
+
+                <span>
+       Control de acceso QR
+    </span>
+
+            </a>
+
         </div>
 
     </nav>
